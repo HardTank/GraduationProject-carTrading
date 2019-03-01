@@ -32,3 +32,8 @@
     transform: rotate(360deg);
   }
 }
+.App-color{
+  background:#1890ff;
+  text-align: center;
+  font-size: 20px;
+}
