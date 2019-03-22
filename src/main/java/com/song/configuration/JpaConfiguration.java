@@ -8,6 +8,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * Created by Song on 2017/2/13.
@@ -22,4 +25,24 @@ public class JpaConfiguration {
     PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){
         return new PersistenceExceptionTranslationPostProcessor();
     }
+    @Bean
+    public WebMvcConfigurer corsConfigurer() {
+        return new WebMvcConfigurerAdapter() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("PUT", "DELETE","GET","POST")
+                        .allowedHeaders("*")
+                        .exposedHeaders("access-control-allow-headers",
+                                "access-control-allow-methods",
+                                "access-control-allow-origin",
+                                "access-control-max-age",
+                                "X-Frame-Options")
+                        .allowCredentials(false).maxAge(3600);
+            }
+        };
+
+    }
+
 }

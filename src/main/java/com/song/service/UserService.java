@@ -20,7 +20,8 @@ public class UserService {
         List< User>  user = null;
         try{
             System.out.println("加工的name的值"+name);
-            user = userRepositoty.findByUserName(name);
+           // user = userRepositoty.findByUserName(name);
+            user=userRepositoty.findAll();
         }catch (Exception e){}
         return user;
     }
