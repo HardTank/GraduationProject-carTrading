@@ -1,0 +1,27 @@
+.option{
+    width: 78px;
+    height: 40px;
+    line-height: 44px;
+
+    background: ghostwhite;
+    color: #666;
+    float: left;
+    border: 1px;
+    text-align: center;
+}
+.content{
+    width: 94%;
+    height: 40px;
+    line-height: 44px;
+margin-bottom: 5px;
+    margin-left: 78px;
+    background: gainsboro;
+    color: #666;
+
+    border: 1px;
+    text-align: center;
+}
+.title{
+    width: 100%;
+    height:80px;
+}

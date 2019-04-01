@@ -1,6 +1,6 @@
-package com.song.repository;
+package com.carTrading.repository;
 
-import com.song.entity.User;
+import com.carTrading.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -9,12 +9,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 /**
- * Created by Song on 2017/2/15.
- * User表操作接口
+ * @author tanlixin
+ * @description
+ * @since 2019-03-25
  */
 @Repository
-public interface UserRepositoty extends JpaRepository<User,Long>{
+public interface UserRepository extends JpaRepository<User,Long>{
 
-    @Query("select t from User t where t.name != :name")
+    @Query("select t from User t where t.name !=:name ")
     List<User> findByUserName(@Param("name") String name);
 }

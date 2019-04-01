@@ -1,4 +1,4 @@
-package com.song.configuration;
+package com.carTrading.configuration;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
@@ -13,13 +13,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
- * Created by Song on 2017/2/13.
+ * @author tanlixin
+ * @description
+ * @since 2019-03-25
  */
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Configuration
 @EnableTransactionManagement(proxyTargetClass = true)
-@EnableJpaRepositories(basePackages = "com.song.repository")
-@EntityScan(basePackages = "com.song.entity")
+@EnableJpaRepositories(basePackages = "com.carTrading.repository")
+@EntityScan(basePackages = "com.carTrading.entity")
 public class JpaConfiguration {
     @Bean
     PersistenceExceptionTranslationPostProcessor persistenceExceptionTranslationPostProcessor(){

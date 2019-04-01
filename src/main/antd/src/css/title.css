@@ -1,0 +1,45 @@
+.head{
+
+    height: 50px;
+    text-align: center;
+    font-size: 25px;
+    color:black;
+}
+.head .login{
+    text-align: right;
+    font-size: 10px;
+    margin-right: 10px;
+    font-weight: bolder;
+}
+.head a{
+
+    color:#F0F0F0;
+}
+
+.code-box-demo {
+    text-align: center;
+}
+.ant-layout-header,
+.ant-layout-footer {
+    background: #7dbcea;
+    color: #fff;
+}
+.ant-layout-footer {
+    line-height: 1.5;
+}
+
+.ant-layout-content {
+
+    min-height: 120px;
+    line-height: 120px;
+}
+.code-box-demo > div > .ant-layout {
+      margin-bottom: 48px;
+  }
+ .code-box-demo > div > .ant-layout:last-child {
+      margin: 0;
+  }
+.select{
+    color:black;
+    background-color: #F0F0F0;
+}
