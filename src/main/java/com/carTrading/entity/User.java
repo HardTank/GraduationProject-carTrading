@@ -22,7 +22,7 @@ public class User {
     /**
      *主键id
      **/
-    private Integer id;
+    private Long id;
     /**
      * 用户姓名
      */
@@ -42,6 +42,7 @@ public class User {
     /**
      * 身份证号码
      */
+    @Column(name="card_id")
     private String cardId;
     /**
      * 联系电话
@@ -51,4 +52,14 @@ public class User {
      * 家庭住址
      */
     private String address;
+
+    public User(String name, String pwd, String mail, String generate, String cardId, String phone, String address) {
+        this.name = name;
+        this.pwd = pwd;
+        this.mail = mail;
+        this.generate = generate;
+        this.cardId = cardId;
+        this.phone = phone;
+        this.address = address;
+    }
 }

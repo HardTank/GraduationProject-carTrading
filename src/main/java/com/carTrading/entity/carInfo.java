@@ -1,5 +1,6 @@
 package com.carTrading.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,11 +22,12 @@ public class CarInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /**主键*/
-    private String id;
+    private Long id;
     /**
      * 拥有者
      */
-    private Integer owner;
+    @Column(name="owner_id")
+    private Integer ownerId;
     /**
      * 当前状态 现场确认 0未确认 1检查无误
      */
@@ -37,10 +39,14 @@ public class CarInfo {
     /**
      * 初登日期
      */
+    @Column(name="initial_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date initialDate;
     /**
      * 出厂日期
      */
+    @Column(name="product_date")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date productDate;
     /**
      * 厂商
@@ -61,6 +67,7 @@ public class CarInfo {
     /**
      * 注册地
      */
+    @Column(name="register_place")
     private String registerPlace;
     /**
      * 排量
@@ -69,15 +76,18 @@ public class CarInfo {
     /**
      * 驱动方式
      */
+    @Column(name="driving_mode")
     private String drivingMode;
     /**
      * 座位数
      */
-    private String seat;
+    @Column(name="seat_num")
+    private String seatNum;
     /**
      * 发动机号
      */
-    private String engine;
+    @Column(name="engine_id")
+    private String engineId;
     /**
      * 是否进口 1是 0否
      */
@@ -93,6 +103,7 @@ public class CarInfo {
     /**
      * 排放标准
      */
+    @Column(name="emission_standard")
     private String emissionStandard;
     /**
      * 能源

@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import Title  from './title';
+import Login from './login'
+
 import TradingHall  from './tradingHall';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import * as serviceWorker from './serviceWorker';
@@ -14,7 +16,7 @@ ReactDOM.render(
         <Router history={hashHistory}>
             <Switch>
                 <Route path="/index" component={Title}/>
-
+                <Route path="/login" component={Login}/>
                 <Route path="/tradingHall" component={TradingHall}/>
                 <Route path="/" component={Title}/>
             </Switch>

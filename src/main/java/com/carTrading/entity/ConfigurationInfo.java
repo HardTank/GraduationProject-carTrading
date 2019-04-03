@@ -22,10 +22,11 @@ public class ConfigurationInfo {
     /**
      *主键id
      **/
-    private Integer id;
+    private Long id;
     /**
      * 二手车id
      */
+    @Column(name="car_id")
     private Integer carId;
     /**
      * 车窗玻璃
@@ -42,18 +43,22 @@ public class ConfigurationInfo {
     /**
      * 倒车影像
      */
+    @Column(name="reversing_image")
     private String reversingImage;
     /**
      * 车外后视镜
      */
+    @Column(name="rearview_mirror")
     private String rearviewMirror;
     /**
      * 座椅材料
      */
+    @Column(name="seat_material")
     private String seatMaterial;
     /**
      * 定速巡航
      */
+    @Column(name="cruise_control")
     private Integer cruiseControl;
     /**
      * 倒车雷达
@@ -70,6 +75,7 @@ public class ConfigurationInfo {
     /**
      * 座椅调节方式
      */
+    @Column(name="seat_control")
     private String seatControl;
     /**
      * 导航

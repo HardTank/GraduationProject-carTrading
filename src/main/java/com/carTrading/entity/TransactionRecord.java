@@ -24,14 +24,16 @@ public class TransactionRecord {
     /**
      *主键id
      **/
-    private Integer id;
+    private Long id;
     /**
      * 交易信息
      */
-    private Integer transactionInfo;
+    @Column(name="transaction_info_id")
+    private Integer transactionInfoId;
     /**
      * 用户id
      */
+    @Column(name="user_id")
     private Integer userId;
     /**
      * 出价
@@ -40,6 +42,7 @@ public class TransactionRecord {
     /**
      * 创建时间
      */
+    @Column(name="create_time")
     private Date createTime;
     /**
      * 当前状态

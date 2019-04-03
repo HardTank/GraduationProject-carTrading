@@ -23,10 +23,11 @@ public class DeviceInspection {
     /**
      *主键id
      **/
-    private Integer id;
+    private Long id;
     /**
      * 二手车id
      */
+    @Column(name="car_id")
     private Integer carId;
     /**
      * 装置
@@ -39,10 +40,12 @@ public class DeviceInspection {
     /**
      * 管理人员id
      */
+    @Column(name="admin_id")
     private Integer adminId;
     /**
      * 创建时间
      */
+    @Column(name="create_date")
     private Date createDate;
     /**
      * 所属类别 0动力检查1车内功能检查 3外观检查4车内环境检查5泡水检查6过火检查

@@ -23,14 +23,16 @@ public class TransactionInfo {
     /**
      *主键id
      **/
-    private Integer id;
+    private Long id;
     /**
      * 二手车id
      */
+    @Column(name="car_id")
     private Integer carId;
     /**
      * 交易用户
      */
+    @Column(name="user_id")
     private Integer userId;
     /**
      * 保证金
@@ -39,6 +41,7 @@ public class TransactionInfo {
     /**
      * 拍卖时间
      */
+    @Column(name="auction_time")
     private Date auctionTime;
 
 }
