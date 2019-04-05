@@ -33,6 +33,7 @@ public class JpaConfiguration {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
+
                         .allowedOrigins("*")
                         .allowedMethods("PUT", "DELETE","GET","POST")
                         .allowedHeaders("*")
@@ -41,7 +42,8 @@ public class JpaConfiguration {
                                 "access-control-allow-origin",
                                 "access-control-max-age",
                                 "X-Frame-Options")
-                        .allowCredentials(false).maxAge(3600);
+                        //.allowCredentials(false).maxAge(3600);
+                        .allowCredentials(true);
             }
         };
 

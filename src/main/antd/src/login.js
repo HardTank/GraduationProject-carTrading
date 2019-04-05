@@ -1,94 +1,87 @@
 import React, { Component} from 'react'
-import request from 'utils/request'
 import 'antd/lib/button/style';
-import './index.css'
-import { Form, Icon, Input, Button, Checkbox } from 'antd';
-class Login extends Component {
-    componentDidMount () {
-        request({
-            method: 'get',
-            url: 'http://47.88.159.228:8080/item/2'
-        }).then(data => {
-            console.log(data)
-        }).catch(err => {
-            console.error(err)
-        })
+import './css/App.css';
+import axios from 'axios';
+import { Form, Icon, Input, Button, Checkbox,Modal} from 'antd';
+class LoginForm extends  React.Component {
+    constructor() {
+        super();
+        this.state = {
+            visible: false,
+
+        }
     }
     handleSubmit = (e) => {
-        e.preventDefault()
-        console.log(2)
-        this.setState({loading: true})
-        console.log(3)
-        this.props.form.validateFieldsAndScroll((err, values) => {
+        e.preventDefault();
+        this.props.form.validateFields((err, values) => {
+            const user=values;
+            if (!err) {
+                axios.get('http://localhost:8080/user/show', {
 
-            if (err) {} else {
-
-             //   message.loading('提交成功，正在验证')
-                const body = {
-                    ...values
-                }
-
-                fetch('api', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(body)
-                }).then((res) => {
-                    return res.json()
-
-                }).then((json) => {
-                    if (json.code === 0) {
-                     //   message.success('success')
-
-                    } else {
-                      //  message.error('failed')
+                        params: {
+                            name:user.name,
+                            pwd:user.pwd,
+                            pageIndex: 0,
+                            pageSize: 1,
+                        }
                     }
-                }).catch((e) => {
-                    console.log(e.message)
-                })
+                ).then(
+                    r => {
+                        this.setState({
+                            result: r.data
+                        });
+                        console.log(r.data.numberOfElements);
+                    }
+                );
             }
-        })
+        });
     }
-
-
-    render () {
-        const {FormItem}=Form.Item;
+    render() {
+        const { visible, onCancel, onOk,form} = this.props;
+       // const { getFieldDecorator } = form;
+        const { getFieldDecorator } = form;
         return (
-            <div>
-                <Form onSubmit={this.handleSubmit} className="login-form">
-                    <FormItem>
-                        {getFieldDecorator('userName', {
-                            rules: [{ required: true, message: 'Please input your username!' }],
-                        })(
-                            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Username" />
-                        )}
-                    </FormItem>
-                    <FormItem>
-                        {getFieldDecorator('password', {
-                            rules: [{ required: true, message: 'Please input your Password!' }],
-                        })(
-                            <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="Password" />
-                        )}
-                    </FormItem>
-                    <FormItem>
-                        {getFieldDecorator('remember', {
-                            valuePropName: 'checked',
-                            initialValue: true,
-                        })(
-                            <Checkbox>Remember me</Checkbox>
-                        )}
-                        <a className="login-form-forgot" href="">Forgot password</a>
-                        <Button type="primary" htmlType="submit" className="login-form-button">
-                            Log in
-                        </Button>
-                        Or <a href="">register now!</a>
-                    </FormItem>
-                </Form>
+            <Modal
+                onCancel={onCancel}
+                footer={null}
+                width='350px'
+                visible={visible}
+                title="登陆"
 
-            </div>
-        )
+               >
+                <Form onSubmit={onOk} className="login-form">
+            <Form.Item>
+            {getFieldDecorator('name', {
+            rules: [{ required: true, message: '请输入用户名/邮箱/手机号码!' }],
+        })(
+            <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名/邮箱/手机号码" />
+        )}
+    </Form.Item>
+        <Form.Item>
+            {getFieldDecorator('pwd', {
+                rules: [{ required: true, message: '请输入密码!' }],
+            })(
+                <Input prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />} type="password" placeholder="密码" />
+            )}
+        </Form.Item>
+        <Form.Item>
+            {getFieldDecorator('remember', {
+                valuePropName: 'checked',
+                initialValue: true,
+            })(
+                <Checkbox>记住我</Checkbox>
+            )}
+            <a className="login-form-forgot" href="">忘记密码</a><br/>
+            <Button type="primary" htmlType="submit" className="login-form-button">
+            登陆
+            </Button><br/>
+            Or <a href="">立刻注册!</a>
+    </Form.Item>
+    </Form>
+    </Modal>
+        );
     }
 }
 
+const Login= Form.create({})(LoginForm);
 export default Login

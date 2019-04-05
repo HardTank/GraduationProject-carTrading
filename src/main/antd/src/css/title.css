@@ -21,8 +21,9 @@
 }
 .ant-layout-header,
 .ant-layout-footer {
-    background: #7dbcea;
+    background: #40a9ff;
     color: #fff;
+    z-index: 7;
 }
 .ant-layout-footer {
     line-height: 1.5;
