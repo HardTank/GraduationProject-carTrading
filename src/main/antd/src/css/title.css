@@ -11,8 +11,8 @@
     margin-right: 10px;
     font-weight: bolder;
 }
-.head a{
-
+.head {
+    cursor: default;
     color:#F0F0F0;
 }
 

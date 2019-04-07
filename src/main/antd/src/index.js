@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import Title  from './title';
 import Login from './login'
-
+import HomePage from './homePage'
 import TradingHall  from './tradingHall';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import * as serviceWorker from './serviceWorker';
@@ -15,10 +15,10 @@ ReactDOM.render(
     <LocaleProvider locale={zhCN}>
         <Router history={hashHistory}>
             <Switch>
-                <Route path="/index" component={Title}/>
+                <Route path="/index" component={HomePage}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/tradingHall" component={TradingHall}/>
-                <Route path="/" component={Title}/>
+                <Route path="/" component={HomePage}/>
             </Switch>
         </Router>
     </LocaleProvider>,

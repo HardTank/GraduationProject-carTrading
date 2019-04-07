@@ -33,14 +33,13 @@ public class UserController {
 
     @RequestMapping(value = "/show",method = RequestMethod.GET)
     @ResponseBody
-    public User show(User user,int pageIndex, int pageSize,HttpServletRequest request,HttpSession session){
+    public Page<User> show(User user,int pageIndex, int pageSize,HttpServletRequest request,HttpSession session){
         logger.info("开始运行"+user.toString()+pageIndex+pageSize);
         Page< User> users =userService.getList(user,pageIndex,pageSize);
-        session.setAttribute("user",users.getContent().get(0));
-        User user1=(User)session.getAttribute("user");
-        System.out.println("sessionid:"+session.getId());
-        logger.info("session"+user1.toString()+pageIndex+pageSize);
-        return user1;
+      //  user=users.
+
+
+        return users;
     }
 
     @RequestMapping(value = "/save",method = RequestMethod.GET)
@@ -50,14 +49,15 @@ public class UserController {
         User user= userService.add(u);
         return user;
     }
-    @RequestMapping(value = "/isLogin",method = RequestMethod.GET)
-    public User  loginStatus( HttpSession session){
+    @RequestMapping(value = "/login",method = RequestMethod.GET)
+    @ResponseBody
+    public User  loginStatus(User user){
         logger.info("开始运行判断登陆状态");
        // User user=(User)session.getAttribute("user");
         //System.out.println("sessionid:"+session.getId());
+        Page< User> users =userService.getList(user,0,1);
+           user = users.getContent().get(0);
 
-          User  user = new User();
-            user.setId(0L);
 
         logger.info("user信息"+user.toString());
         return user ;
