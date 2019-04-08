@@ -38,7 +38,7 @@ public class User {
     /**
      * 性别
      */
-    private String generate;
+    private String gender;
     /**
      * 身份证号码
      */
@@ -53,13 +53,14 @@ public class User {
      */
     private String address;
 
-    public User(String name, String pwd, String mail, String generate, String cardId, String phone, String address) {
+    public User(String name, String pwd, String mail, String gender, String cardId, String phone, String address) {
         this.name = name;
         this.pwd = pwd;
         this.mail = mail;
-        this.generate = generate;
+        this.gender = gender;
         this.cardId = cardId;
         this.phone = phone;
         this.address = address;
+
     }
 }

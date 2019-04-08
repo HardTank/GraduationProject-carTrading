@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import './css/App.css';
 import './css/title.css';
 import Login  from './login';
-import {Affix,Tag,Row, Col, Layout,Menu,Button,Form, Icon, Input,Checkbox,Modal, message} from 'antd';
+import {Select,Affix,Tag,Row, Col, Layout,Menu,Button,Form, Icon, Input,Checkbox,Modal, message} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import TradingHall from './tradingHall';
+import Register from './register';
 import App from './App';
+
 class Title extends Component {
     state = {
         size: 'large',
@@ -17,12 +19,17 @@ class Title extends Component {
         pageSize: 1,
         loginVisible: false,
         index: 'select',
-        target: ''
+        target: '',
+        registerVisible: false,
 
     };
 
     showModal = (target)=> {
         this.setState({loginVisible: true, target: target});
+    }
+    showRegister = (e)=> {
+        e.preventDefault();
+        this.setState({loginVisible: false, registerVisible: true});
     }
     judgeLogin = (e, target)=> {
         e.preventDefault();
@@ -53,11 +60,10 @@ class Title extends Component {
         });
     }
     handleCancel = ()=> {
-        this.setState({loginVisible: false});
+        this.setState({loginVisible: false, registerVisible: false});
     }
     handleOk = (e) => {
         e.preventDefault();
-
         this.props.form.validateFields((err, values) => {
             if (!err) {
                 axios.get('http://localhost:8080/user/show', {
@@ -114,6 +120,44 @@ class Title extends Component {
         this.form = form;
     };
 
+    handleSubmit = (user) => {
+        console.info(user);
+        axios.get('http://localhost:8080/user/save', {
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                params: {
+                    name: user.name,
+                    pwd: user.password,
+                    mail: user.email,
+                    phone: user.phone,
+                    cardId: user.cardId,
+                    address: user.address,
+                    gender:user.gender,
+                }
+            }
+        ).then(
+            r => {
+
+                if (r.status == 200) {
+                    message.config({
+                        top: 130,
+                        duration: 2,
+                        maxCount: 3,
+                    });
+                    message.info('注册成功', 1);
+                    this.setState({
+
+                        loginVisible:true,
+                        registerVisible: false,
+                    });
+                }
+                ;
+            }
+        );
+
+    }
 
     componentDidMount() {
         var userId = sessionStorage.getItem("userId");
@@ -149,6 +193,13 @@ class Title extends Component {
 
     }
 
+
+    state = {
+        confirmDirty: false,
+        autoCompleteResult: [],
+    };
+
+
     render() {
 
         const {
@@ -156,6 +207,9 @@ class Title extends Component {
             } = Layout;
         const { getFieldDecorator } =this.props.form;
         const target = this.props.target;
+        const { Option } = Select;
+
+
         return (
             <div>
 
@@ -176,8 +230,8 @@ class Title extends Component {
                                         </div >
                                     </Col>
                                     <Col span={4}>
-                                        <div className={target=="serviceCentral"?"select":""}
-                                             onClick={(ev) => {this.judgeLogin(ev,"serviceCentral")}}>服务中心
+                                        <div className={target=="personalCentral"?"select":""}
+                                             onClick={(ev) => {this.judgeLogin(ev,"personalCentral")}}>个人中心
                                         </div>
                                     </Col>
                                     <Col span={4}>
@@ -242,11 +296,20 @@ class Title extends Component {
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登陆
                             </Button><br/>
-                            Or <a href="">立刻注册!</a>
+                            Or <a onClick={this.showRegister}>立刻注册!</a>
                         </Form.Item>
                     </Form>
                 </Modal>
+                <Register
+                    ref={this.saveFormRef}
+                    onCancel={this.handleCancel}
+                    visible={this.state.registerVisible}
+                    onOk={this.handleSubmit}
 
+                >
+
+
+                </Register>
             </div>
 
 

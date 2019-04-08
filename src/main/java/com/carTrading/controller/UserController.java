@@ -44,8 +44,9 @@ public class UserController {
 
     @RequestMapping(value = "/save",method = RequestMethod.GET)
     @ResponseBody
-    public User saveCarInfo(){
-        User u=new User("x","x","x","x","X","X","x");
+    public User saveCarInfo(User u){
+       // User u=new User("x","x","x","x","X","X","x");
+        logger.info("添加用户");
         User user= userService.add(u);
         return user;
     }
