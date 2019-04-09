@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './css/App.css';
-import './css/personalCentral.css';
+import './css/personal.css';
 import {
     Menu,Layout,Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,
 } from 'antd';
@@ -18,6 +18,13 @@ class PersonalCentral extends Component {
         result: '',
         name: '',
         visible: false,
+        user: {
+            name: '',
+            cardId: '',
+            phone: '',
+            mail: '',
+            pwd: '',
+        },
     };
 
     componentDidMount() {
@@ -73,41 +80,27 @@ class PersonalCentral extends Component {
         }
         this.setState({autoCompleteResult});
     }
+    handleOk = (item)=> {
+        alert(item.key);
+    }
+
+    componentDidMount() {
+        var user = sessionStorage.getItem("user");
+        user = JSON.parse(user);
+        this.setState(
+            {
+                name: user.name,
+                pwd: user.pwd,
+                mail: user.mail,
+                phone: user.phone,
+                cardId: user.cardId,
+                address: user.address,
+            })
+        ;
+    }
 
     render() {
         const { getFieldDecorator } = this.props.form;
-        const { Option } = Select;
-        const formItemLayout = {
-            labelCol: {
-                xs: {span: 24},
-                sm: {span: 8},
-            },
-            wrapperCol: {
-                xs: {span: 24},
-                sm: {span: 16},
-            },
-        };
-        const tailFormItemLayout = {
-            wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    span: 16,
-                    offset: 8,
-                },
-            },
-        };
-        const prefixSelector = getFieldDecorator('prefix', {
-            initialValue: '86',
-        })(
-            <Select style={{ width: 70 }}>
-                <Option value="86">+86</Option>
-                <Option value="87">+87</Option>
-            </Select>
-        );
-
 
         return (
             <Title
@@ -118,108 +111,99 @@ class PersonalCentral extends Component {
                     <Sider >
 
 
-                        <div style={{marginTop: 180,width: 200, overflow: 'auto'}}>
+                        <div style={{marginTop: 80,width: 200, overflow: 'auto'}}>
                             <Menu
                                 theme="light"
                                 mode="inline"
                                 defaultSelectedKeys="index"
                                 inlineCollapsed={true}
                                 onSelect={(item) => {
-                                window.location.href = item.key + ".html";
+                                this.handleOk(item);
                             }}>
-                                <Menu.Item key="index">
-                                    <span>个人信息</span>
-                                </Menu.Item>
-                                <Menu.SubMenu key="1" title="交易信息">
-                                    <Menu.Item key="2">
-                                        <span>交易信息</span>
+                                <Menu.ItemGroup key="tradingCenter" title="交易中心">
+                                    <Menu.Item key="confirm">
+                                        <span>成交确认</span>
                                     </Menu.Item>
-                                    <Menu.Item key="3">
-                                        <span>交易信息</span>
+                                    <Menu.Item key="order">
+                                        <span>订单车辆</span>
                                     </Menu.Item>
-                                </Menu.SubMenu>
+                                    <Menu.Item key="outbid">
+                                        <span>历史竞价</span>
+                                    </Menu.Item>
+                                    <Menu.Item key="bond">
+                                        <span>保证金</span>
+                                    </Menu.Item>
+                                </Menu.ItemGroup>
+                                <Menu.ItemGroup key="userInfo" title="个人信息">
+                                    <Menu.Item key="baseInfo">
+                                        <span onClick={this.handleOk}>基本信息</span>
+                                    </Menu.Item>
+                                    <Menu.Item key="editInfo">
+                                        <span>信息修改</span>
+                                    </Menu.Item>
+
+                                </Menu.ItemGroup>
 
                             </Menu>
                         </div>
                     </Sider>
-                    <Content style={{marginLeft: 20, overflow: 'auto', height: '99vh'}}>
-
-
-                        <Form style={{width:700,marginLeft:200 }}   onSubmit={this.handleSubmit}>
-                            <Row>
-                                <Col span="12">
-                                    <Form.Item style={{width:300 }}
-                                               label="E-mail"
-                                    >
-                                        {getFieldDecorator('email', {
-                                            rules: [{
-                                                type: 'email', message: 'The input is not valid E-mail!',
-                                            }, {
-                                                required: true, message: 'Please input your E-mail!',
-                                            }],
-                                        })(
-                                            <Input />
-                                        )}
-                                    </Form.Item>
-                                </Col>
-                                <Col span="12">
-                                    <Form.Item style={{width:300 }}
-                                               label="Password"
-                                    >
-                                        {getFieldDecorator('password', {
-                                            rules: [{
-                                                required: true, message: 'Please input your password!',
-                                            }, {
-                                                validator: this.validateToNextPassword,
-                                            }],
-                                        })(
-                                            <Input type="password"/>
-                                        )}
-                                    </Form.Item></Col>
-                            </Row>
-
-
-
-                            <Row>
-                                <Col span="12">
-                                    <Form.Item style={{width:300 }}
-                                               label="Confirm Password"
-                                    >
-                                        {getFieldDecorator('confirm', {
-                                            rules: [{
-                                                required: true, message: 'Please confirm your password!',
-                                            }, {
-                                                validator: this.compareToFirstPassword,
-                                            }],
-
-                                        })(
-                                            <Input type="password" onBlur={this.handleConfirmBlur}/>
-                                        )}
-                                    </Form.Item>
-                                </Col>
-                                <Col span="12">
-                                    <Form.Item style={{width:300 }}
-                                               label="Phone Number"
-                                    >
-                                        {getFieldDecorator('phone', {
-                                            rules: [{required: true, message: 'Please input your phone number!'}],
-                                        })(
-                                            <Input addonBefore={prefixSelector} style={{ width: '100%' }}/>
-                                        )}
-                                    </Form.Item></Col>
-                            </Row>
-
-
-                            <Form.Item {...tailFormItemLayout}>
-                                {getFieldDecorator('agreement', {
-                                    valuePropName: 'checked',
+                    <Content style={{marginLeft: 20, overflow: 'auto', height: '80vh'}}>
+                        <Form layout={'inline'} className="userInfo-form">
+                            <Form.Item style={{width:300 }}
+                                       label="用户名"
+                            >
+                                {getFieldDecorator('name', {
+                                    rules: [{
+                                        required: true,
+                                    }],
                                 })(
-                                    <Checkbox>I have read the <a href="">agreement</a></Checkbox>
+                                    <div>{this.state.name}</div>
                                 )}
-                            </Form.Item>
-                            <Form.Item {...tailFormItemLayout}>
-                                <Button type="primary" htmlType="submit">Register</Button>
-                            </Form.Item>
+                            </Form.Item><br/>
+                            <Form.Item style={{width:300 }}
+                                       label="身份证号"
+                            >
+                                {getFieldDecorator('cardId', {
+                                    rules: [{
+                                        required: true,
+                                    }],
+                                })(
+                                    <div>{this.state.cardId}</div>
+                                )}
+                            </Form.Item><br/>
+                            <Form.Item style={{width:300 }}
+                                       label="联系电话"
+                            >
+                                {getFieldDecorator('phone', {
+                                    rules: [{
+                                        required: true,
+                                    }],
+                                })(
+                                    <div>{this.state.phone}</div>
+                                )}
+                            </Form.Item><br/>
+                            <Form.Item style={{width:300 }}
+                                       label="邮箱"
+                            >
+                                {getFieldDecorator('mail', {
+                                    rules: [{
+                                        required: true,
+                                    }],
+                                })(
+                                    <div>{this.state.mail}</div>
+                                )}
+                            </Form.Item><br/>
+                            <Form.Item style={{width:300 }}
+                                       label="家庭住址"
+                            >
+                                {getFieldDecorator('address', {
+                                    rules: [{
+                                        required: true,
+                                    }],
+                                })(
+                                    <div>{this.state.address}</div>
+                                )}
+                            </Form.Item><br/>
                         </Form>
 
                     </Content>

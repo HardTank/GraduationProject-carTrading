@@ -28,11 +28,7 @@ class Register extends Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                // var str = JSON.stringify(values);
-                // sessionStorage.setItem("user",str);
-                //var user=sessionStorage.getItem("user");
-                // user= JSON.parse(user);
-                // alert(user.name);
+
                 this.props.onOk(values);
             }
 
