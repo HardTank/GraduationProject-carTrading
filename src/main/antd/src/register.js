@@ -69,7 +69,7 @@ class Register extends Component {
     handleSelectChange = (value) => {
         console.log(value);
         this.props.form.setFieldsValue({
-            note: `Hi, ${value === 'male' ? '男' : '女'}!`,
+            note: `Hi, ${value === '男' ? '男' : '女'}!`,
         });
     }
 
@@ -168,7 +168,7 @@ class Register extends Component {
                             <Form.Item style={{width:300 } }
                                        label="邮箱"
                             >
-                                {getFieldDecorator('email', {
+                                {getFieldDecorator('mail', {
                                     rules: [{
                                         type: 'email', message: '邮箱格式错误!',
                                     }, {
@@ -204,8 +204,8 @@ class Register extends Component {
                                     <Input />
                                 )}
                             </Form.Item></Col><Col span={12}>
-                            <Form.Item
-                                label="Gender"
+                            <Form.Item  style={{width:300 }}
+                                label="性别"
                             >
                                 {getFieldDecorator('gender', {
                                     rules: [{required: true, message: 'Please select your gender!'}],
@@ -214,9 +214,36 @@ class Register extends Component {
                                         placeholder="请选择"
 
                                     >
-                                        <Option value="男">male</Option>
-                                        <Option value="女">female</Option>
+                                        <Option value="男">男</Option>
+                                        <Option value="女">女</Option>
                                     </Select>
+                                )}
+                            </Form.Item>
+                        </Col> </Row>
+                        <Row><Col span={12}>
+                            <Form.Item style={{width:300 }}
+                                       label="银行卡号"
+                            >
+                                {getFieldDecorator('bankCardNum', {
+                                    rules: [{
+                                        required: true, message: '请输入银行卡号!',
+                                    }, {
+                                        pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
+                                        message: "格式错误",
+                                    }],
+                                })(
+                                    <Input maxLength={18}/>
+                                )}
+                            </Form.Item></Col><Col span={12}>
+                            <Form.Item style={{width:300 }}
+                                       label="开户行"
+                            >
+                                {getFieldDecorator('openBank', {
+                                    rules: [{
+                                        required: true, message: '请输入开户行!',
+                                    }],
+                                })(
+                                    <Input />
                                 )}
                             </Form.Item>
                         </Col> </Row>

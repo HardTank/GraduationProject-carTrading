@@ -130,11 +130,13 @@ class Title extends Component {
                 params: {
                     name: user.name,
                     pwd: user.password,
-                    mail: user.email,
+                    mail: user.mail,
                     phone: user.phone,
                     cardId: user.cardId,
                     address: user.address,
                     gender:user.gender,
+                    bankCardNum:user.bankCardNum,
+                    openBank:user.openBank,
                 }
             }
         ).then(
@@ -178,8 +180,8 @@ class Title extends Component {
 
                     if (r.status == 200) {
                         sessionStorage.setItem("userId", r.data.id);
-                         var str = JSON.stringify(r.data);
-                         sessionStorage.setItem("user",str);
+                        var str = JSON.stringify(r.data);
+                        sessionStorage.setItem("user",str);
 
                         this.setState({
                             name: r.data.name,

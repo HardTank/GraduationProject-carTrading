@@ -2,66 +2,37 @@ import React, { Component } from 'react';
 import './css/App.css';
 import './css/personal.css';
 import {
-    Menu,Layout,Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,
+    message,Tabs,Menu,Layout,Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete,
 } from 'antd';
 import {LocaleProvider} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
-import Title from './title'
+import Title from './title';
+import EditPwd from './editPwd';
+import BaseInfoForm from'./baseInfoForm';
+import EditBaseInfoForm from'./editBaseInfo';
+import Wallet from './wallet';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-const { Header, Footer, Sider, Content } = Layout;
-const FormItem = Form.Item;
-
+const {   Sider, Content } = Layout;
 class PersonalCentral extends Component {
-    state = {
-        size: 'large',
-        result: '',
-        name: '',
-        visible: false,
-        user: {
-            name: '',
-            cardId: '',
-            phone: '',
-            mail: '',
-            pwd: '',
-        },
-    };
+    constructor() {
+        super();
+        this.state = {
+            baseInfo: true,
+            editInfo: true,
+            confirm: true,
+            order: true,
+            outbid: true,
+            wallet: false,
 
-    componentDidMount() {
-        var userId = sessionStorage.getItem("userId");
-        if (userId == null || userId == 0) {
-            window.location.href = "#/index";
         }
     }
-
 
     state = {
         confirmDirty: false,
         autoCompleteResult: [],
     };
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
-            }
-        });
-    }
-
-    handleConfirmBlur = (e) => {
-        const value = e.target.value;
-        this.setState({confirmDirty: this.state.confirmDirty || !!value});
-    }
-
-    compareToFirstPassword = (rule, value, callback) => {
-        const form = this.props.form;
-        if (value && value !== form.getFieldValue('password')) {
-            callback('两次密码不一致!');
-        } else {
-            callback();
-        }
-    }
 
     validateToNextPassword = (rule, value, callback) => {
         const form = this.props.form;
@@ -71,36 +42,113 @@ class PersonalCentral extends Component {
         callback();
     }
 
-    handleWebsiteChange = (value) => {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({autoCompleteResult});
-    }
+
     handleOk = (item)=> {
-        alert(item.key);
+        this.setState({
+            baseInfo: true,
+            editInfo: true,
+            confirm: true,
+            order: true,
+            outbid: true,
+            wallet: true,
+        })
+        if (item.key == "baseInfo") {
+            var user = sessionStorage.getItem("user");
+            user = JSON.parse(user);
+            this.props.form.setFieldsValue(user);
+            this.setState(
+                {
+                    name: user.name,
+                    pwd: user.pwd,
+                    mail: user.mail,
+                    phone: user.phone,
+                    cardId: user.cardId,
+                    address: user.address,
+                    bankCardNum:user.bankCardNum,
+                    openBank:user.openBank,
+                })
+            this.setState({
+                    baseInfo: false,
+                }
+            )
+        }
+       else if (item.key == "editInfo") {
+            this.setState({
+                editInfo: false,
+            })
+        }
+       else if (item.key == "confirm") {
+            this.setState({
+                confirm: false,
+            })
+        }
+        else if (item.key == "order") {
+            this.setState({
+                order: false,
+            })
+        }
+        else if (item.key == "outbid") {
+            this.setState({
+                outbid: false,
+            })
+        }
+        else if (item.key == "wallet") {
+            this.setState({
+                wallet: false,
+            })
+        }
     }
 
     componentDidMount() {
-        var user = sessionStorage.getItem("user");
-        user = JSON.parse(user);
-        this.setState(
-            {
-                name: user.name,
-                pwd: user.pwd,
-                mail: user.mail,
-                phone: user.phone,
-                cardId: user.cardId,
-                address: user.address,
-            })
-        ;
+        var userId = sessionStorage.getItem("userId");
+        if (userId == null || userId == 0) {
+            window.location.href = "#/index";
+        }
+        else{
+            axios.get('http://localhost:8080/user/login', {
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    crossDomain: true,
+                    params: {
+                        id: userId,
+                        pageIndex: 0,
+                        pageSize: 1,
+                    }
+                }
+            ).then(
+                r => {
+
+                    if (r.status == 200) {
+                        sessionStorage.setItem("userId", r.data.id);
+                        var str = JSON.stringify(r.data);
+                        sessionStorage.setItem("user",str);
+                        var user = sessionStorage.getItem("user");
+                        user = JSON.parse(user);
+                        this.props.form.setFieldsValue(user);
+                        this.setState(
+                            {
+                                name: user.name,
+                                pwd: user.pwd,
+                                mail: user.mail,
+                                phone: user.phone,
+                                cardId: user.cardId,
+                                address: user.address,
+                                bankCardNum:user.bankCardNum,
+                                openBank:user.openBank,
+                            })
+                    }
+                    ;
+                }
+            );
+        }
+
+
+
     }
 
     render() {
-        const { getFieldDecorator } = this.props.form;
+        const TabPane = Tabs.TabPane;
 
         return (
             <Title
@@ -115,7 +163,7 @@ class PersonalCentral extends Component {
                             <Menu
                                 theme="light"
                                 mode="inline"
-                                defaultSelectedKeys="index"
+                                defaultSelectedKeys={['baseInfo']}
                                 inlineCollapsed={true}
                                 onSelect={(item) => {
                                 this.handleOk(item);
@@ -130,13 +178,13 @@ class PersonalCentral extends Component {
                                     <Menu.Item key="outbid">
                                         <span>历史竞价</span>
                                     </Menu.Item>
-                                    <Menu.Item key="bond">
-                                        <span>保证金</span>
+                                    <Menu.Item key="wallet">
+                                        <span>我的钱包</span>
                                     </Menu.Item>
                                 </Menu.ItemGroup>
                                 <Menu.ItemGroup key="userInfo" title="个人信息">
                                     <Menu.Item key="baseInfo">
-                                        <span onClick={this.handleOk}>基本信息</span>
+                                        <span  >基本信息</span>
                                     </Menu.Item>
                                     <Menu.Item key="editInfo">
                                         <span>信息修改</span>
@@ -148,67 +196,33 @@ class PersonalCentral extends Component {
                         </div>
                     </Sider>
                     <Content style={{marginLeft: 20, overflow: 'auto', height: '80vh'}}>
-                        <Form layout={'inline'} className="userInfo-form">
-                            <Form.Item style={{width:300 }}
-                                       label="用户名"
-                            >
-                                {getFieldDecorator('name', {
-                                    rules: [{
-                                        required: true,
-                                    }],
-                                })(
-                                    <div>{this.state.name}</div>
-                                )}
-                            </Form.Item><br/>
-                            <Form.Item style={{width:300 }}
-                                       label="身份证号"
-                            >
-                                {getFieldDecorator('cardId', {
-                                    rules: [{
-                                        required: true,
-                                    }],
-                                })(
-                                    <div>{this.state.cardId}</div>
-                                )}
-                            </Form.Item><br/>
-                            <Form.Item style={{width:300 }}
-                                       label="联系电话"
-                            >
-                                {getFieldDecorator('phone', {
-                                    rules: [{
-                                        required: true,
-                                    }],
-                                })(
-                                    <div>{this.state.phone}</div>
-                                )}
-                            </Form.Item><br/>
-                            <Form.Item style={{width:300 }}
-                                       label="邮箱"
-                            >
-                                {getFieldDecorator('mail', {
-                                    rules: [{
-                                        required: true,
-                                    }],
-                                })(
-                                    <div>{this.state.mail}</div>
-                                )}
-                            </Form.Item><br/>
-                            <Form.Item style={{width:300 }}
-                                       label="家庭住址"
-                            >
-                                {getFieldDecorator('address', {
-                                    rules: [{
-                                        required: true,
-                                    }],
-                                })(
-                                    <div>{this.state.address}</div>
-                                )}
-                            </Form.Item><br/>
-                        </Form>
-
+                        <div hidden={this.state.wallet}>
+                            <Wallet></Wallet>
+                            </div>
+                        <div hidden={this.state.baseInfo}>
+                            <BaseInfoForm
+                                name={this.state.name}
+                                cardId={this.state.cardId}
+                                gender={this.state.gender}
+                                mail={this.state.mail}
+                                address={this.state.address}
+                                phone={this.state.phone}
+                                bankCardNum={this.state.bankCardNum}
+                                openBank={this.state.openBank}
+                            ></BaseInfoForm>
+                        </div>
+                        <div hidden={this.state.editInfo}>
+                            <Tabs defaultActiveKey="editBaseInfo">
+                                <TabPane tab="基本信息修改" key="editBaseInfo">
+                                    <EditBaseInfoForm></EditBaseInfoForm>
+                                </TabPane>
+                                <TabPane tab="密码修改" key="editPwd">
+                                    <EditPwd></EditPwd>
+                                </TabPane>
+                            </Tabs>
+                        </div>
                     </Content>
                 </Layout>
-
             </Title>
 
 

@@ -21,6 +21,7 @@ ReactDOM.render(
                 <Route path="/tradingHall" component={TradingHall}/>
                 <Route path="/tradingHall" component={TradingHall}/>
                 <Route path="/personalCentral" component={PersonalCentral}/>
+                <Route path="/" component={HomePage}/>
             </Switch>
         </Router>
     </LocaleProvider>,
