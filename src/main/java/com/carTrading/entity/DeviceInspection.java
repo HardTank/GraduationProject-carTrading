@@ -1,5 +1,6 @@
 package com.carTrading.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class DeviceInspection {
      */
     private String device;
     /**
-     * y异常问题
+     * 异常问题
      */
     private String abnormal;
     /**
@@ -45,6 +46,7 @@ public class DeviceInspection {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @Column(name="create_date")
     private Date createDate;
     /**

@@ -114,9 +114,10 @@ class Register extends Component {
                                        label="姓名"
                             >
                                 {getFieldDecorator('name', {
-                                    rules: [{
-                                        required: true, message: '请输入姓名!',
-                                    }],
+                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
+                                        {
+                                            required: true, message: '请输入姓名!',
+                                        }],
                                 })(
                                     <Input />
                                 )}
@@ -204,8 +205,8 @@ class Register extends Component {
                                     <Input />
                                 )}
                             </Form.Item></Col><Col span={12}>
-                            <Form.Item  style={{width:300 }}
-                                label="性别"
+                            <Form.Item style={{width:300 }}
+                                       label="性别"
                             >
                                 {getFieldDecorator('gender', {
                                     rules: [{required: true, message: 'Please select your gender!'}],
@@ -225,23 +226,21 @@ class Register extends Component {
                                        label="银行卡号"
                             >
                                 {getFieldDecorator('bankCardNum', {
-                                    rules: [{
+                                    rules: [{pattern: /^(\d{16}|\d{19})$/, message: '格式错误'}, {
                                         required: true, message: '请输入银行卡号!',
-                                    }, {
-                                        pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
-                                        message: "格式错误",
-                                    }],
+                                    },],
                                 })(
-                                    <Input maxLength={18}/>
+                                    <Input maxLength={19}/>
                                 )}
                             </Form.Item></Col><Col span={12}>
                             <Form.Item style={{width:300 }}
                                        label="开户行"
                             >
                                 {getFieldDecorator('openBank', {
-                                    rules: [{
-                                        required: true, message: '请输入开户行!',
-                                    }],
+                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
+                                        {
+                                            required: true, message: '请输入开户行!',
+                                        }],
                                 })(
                                     <Input />
                                 )}

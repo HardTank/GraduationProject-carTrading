@@ -40,13 +40,13 @@ public class CarInfo {
      * 初登日期
      */
     @Column(name="initial_date")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd  ", timezone = "GMT+8")
     private Date initialDate;
     /**
      * 出厂日期
      */
     @Column(name="product_date")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+8")
     private Date productDate;
     /**
      * 厂商

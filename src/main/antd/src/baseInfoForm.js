@@ -20,7 +20,7 @@ class BaseInfoForm extends Component {
     componentDidMount() {
         var user = sessionStorage.getItem("user");
         user = JSON.parse(user);
-        this.props.form.setFieldsValue(user);
+
         this.setState(
             {
                 name: user.name,
@@ -30,7 +30,6 @@ class BaseInfoForm extends Component {
                 cardId: user.cardId,
                 address: user.address,
             })
-
     }
     render() {
 

@@ -3,6 +3,8 @@ package com.carTrading.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -14,6 +16,8 @@ import javax.persistence.*;
 @Entity
 @Table(name = "user")
 @Data
+@DynamicUpdate(true)
+@DynamicInsert(true)
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
@@ -55,6 +59,7 @@ public class User {
     /**
      * 钱包
      */
+    @Column(name="wallet" ,nullable =true)
     private Double wallet;
     /**
      * 银行卡号
@@ -67,7 +72,7 @@ public class User {
     @Column(name = "open_bank")
     private String openBank;
 
-    public User(String name, String pwd, String mail, String gender, String cardId, String phone, String address, Double wallet, String bankCardNum, String openBank) {
+    public User(String name, String pwd, String mail, String gender, String cardId, String phone, String address,  String bankCardNum, String openBank) {
         this.name = name;
         this.pwd = pwd;
         this.mail = mail;
@@ -75,7 +80,7 @@ public class User {
         this.cardId = cardId;
         this.phone = phone;
         this.address = address;
-        this.wallet = wallet;
+
         this.bankCardNum = bankCardNum;
         this.openBank = openBank;
     }

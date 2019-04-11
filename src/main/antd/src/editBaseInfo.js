@@ -96,7 +96,8 @@ class EditBaseInfo extends Component {
                                                    label="姓名"
                                         >
                                             {getFieldDecorator('name', {
-                                                rules: [{
+                                                rules: [{pattern:/^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/,message:'格式错误'},
+                                                    {
                                                     required: true, message: '请输入姓名!',
                                                 }],
                                             })(
@@ -181,10 +182,7 @@ class EditBaseInfo extends Component {
                                             {getFieldDecorator('bankCardNum', {
                                                 rules: [{
                                                     required: true, message: '请输入银行卡号!',
-                                                }, {
-                                                    pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
-                                                    message: "格式错误",
-                                                }],
+                                                },{pattern: /^(\d{16}|\d{19})$/, message: '格式错误'}],
                                             })(
                                                 <Input maxLength={18}/>
                                             )}
@@ -193,7 +191,8 @@ class EditBaseInfo extends Component {
                                                    label="开户行"
                                         >
                                             {getFieldDecorator('openBank', {
-                                                rules: [{
+                                                rules: [{pattern:/^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/,message:'格式错误'},
+                                                    {
                                                     required: true, message: '请输入开户行!',
                                                 }],
                                             })(

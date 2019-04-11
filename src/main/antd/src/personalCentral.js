@@ -23,8 +23,16 @@ class PersonalCentral extends Component {
             confirm: true,
             order: true,
             outbid: true,
-            wallet: false,
-
+            MyWallet: false,
+            name:'',
+            pwd: '',
+            mail:'',
+            phone: '',
+            cardId: '',
+            address:'',
+            wallet:'',
+            bankCardNum:'',
+            openBank:'',
         }
     }
 
@@ -50,7 +58,7 @@ class PersonalCentral extends Component {
             confirm: true,
             order: true,
             outbid: true,
-            wallet: true,
+           myWallet: true,
         })
         if (item.key == "baseInfo") {
             var user = sessionStorage.getItem("user");
@@ -92,9 +100,9 @@ class PersonalCentral extends Component {
                 outbid: false,
             })
         }
-        else if (item.key == "wallet") {
+        else if (item.key == "myWallet") {
             this.setState({
-                wallet: false,
+               myWallet: false,
             })
         }
     }
@@ -149,6 +157,7 @@ class PersonalCentral extends Component {
 
     render() {
         const TabPane = Tabs.TabPane;
+        const { getFieldDecorator} = this.props.form;
 
         return (
             <Title
@@ -178,7 +187,7 @@ class PersonalCentral extends Component {
                                     <Menu.Item key="outbid">
                                         <span>历史竞价</span>
                                     </Menu.Item>
-                                    <Menu.Item key="wallet">
+                                    <Menu.Item key="myWallet">
                                         <span>我的钱包</span>
                                     </Menu.Item>
                                 </Menu.ItemGroup>
@@ -196,7 +205,7 @@ class PersonalCentral extends Component {
                         </div>
                     </Sider>
                     <Content style={{marginLeft: 20, overflow: 'auto', height: '80vh'}}>
-                        <div hidden={this.state.wallet}>
+                        <div hidden={this.state.myWallet}>
                             <Wallet></Wallet>
                             </div>
                         <div hidden={this.state.baseInfo}>
@@ -207,9 +216,11 @@ class PersonalCentral extends Component {
                                 mail={this.state.mail}
                                 address={this.state.address}
                                 phone={this.state.phone}
+                                wallet={this.state.wallet}
                                 bankCardNum={this.state.bankCardNum}
                                 openBank={this.state.openBank}
                             ></BaseInfoForm>
+
                         </div>
                         <div hidden={this.state.editInfo}>
                             <Tabs defaultActiveKey="editBaseInfo">

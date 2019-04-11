@@ -1,5 +1,6 @@
 package com.carTrading.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -58,11 +59,13 @@ public class ProcedureInfo {
     /**
      * 交强险有效期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @Column(name="compulsory_insurance_validity_date")
     private Date compulsoryInsuranceValidityDate;
     /**
      * 车牌所在地
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @Column(name="plate_location")
     private String plateLocation;
     /**
@@ -73,6 +76,7 @@ public class ProcedureInfo {
     /**
      * 年检有效期
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @Column(name="yearly_inspection_validity_date")
     private Date yearlyInspectionValidityDate;
     /**

@@ -2,6 +2,7 @@ package com.carTrading.controller;
 
 import com.carTrading.entity.User;
 import com.carTrading.service.UserService;
+import com.carTrading.tool.UpdateNotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,14 +42,23 @@ public class UserController {
 
         return users;
     }
-
     @RequestMapping(value = "/save",method = RequestMethod.GET)
     @ResponseBody
     public User saveCarInfo(User u){
-       // User u=new User("x","x","x","x","X","X","x");
-        logger.info("添加用户");
-        User user= userService.add(u);
-        return user;
+        if(u.getId()!=null) {
+            User user = userService.getUser(u);
+            logger.info("更新用户前" + user.toString()+u.toString());
+            UpdateNotNull.copyNonNullProperties(u, user);
+            logger.info("更新用户" + user.toString()+u.toString());
+            user = userService.add(user);
+            return user;
+        }
+        else{
+            logger.info("添加用户" + u.toString());
+            u = userService.add(u);
+            return u;
+        }
+
     }
     @RequestMapping(value = "/login",method = RequestMethod.GET)
     @ResponseBody

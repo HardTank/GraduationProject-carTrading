@@ -47,4 +47,12 @@ public class UserService {
         User user = userRepository.save(u);
         return user;
     }
+    /**根据id查找用户*/
+    @Transactional(rollbackFor = Exception.class)
+    public  User  getUser(User user) {
+        logger.info("根据id查找用户");
+        user = userRepository.findOne(user.getId());
+        return user;
+    }
+
 }

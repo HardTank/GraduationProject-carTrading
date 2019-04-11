@@ -182,7 +182,6 @@ class Title extends Component {
                         sessionStorage.setItem("userId", r.data.id);
                         var str = JSON.stringify(r.data);
                         sessionStorage.setItem("user",str);
-
                         this.setState({
                             name: r.data.name,
                             login: true,
@@ -195,6 +194,7 @@ class Title extends Component {
             );
 
         }
+
 
     }
 
