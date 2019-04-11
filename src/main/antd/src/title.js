@@ -133,7 +133,7 @@ class Title extends Component {
                     mail: user.mail,
                     phone: user.phone,
                     cardId: user.cardId,
-                    address: user.address,
+                    address: user.address[0]+user.address[1]+user.address[2],
                     gender:user.gender,
                     bankCardNum:user.bankCardNum,
                     openBank:user.openBank,

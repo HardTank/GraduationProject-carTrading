@@ -177,7 +177,6 @@ class Wallet extends Component {
     }
     //充值或者提取
     changeWallet = (type,amount)=> {
-        alert(amount)
         var userId = sessionStorage.getItem("userId");
         axios.get('http://localhost:8080/wallet/save', {
                 params: {
@@ -200,6 +199,11 @@ class Wallet extends Component {
     }
     //table展示列
     columns = [{
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+        className: 'hidden',
+    },{
         title: '序号',
         width: 80,
         render: (text, record, index) => `${index + 1}`
@@ -250,10 +254,14 @@ class Wallet extends Component {
                         <div className="walletPrice">保证金:</div>
                     </Col>
                 </Row>
-                <Row><Col span={3}>
-                    <Button type="primary" onClick={this.showPayModal}>充值</Button></Col><Col span={3}>
+                <Row style={{height:40}}><Col span={3} style={{height:40}}>
+                    <Button type="primary" onClick={this.showPayModal}>充值</Button></Col><Col style={{height:40}} span={3}>
                     <Button type="primary" onClick={this.showDrawModal}>提取</Button></Col>
+
                 </Row>
+
+                    <div  style={{  fontWeight:'bold',height:80}}>流水记录:</div>
+
                 <hr/>
 
                 <Modal

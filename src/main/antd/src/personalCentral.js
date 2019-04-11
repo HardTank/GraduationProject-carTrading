@@ -12,6 +12,8 @@ import EditPwd from './editPwd';
 import BaseInfoForm from'./baseInfoForm';
 import EditBaseInfoForm from'./editBaseInfo';
 import Wallet from './wallet';
+import SellCar from './sellCar'
+import Address from './address'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const {   Sider, Content } = Layout;
 class PersonalCentral extends Component {
@@ -22,8 +24,8 @@ class PersonalCentral extends Component {
             editInfo: true,
             confirm: true,
             order: true,
-            outbid: true,
-            MyWallet: false,
+            sellCar: false,
+            myWallet: true,
             name:'',
             pwd: '',
             mail:'',
@@ -57,7 +59,7 @@ class PersonalCentral extends Component {
             editInfo: true,
             confirm: true,
             order: true,
-            outbid: true,
+            sellCar: true,
            myWallet: true,
         })
         if (item.key == "baseInfo") {
@@ -95,9 +97,9 @@ class PersonalCentral extends Component {
                 order: false,
             })
         }
-        else if (item.key == "outbid") {
+        else if (item.key == "sellCar") {
             this.setState({
-                outbid: false,
+                sellCar: false,
             })
         }
         else if (item.key == "myWallet") {
@@ -172,7 +174,7 @@ class PersonalCentral extends Component {
                             <Menu
                                 theme="light"
                                 mode="inline"
-                                defaultSelectedKeys={['baseInfo']}
+                                defaultSelectedKeys={['sellCar']}
                                 inlineCollapsed={true}
                                 onSelect={(item) => {
                                 this.handleOk(item);
@@ -184,8 +186,8 @@ class PersonalCentral extends Component {
                                     <Menu.Item key="order">
                                         <span>订单车辆</span>
                                     </Menu.Item>
-                                    <Menu.Item key="outbid">
-                                        <span>历史竞价</span>
+                                    <Menu.Item key="sellCar">
+                                        <span>我要卖车</span>
                                     </Menu.Item>
                                     <Menu.Item key="myWallet">
                                         <span>我的钱包</span>
@@ -205,6 +207,10 @@ class PersonalCentral extends Component {
                         </div>
                     </Sider>
                     <Content style={{marginLeft: 20, overflow: 'auto', height: '80vh'}}>
+                        <div hidden={this.state.sellCar}>
+                            <SellCar></SellCar>
+                            <Address></Address>
+                        </div>
                         <div hidden={this.state.myWallet}>
                             <Wallet></Wallet>
                             </div>
