@@ -4,18 +4,28 @@
     padding-top: 0.1px;
     background-color: lightgray;
 }
-.userInfo-form{
+
+.userInfo-form {
     margin: 100px 100px;;
 }
-.walletPrice{
-    float:left;
-    font-size:20px;
-    font-weight:bold;
+
+.walletPrice {
+    float: left;
+    font-size: 20px;
+    font-weight: bold;
 }
+
 .hidden {
     display: none;
 }
-.placeholder ::placeholder{
-    font-size:14px;
-    color:rgb(0,0,35);
+
+.placeholder ::placeholder {
+    font-size: 14px;
+    color: rgb(0, 0, 35);
+}
+
+.divcss5 {
+    margin:30px 30px;
+    border-style: groove;
+    padding-right: 80px;
 }

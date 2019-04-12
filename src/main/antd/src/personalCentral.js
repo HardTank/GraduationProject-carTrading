@@ -13,7 +13,6 @@ import BaseInfoForm from'./baseInfoForm';
 import EditBaseInfoForm from'./editBaseInfo';
 import Wallet from './wallet';
 import SellCar from './sellCar'
-import Address from './address'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const {   Sider, Content } = Layout;
 class PersonalCentral extends Component {
@@ -91,7 +90,12 @@ class PersonalCentral extends Component {
        else if (item.key == "editInfo") {
             this.setState({
                 editInfo: false,
+
             })
+            var user = sessionStorage.getItem("user");
+            user = JSON.parse(user);
+            user.area = user.province + "/" + user.city + "/" + user.county;
+                this.form.setFieldsValue(user);
         }
        else if (item.key == "confirm") {
             this.setState({
@@ -141,7 +145,7 @@ class PersonalCentral extends Component {
                         sessionStorage.setItem("user",str);
                         var user = sessionStorage.getItem("user");
                         user = JSON.parse(user);
-                        this.props.form.setFieldsValue(user);
+                       // this.props.form.setFieldsValue(user);
                         this.setState(
                             {
                                 name: user.name,
@@ -165,10 +169,11 @@ class PersonalCentral extends Component {
 
 
     }
-
+    saveFormRef = (form) => {
+        this.form = form;
+    };
     render() {
         const TabPane = Tabs.TabPane;
-        const { getFieldDecorator} = this.props.form;
 
         return (
             <Title
@@ -218,7 +223,6 @@ class PersonalCentral extends Component {
                     <Content style={{marginLeft: 20, overflow: 'auto', height: '80vh'}}>
                         <div hidden={this.state.sellCar}>
                             <SellCar></SellCar>
-                            <Address></Address>
                         </div>
                         <div hidden={this.state.myWallet}>
                             <Wallet></Wallet>
@@ -243,7 +247,10 @@ class PersonalCentral extends Component {
                         <div hidden={this.state.editInfo}>
                             <Tabs defaultActiveKey="editBaseInfo">
                                 <TabPane tab="基本信息修改" key="editBaseInfo">
-                                    <EditBaseInfoForm></EditBaseInfoForm>
+                                    <EditBaseInfoForm
+                                        ref={this.saveFormRef}
+
+                                    ></EditBaseInfoForm>
                                 </TabPane>
                                 <TabPane tab="密码修改" key="editPwd">
                                     <EditPwd></EditPwd>

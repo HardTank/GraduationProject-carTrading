@@ -58,15 +58,7 @@ class Register extends Component {
         callback();
     }
 
-    handleWebsiteChange = (value) => {
-        let autoCompleteResult;
-        if (!value) {
-            autoCompleteResult = [];
-        } else {
-            autoCompleteResult = ['.com', '.org', '.net'].map(domain => `${value}${domain}`);
-        }
-        this.setState({autoCompleteResult});
-    }
+
     handleSelectChange = (value) => {
         console.log(value);
         this.props.form.setFieldsValue({

@@ -74,13 +74,13 @@ class EditBaseInfo extends Component {
     }
 
 
-    componentDidMount() {
-        var user = sessionStorage.getItem("user");
-        user = JSON.parse(user);
-        user.area = user.province + "/" + user.city + "/" + user.county;
-        this.props.form.setFieldsValue(user);
-
-    }
+    //componentDidMount() {
+    //    var user = sessionStorage.getItem("user");
+    //    user = JSON.parse(user);
+    //    user.area = user.province + "/" + user.city + "/" + user.county;
+    //    //this.props.form.setFieldsValue(user);
+    //
+    //}
 
     render() {
         const { getFieldDecorator } = this.props.form;

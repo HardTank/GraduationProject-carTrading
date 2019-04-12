@@ -232,11 +232,11 @@ class Title extends Component {
 
 
         return (
-            <div>
+            <div >
 
-                <Layout>
+                <Layout >
                     <Affix>
-                        <Header>
+                        <Header >
                             <div className="head">
 
                                 <Row >
@@ -275,7 +275,7 @@ class Title extends Component {
                             </div>
                         </Header>
                     </Affix>
-                    <Content>
+                    <Content >
                         {this.props.children}
                     </Content>
                     <Footer></Footer>
