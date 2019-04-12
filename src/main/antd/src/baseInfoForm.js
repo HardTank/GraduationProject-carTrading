@@ -91,7 +91,10 @@ class BaseInfoForm extends Component {
                                         required: true,
                                     }],
                                 })(
-                                    <div>{this.props.address}</div>
+                                    <div>{this.props.province=="北京市"||this.props.province=="天津市"
+                                    ||this.props.province=="上海市"||this.props.province=="重庆市"?'':this.props.province}
+                                        {this.props.city
+                                    +this.props.county+this.props.address}</div>
                                 )}
                             </Form.Item><br/>
                                 <Form.Item style={{width:300 }}

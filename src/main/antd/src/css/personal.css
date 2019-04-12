@@ -15,3 +15,7 @@
 .hidden {
     display: none;
 }
+.placeholder ::placeholder{
+    font-size:14px;
+    color:rgb(0,0,35);
+}

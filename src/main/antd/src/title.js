@@ -19,7 +19,7 @@ class Title extends Component {
         pageSize: 1,
         loginVisible: false,
         index: 'select',
-        target: '',
+        target: 'index',
         registerVisible: false,
 
     };
@@ -31,11 +31,19 @@ class Title extends Component {
         e.preventDefault();
         this.setState({loginVisible: false, registerVisible: true});
     }
+    callback = () => { window.location.reload(true) };
+
+
+
+
     judgeLogin = (e, target)=> {
         e.preventDefault();
         var userId = sessionStorage.getItem("userId");
 
         if (userId > 0) {
+            var firstLogin= sessionStorage.getItem("firstLogin")
+            if(firstLogin==null)
+                window.location.reload(true);
             window.location.href = "#/" + target;
 
         }
@@ -99,7 +107,12 @@ class Title extends Component {
                                 login: true,
                                 loginVisible: false,
                             });
+
+
+                            window.location.reload(true);
+                            sessionStorage.setItem("firstLogin",true)
                             window.location.href = "#/" + this.state.target;
+
                         }
                         else {
                             message.config({
@@ -133,7 +146,10 @@ class Title extends Component {
                     mail: user.mail,
                     phone: user.phone,
                     cardId: user.cardId,
-                    address: user.address[0]+user.address[1]+user.address[2],
+                    province:user.area[0],
+                    city:user.area[1],
+                    county:user.area[2],
+                    address: user.address,
                     gender:user.gender,
                     bankCardNum:user.bankCardNum,
                     openBank:user.openBank,
@@ -247,7 +263,7 @@ class Title extends Component {
                                     <Col span={8}>
                                         <Row className="login">
                                             <Button hidden={this.state.login} onClick={ this.showModal} type="primary">登陆/注册</Button>
-                                            <p hidden={!this.state.login}>{this.state.name},欢迎您!
+                                            <p style={{fontSize:20}} hidden={!this.state.login}>{this.state.name},欢迎您!
                                                 <Button onClick={ this.exitLogin} type="primary">
                                                     退出登陆
                                                 </Button>

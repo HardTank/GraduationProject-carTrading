@@ -15,7 +15,31 @@ import EditPwd from './editPwd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 
 class Address extends Component {
+    constructor(props) {
+        super(props);
 
+        const { value } = props;
+        this.state = {
+            value,
+        };
+    }
+    componentWillReceiveProps(nextProps) {
+        if ('value' in nextProps) {
+            console.log(nextProps.value);
+            this.setState({
+                value: nextProps.value,
+            });
+        }
+    }
+    handleChange = (value) => {
+        const { onChange } = this.props;
+        this.setState({
+            value,
+        });
+        if (onChange) {
+            onChange(value);
+        }
+    }
 
     render() {
 
@@ -10501,9 +10525,10 @@ class Address extends Component {
 
 
         return (
-            <div>
-                <Cascader options={addressOptions} notFoundContent="请选择地区" placeholder="请选择地区" defaultValue={['广东省', '深圳市', '南山区']}/>
-            </div>
+
+            <Cascader options={addressOptions} placeholder={this.state.value} className="placeholder"
+                       onChange={this. handleChange}/>
+
         )
     }
 }

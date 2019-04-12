@@ -59,7 +59,7 @@ public class User {
     /**
      * 钱包
      */
-    @Column(name="wallet" ,nullable =true)
+    @Column(name = "wallet", nullable = true)
     private Double wallet;
     /**
      * 银行卡号
@@ -71,8 +71,20 @@ public class User {
      */
     @Column(name = "open_bank")
     private String openBank;
+    /**
+     * 省/直辖市
+     */
+    private String province;
+    /**
+     * 市
+     */
+    private String city;
+    /**
+     * 县区
+     */
+    private String county;
 
-    public User(String name, String pwd, String mail, String gender, String cardId, String phone, String address,  String bankCardNum, String openBank) {
+    public User(String name, String pwd, String mail, String gender, String cardId, String phone, String address, String bankCardNum, String openBank) {
         this.name = name;
         this.pwd = pwd;
         this.mail = mail;

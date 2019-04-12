@@ -31,6 +31,9 @@ class PersonalCentral extends Component {
             mail:'',
             phone: '',
             cardId: '',
+            province:'',
+            city:'',
+            county:'',
             address:'',
             wallet:'',
             bankCardNum:'',
@@ -65,7 +68,7 @@ class PersonalCentral extends Component {
         if (item.key == "baseInfo") {
             var user = sessionStorage.getItem("user");
             user = JSON.parse(user);
-            this.props.form.setFieldsValue(user);
+         //   this.props.form.setFieldsValue(user);
             this.setState(
                 {
                     name: user.name,
@@ -76,6 +79,9 @@ class PersonalCentral extends Component {
                     address: user.address,
                     bankCardNum:user.bankCardNum,
                     openBank:user.openBank,
+                    province:user.province,
+                    city:user.city,
+                    county:user.county,
                 })
             this.setState({
                     baseInfo: false,
@@ -146,6 +152,9 @@ class PersonalCentral extends Component {
                                 address: user.address,
                                 bankCardNum:user.bankCardNum,
                                 openBank:user.openBank,
+                                province:user.province,
+                                city:user.city,
+                                county:user.county,
                             })
                     }
                     ;
@@ -225,6 +234,9 @@ class PersonalCentral extends Component {
                                 wallet={this.state.wallet}
                                 bankCardNum={this.state.bankCardNum}
                                 openBank={this.state.openBank}
+                                province={this.state.province}
+                                city={this.state.city}
+                                county={this.state.county}
                             ></BaseInfoForm>
 
                         </div>

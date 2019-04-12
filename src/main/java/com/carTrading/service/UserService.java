@@ -44,6 +44,9 @@ public class UserService {
     /**更新数据*/
     @Transactional(rollbackFor = Exception.class)
     public User add(User u) {
+        u.setProvince(u.getProvince().replace("/",""));
+        u.setCity(u.getCity().replace("/",""));
+        u.setCounty(u.getCounty().replace("/",""));
         User user = userRepository.save(u);
         return user;
     }

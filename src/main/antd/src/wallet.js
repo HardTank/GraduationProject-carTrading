@@ -256,7 +256,7 @@ class Wallet extends Component {
                 </Row>
                 <Row style={{height:40}}><Col span={3} style={{height:40}}>
                     <Button type="primary" onClick={this.showPayModal}>充值</Button></Col><Col style={{height:40}} span={3}>
-                    <Button type="primary" onClick={this.showDrawModal}>提取</Button></Col>
+                    <Button type="primary" disabled={this.state.wallet==0}  onClick={this.showDrawModal}>提取</Button></Col>
 
                 </Row>
 
