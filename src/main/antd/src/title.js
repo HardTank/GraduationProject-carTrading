@@ -31,7 +31,7 @@ class Title extends Component {
         e.preventDefault();
         this.setState({loginVisible: false, registerVisible: true});
     }
-    callback = () => { window.location.reload(true) };
+
 
 
 
@@ -42,8 +42,8 @@ class Title extends Component {
 
         if (userId > 0) {
             var firstLogin= sessionStorage.getItem("firstLogin")
-            if(firstLogin==null)
-                window.location.reload(true);
+           // if(firstLogin==null)
+               // window.location.reload(true);
             window.location.href = "#/" + target;
 
         }
@@ -109,7 +109,7 @@ class Title extends Component {
                             });
 
 
-                            window.location.reload(true);
+                           // window.location.reload(true);
                             sessionStorage.setItem("firstLogin",true)
                             window.location.href = "#/" + this.state.target;
 

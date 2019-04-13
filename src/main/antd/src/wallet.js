@@ -17,28 +17,27 @@ import EditPwd from './editPwd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const { Meta } = Card;
 class Wallet extends Component {
-    constructor() {
-        super();
-        this.state = {
+
+         state = {
             visible: false,
             amount: 1000,
             withdrawVisible: false,
-            wallet: '',
+            wallet:'1',
             userId: 0,
             result: {},
             pageIndex: 0,
             pageSize: 4,
-            pay:''
+            pay: ''
         }
-    }
-    //提取操作
+
+
+    //充值操作
     handleOk = ()=> {
-        this.setState({
-            visible: false,
-            wallet: this.state.wallet + parseFloat(this.state.amount),
-        })
+if(this.state.wallet=='1')
+    var wallet = this.props.wallet + parseFloat(this.state.amount)
+else
         var wallet = this.state.wallet + parseFloat(this.state.amount)
-        this.changeWallet(0,this.state.amount);
+
         axios.get('http://localhost:8080/user/save', {
                 xhrFields: {
                     withCredentials: true
@@ -62,18 +61,29 @@ class Wallet extends Component {
                         loginVisible: false,
 
                     });
+                    this.changeWallet(0, this.state.amount);
+
                 }
                 ;
+                {
+                    this.setState({
+                        visible: false,
+                        wallet:wallet,
+                        //wallet: wallet + parseFloat(this.state.amount),
+                    })
+                }
+
             }
         );
+
     }
     //隐藏modal
     handleCancel = ()=> {
-        this.setState({visible: false,withdrawVisible:false})
+        this.setState({visible: false, withdrawVisible: false})
     }
     //充值界面
     showPayModal = ()=> {
-        this.setState({visible: true,amount:1000})
+        this.setState({visible: true, amount: 1000})
     }
     //提取界面
     showDrawModal = ()=> {
@@ -107,17 +117,17 @@ class Wallet extends Component {
         )
     }
     //按填写金额提取
-    withdraw=()=>{
+    withdraw = ()=> {
         this.props.form.validateFields((err, values) => {
             if (!err) {
 
-                this.setState({
-                    withdrawVisible:false,
-                    wallet:parseFloat(this.state.wallet)-values.withdraw,
+                if(typeof (this.state.wallet)=='string')
+                var wallet = parseFloat(this.props.wallet) - values.withdraw
+                else
+                    var wallet = parseFloat(this.state.wallet) - values.withdraw
 
-                })
-               var wallet=parseFloat(this.state.wallet)-values.withdraw
-                this.changeWallet(1,values.withdraw );
+                this.changeWallet(1, values.withdraw);
+                this.handleCancel();
                 axios.get('http://localhost:8080/user/save', {
                         xhrFields: {
                             withCredentials: true
@@ -135,23 +145,27 @@ class Wallet extends Component {
                             sessionStorage.setItem("userId", r.data.id);
                             var str = JSON.stringify(r.data);
                             sessionStorage.setItem("user", str);
+                            this.setState({
+                                withdrawVisible: false,
+                                wallet:wallet,
+                                //wallet: parseFloat(this.state.wallet) - values.withdraw,
 
+                            })
                         }
                         ;
                     }
                 );
+
             }
 
         });
     }
     //余额全部取出
-    handleSubmit=()=>{
-        this.setState({
-            withdrawVisible:false,
-            wallet:0,
-
-        })
-        this.changeWallet(1,this.state.wallet );
+    handleSubmit = ()=> {
+        if(typeof (this.state.wallet)=='string')
+        this.changeWallet(1, this.props.wallet);
+        else
+            this.changeWallet(1, this.state.wallet);
         axios.get('http://localhost:8080/user/save', {
                 xhrFields: {
                     withCredentials: true
@@ -159,7 +173,7 @@ class Wallet extends Component {
                 crossDomain: true,
                 params: {
                     id: this.state.userId,
-                    wallet: 0,
+                    wallet:0,
                 }
             }
         ).then(
@@ -169,33 +183,59 @@ class Wallet extends Component {
                     sessionStorage.setItem("userId", r.data.id);
                     var str = JSON.stringify(r.data);
                     sessionStorage.setItem("user", str);
+                    this.setState({
+                        withdrawVisible: false,
+                        wallet:0,
+
+                    })
 
                 }
                 ;
+
             }
         );
+
     }
     //充值或者提取
-    changeWallet = (type,amount)=> {
+    changeWallet = (type, amount)=> {
         var userId = sessionStorage.getItem("userId");
         axios.get('http://localhost:8080/wallet/save', {
                 params: {
                     userId: userId,
-                    amount:amount,
-                    type:type,
+                    amount: amount,
+                    type: type,
                 }
             }
         ).then(
-            this.show(0)
+            r => {
+                var data = r.data;
+                console.info(data)
+
+                this.setState({
+                    result: data,
+                });
+                console.info(r);
+            }
+
         )
     }
     //确定余额是否符合
-    confirmAmount=(rule, value, callback)=>{
-        if (value>this.state.wallet) {
-            callback('超过可取金额!');
-        } else {
-            callback();
+    confirmAmount = (rule, value, callback)=> {
+        if(typeof (this.state.wallet)=='string'){
+            if (value > this.props.wallet) {
+                callback('超过可取金额!');
+            } else {
+                callback();
+            }
         }
+        else {
+            if (value > this.state.wallet) {
+                callback('超过可取金额!');
+            } else {
+                callback();
+            }
+        }
+
     }
     //table展示列
     columns = [{
@@ -203,7 +243,7 @@ class Wallet extends Component {
         dataIndex: 'id',
         key: 'id',
         className: 'hidden',
-    },{
+    }, {
         title: '序号',
         width: 80,
         render: (text, record, index) => `${index + 1}`
@@ -232,15 +272,17 @@ class Wallet extends Component {
         user = JSON.parse(user);
         this.setState(
             {
-                wallet: user.wallet,
+              //  wallet: user.wallet,
                 userId: userId,
             })
         this.show(0);
+
     }
 
     render() {
         const TabPane = Tabs.TabPane;
         const { getFieldDecorator } = this.props.form;
+        const { wallet}=this.props;
         return (
             <div >
                 <Row style={{height:60}}>
@@ -248,19 +290,21 @@ class Wallet extends Component {
                         <div className="walletPrice">总额:</div>
                     </Col>
                     <Col span={4} style={{height:60}}>
-                        <div className="walletPrice">余额:{this.state.wallet}元</div>
+                        <div className="walletPrice">余额:{typeof(this.state.wallet)=='string'?wallet:this.state.wallet}元</div>
                     </Col>
                     <Col span={4} style={{height:60}}>
                         <div className="walletPrice">保证金:</div>
                     </Col>
                 </Row>
                 <Row style={{height:40}}><Col span={3} style={{height:40}}>
-                    <Button type="primary" onClick={this.showPayModal}>充值</Button></Col><Col style={{height:40}} span={3}>
-                    <Button type="primary" disabled={this.state.wallet==0}  onClick={this.showDrawModal}>提取</Button></Col>
+                    <Button type="primary" onClick={this.showPayModal}>充值</Button></Col><Col style={{height:40}}
+                                                                                             span={3}>
+                    <Button type="primary"
+                            onClick={this.showDrawModal} disabled={this.props.wallet==0&&this.state.wallet=='1'||this.state.wallet==0}>提取</Button></Col>
 
                 </Row>
 
-                    <div  style={{  fontWeight:'bold',height:80}}>流水记录:</div>
+                <div style={{  fontWeight:'bold',height:80}}>流水记录:</div>
 
                 <hr/>
 
@@ -308,7 +352,7 @@ class Wallet extends Component {
                     destroyOnClose="true"
                     footer={null}
                 >
-                    <Form layout="horizontal" style={{marginLeft:100}} onSubmit={this.handleSubmit}>
+                    <Form layout="horizontal" style={{marginLeft:100}}>
                         <Form.Item style={{width:300 } }
                                    label="取款金额"
                         >
@@ -318,7 +362,7 @@ class Wallet extends Component {
                                         pattern: /^\+?(?!0+(\.00?)?$)\d+(\.\d\d?)?$/, message: '格式错误!',
                                     }, {
                                         required: true, message: '请输入取款金额!',
-                                    },{
+                                    }, {
                                         validator: this.confirmAmount,
                                     }],
                             })(
@@ -327,10 +371,10 @@ class Wallet extends Component {
                         </Form.Item>
                         <Form.Item  >
                             <Row><Col span={8}>
-                            <Button type="primary" htmlType="submit">全部取出</Button></Col>
-                                <Col  span={8}>
-                            <Button type="primary" onClick={this.withdraw}>提取</Button></Col>
-                                </Row>
+                                <Button type="primary" onClick={this.handleSubmit}>全部取出</Button></Col>
+                                <Col span={8}>
+                                    <Button type="primary" onClick={this.withdraw}>提取</Button></Col>
+                            </Row>
                         </Form.Item>
                     </Form>
                 </Modal>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import '../css/personal.css';
 import {
-    message,Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Button,
+    message,Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Button, DatePicker
 } from 'antd';
 import {LocaleProvider} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
@@ -10,25 +10,68 @@ import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Address from'../address'
 const { Option } = Select;
+const { MonthPicker} = DatePicker;
 class CarInfo extends Component {
+
+          state={
+
+             readOnly:false,
+
+         }
+
+
+    handleSubmit = (e)=> {
+        e.preventDefault();
+        this.setState({
+            readOnly:true,
+        })
+        this.props.form.validateFields((err, values) => {
+
+            axios.get('http://localhost:8080/carInfo/save', {
+                    params: {
+                        name: values.name,
+                        pwd: values.pwd,
+                        pageIndex: 0,
+                        pageSize: 1,
+                    }
+                }
+            ).then(
+                r => {
+                    console.info(r)
+                    if (r.data.numberOfElements == 1) {
+
+                        message.config({
+                            top: 130,
+                            duration: 2,
+                            maxCount: 3,
+                        });
+                        message.info('登陆成功', 1);
+
+                    }
+                });
+
+
+        })
+
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
-
             <div className="divcss5">
-                <Form layout="horizontal" style={{marginLeft:100}} onSubmit={this.handleSubmit}>
+                <Form   layout="horizontal" style={{marginLeft:100}} onSubmit={this.handleSubmit}>
                     <Row gutter={8}>
                         <Col span={8}>
                             <Form.Item
                                 label="VIN码"
                             >
                                 {getFieldDecorator('vin', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
+                                    rules: [{pattern: /^[0-9A-Za-z]{17}$/, message: '格式错误'},
                                         {
                                             required: true, message: '请输入vin码!',
                                         }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -39,12 +82,9 @@ class CarInfo extends Component {
                                 {getFieldDecorator('brand', {
                                     rules: [{
                                         required: true, message: '请输入厂商品牌!',
-                                    }, {
-                                        pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
-                                        message: "格式错误",
                                     }],
                                 })(
-                                    <Input maxLength={18}/>
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -53,12 +93,11 @@ class CarInfo extends Component {
                                 label="汽车类型"
                             >
                                 {getFieldDecorator('productDate', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入汽车类型!',
-                                        }],
+                                    rules: [{
+                                        required: true, message: '请输入汽车类型!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -70,12 +109,11 @@ class CarInfo extends Component {
                                 label="颜色"
                             >
                                 {getFieldDecorator('color', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入颜色!',
-                                        }],
+                                    rules: [{
+                                        required: true, message: '请输入颜色!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly} />
                                 )}
                             </Form.Item>
                         </Col>
@@ -91,7 +129,7 @@ class CarInfo extends Component {
                                         message: "格式错误",
                                     }],
                                 })(
-                                    <Input maxLength={18}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -100,12 +138,15 @@ class CarInfo extends Component {
                                 label="注册地"
                             >
                                 {getFieldDecorator('productDate', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
+                                    rules: [{
+                                        pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/,
+                                        message: '格式错误'
+                                    },
                                         {
-                                            required: true, message: '请输入姓名!',
+                                            required: true, message: '请输入注册地!',
                                         }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -116,12 +157,11 @@ class CarInfo extends Component {
                                 label="出厂日期"
                             >
                                 {getFieldDecorator('productDate', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入出厂日期!',
-                                        }],
+                                    rules: [{
+                                        required: true, message: '请输入出厂日期!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <MonthPicker  disabled={this.state.readOnly} style={{width:'100%'}}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -132,12 +172,9 @@ class CarInfo extends Component {
                                 {getFieldDecorator('discharge', {
                                     rules: [{
                                         required: true, message: '请输入排量!',
-                                    }, {
-                                        pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
-                                        message: "格式错误",
                                     }],
                                 })(
-                                    <Input maxLength={18}/>
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -146,12 +183,12 @@ class CarInfo extends Component {
                                 label="驱动方式"
                             >
                                 {getFieldDecorator('drivingMode', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
+                                    rules: [
                                         {
                                             required: true, message: '请选择驱动方式!',
                                         }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -162,12 +199,12 @@ class CarInfo extends Component {
                                 label="座位数"
                             >
                                 {getFieldDecorator('seatNum', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
+                                    rules: [{pattern: /^[0-9]*$/, message: '格式错误'},
                                         {
                                             required: true, message: '请输入座位数!',
                                         }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -183,7 +220,7 @@ class CarInfo extends Component {
                                         message: "格式错误",
                                     }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -192,12 +229,11 @@ class CarInfo extends Component {
                                 label="是否进口"
                             >
                                 {getFieldDecorator('source', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请选择来源!',
-                                        }],
+                                    rules: [{
+                                        required: true, message: '请选择来源!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -208,12 +244,11 @@ class CarInfo extends Component {
                                 label="表显里程"
                             >
                                 {getFieldDecorator('mileage', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入表显里程!',
-                                        }],
+                                    rules: [{pattern: /^[0-9]*$/, message: '格式错误'}, {
+                                        required: true, message: '请输入表显里程!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -224,13 +259,10 @@ class CarInfo extends Component {
                                 {getFieldDecorator('transmission', {
                                     rules: [{
                                         required: true, message: '请选择变速器类型!',
-                                    }, {
-                                        pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
-                                        message: "格式错误",
                                     }],
                                 })(
                                     <Select
-                                        placeholder="请选择"
+                                        placeholder="请选择"  disabled={this.state.readOnly}
 
                                     >
                                         <Option value="AT">自动变速器</Option>
@@ -247,13 +279,12 @@ class CarInfo extends Component {
                                 label="排放标准"
                             >
                                 {getFieldDecorator('emissionStandard', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请选择排放标准!',
-                                        }],
+                                    rules: [{
+                                        required: true, message: '请选择排放标准!',
+                                    }],
                                 })(
                                     <Select
-                                        placeholder="请选择"
+                                        placeholder="请选择"  disabled={this.state.readOnly}
 
                                     >
                                         <Option value="国六">国六</Option>
@@ -273,12 +304,11 @@ class CarInfo extends Component {
                                 label="能源类型"
                             >
                                 {getFieldDecorator('energy', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入能源类型!',
-                                        }],
+                                    rules: [{
+                                        required: true, message: '请输入能源类型!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -289,12 +319,9 @@ class CarInfo extends Component {
                                 {getFieldDecorator('tyre', {
                                     rules: [{
                                         required: true, message: '请输入轮胎规格!',
-                                    }, {
-                                        pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
-                                        message: "格式错误",
                                     }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -303,29 +330,31 @@ class CarInfo extends Component {
                                 label="过户次数"
                             >
                                 {getFieldDecorator('transfer', {
-                                    rules: [{pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入过户次数!',
-                                        }],
+                                    rules: [{pattern: /^[0-9]*$/, message: '格式错误'}, {
+                                        required: true, message: '请输入过户次数!',
+                                    }],
                                 })(
-                                    <Input />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
                     </Row>
 
                     <Form.Item  >
-                        <Button type="primary" htmlType="submit">确认修改</Button>
+                        <Button type="primary" htmlType="submit">保存</Button>
                     </Form.Item>
                 </Form>
 
             </div>
-
-
-
         );
     }
-
-
 }
-export default Form.create({})(CarInfo);
+export
+default
+Form
+    .create({})
+
+    (
+        CarInfo
+    )
+;

@@ -11,26 +11,8 @@ import Title from './title';
 import EditPwd from './editPwd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 class BaseInfoForm extends Component {
-    constructor() {
-        super();
-        this.state = {
-            visible:false,
-        }
-    }
-    componentDidMount() {
-        var user = sessionStorage.getItem("user");
-        user = JSON.parse(user);
 
-        this.setState(
-            {
-                name: user.name,
-                pwd: user.pwd,
-                mail: user.mail,
-                phone: user.phone,
-                cardId: user.cardId,
-                address: user.address,
-            })
-    }
+
     render() {
 
 

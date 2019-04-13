@@ -2,6 +2,9 @@ package com.carTrading.controller;
 
 import com.carTrading.entity.CarInfo;
 import com.carTrading.service.CarInfoService;
+import com.carTrading.tool.UpdateNotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CarInfoController {
     @Autowired
     CarInfoService carInfoService;
-
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     @RequestMapping(value = "/getList")
     public Page<CarInfo> getList(CarInfo car, int pageIndex, int pageSize) {
         Page<CarInfo>page=carInfoService.getList(car,pageIndex,pageSize);
@@ -25,8 +28,19 @@ public class CarInfoController {
     }
 
     @RequestMapping("save")
-    public Boolean saveCarInfo(CarInfo carInfo) {
-        Boolean result = carInfoService.save(carInfo);
-        return result;
+    public CarInfo saveCarInfo(CarInfo carInfo) {
+        if(carInfo.getId()!=null) {
+            CarInfo car = carInfoService.getCar(carInfo);
+            logger.info("更新二手车前" + car.toString() + carInfo.toString());
+            UpdateNotNull.copyNonNullProperties(carInfo, car);
+            logger.info("更新二手车" + car.toString() + carInfo.toString());
+            carInfo = carInfoService.save(car);
+        }
+        else{
+            logger.info("添加二手车" + carInfo.toString());
+            carInfo = carInfoService.save(carInfo);
+
+        }
+        return carInfo;
     }
 }

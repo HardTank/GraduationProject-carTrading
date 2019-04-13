@@ -45,12 +45,17 @@ public class CarInfoService {
      * 更新数据
      */
     @Transactional(rollbackFor = Exception.class)
-    public Boolean save(CarInfo car) {
+    public CarInfo save(CarInfo car) {
         logger.info("更新二手车信息");
         CarInfo carInfo = carInfoRepository.save(car);
-        if (carInfo != null)
-            return true;
-        else
-            return false;
+        return carInfo;
+    }
+
+    /**
+     * 根据id获取汽车的信息
+     */
+    public CarInfo getCar(CarInfo carInfo) {
+        CarInfo car = carInfoRepository.findOne(carInfo.getId());
+        return car;
     }
 }

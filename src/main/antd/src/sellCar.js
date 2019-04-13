@@ -9,6 +9,8 @@ import axios from 'axios'//这是模块的加载机制，直接写依赖库的�
 import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import CarInfo from './sellCar/carInfo'
+import ConfigurationInfo from './sellCar/configurationInfo'
+import ProcedureInfo from './sellCar/procedureInfo'
 class SellCar extends Component {
     handleSubmit = (e) => {
         e.preventDefault();
@@ -24,9 +26,7 @@ class SellCar extends Component {
                             withCredentials: true
                         },
                         crossDomain: true,
-                        params: {
-
-                        }
+                        params: {}
                     }
                 ).then(
                     r => {
@@ -74,7 +74,12 @@ class SellCar extends Component {
             <div style={{padding:30,backgroundColor:' white',marginTop:-30,marginLeft:-30}}>
                 <Tabs defaultActiveKey="editBaseInfo">
                     <TabPane tab="基本信息修改" key="editBaseInfo">
-<CarInfo></CarInfo>
+                        <h2 style={{marginLeft:40}}>基本信息:</h2>
+                        <CarInfo></CarInfo>
+                        <h2 style={{marginLeft:40}}>配置信息:</h2>
+                        <ConfigurationInfo></ConfigurationInfo>
+                        <h2 style={{marginLeft:40}}>手续信息:</h2>
+                        <ProcedureInfo></ProcedureInfo>
                     </TabPane>
                     <TabPane tab="密码修改" key="editPwd">
 

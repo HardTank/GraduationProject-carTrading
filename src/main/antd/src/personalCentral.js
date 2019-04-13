@@ -159,6 +159,7 @@ class PersonalCentral extends Component {
                                 province:user.province,
                                 city:user.city,
                                 county:user.county,
+                                wallet:user.wallet,
                             })
                     }
                     ;
@@ -225,7 +226,9 @@ class PersonalCentral extends Component {
                             <SellCar></SellCar>
                         </div>
                         <div hidden={this.state.myWallet}>
-                            <Wallet></Wallet>
+                            <Wallet
+                                wallet={this.state.wallet}
+                            ></Wallet>
                             </div>
                         <div hidden={this.state.baseInfo}>
                             <BaseInfoForm

@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 /**
  * @author tanlixin
  * @description
@@ -28,17 +25,23 @@ public class WalletController {
     /**查询流水*/
     @RequestMapping(value = "/show",method = RequestMethod.GET)
     @ResponseBody
-    public Page<Wallet> show(Wallet wallet, int pageIndex, int pageSize, HttpServletRequest request, HttpSession session){
+    public Page<Wallet> show(Wallet wallet, int pageIndex, int pageSize){
         logger.info("开始运行查询流水"+wallet.toString()+pageIndex+pageSize);
         Page< Wallet> page =walletService.getList(wallet,pageIndex,pageSize);
         //  user=users.
+        logger.info("操作数据"+page.getContent().get(0).getAmount());
         return page;
     }
     @RequestMapping(value = "/save",method = RequestMethod.GET)
     @ResponseBody
-    public Wallet save(Wallet wallet){
+    public Page<Wallet> save(Wallet wallet){
         logger.info("当前流水"+wallet.toString());
-        wallet=walletService.add(wallet);
-        return wallet;
+
+        walletService.add(wallet);
+        Wallet w=new Wallet();
+        w.setUserId(wallet.getUserId());
+        logger.info("w:"+w.toString());
+        Page<Wallet> wa=show(w,0,4);
+        return wa;
     }
 }
