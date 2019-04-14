@@ -12,6 +12,34 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 const { Option } = Select;
 const { MonthPicker} = DatePicker;
 class ConfigurationInfo extends Component {
+    state = {
+
+        readOnly: false,
+        save:false,
+    }
+    editForm=()=>{
+        this.setState({
+            readOnly: false,
+            save:false,
+        },()=>this.props.edit());
+
+    }
+
+    handleSubmit = (e)=> {
+        e.preventDefault();
+        this.props.form.validateFields((err,values)=>{
+            if(!err){
+                console.info(values);
+                this.setState({
+                        readOnly: true,
+                        save:true},
+                    ()=>this.props.save())
+            }
+        });
+
+
+
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -27,7 +55,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请输入座椅材料!',
                                     }],
                                 })(
-                                    <Input />
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -40,7 +68,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请输入座椅功能!',
                                     }],
                                 })(
-                                    <Input  />
+                                    <Input  disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -53,7 +81,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请输入轮毂规格!',
                                     }],
                                 })(
-                                    <Input />
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -68,7 +96,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '车窗玻璃调节方式!',
                                     }],
                                 })(
-                                    <Select
+                                    <Select disabled={this.state.readOnly}
                                         placeholder="请选择"
 
                                     >
@@ -87,7 +115,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请选择车窗后视镜调节方式!',
                                     }],
                                 })(
-                                    <Select
+                                    <Select disabled={this.state.readOnly}
                                         placeholder="请选择"
 
                                     >
@@ -106,7 +134,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请选择座椅调节方式!',
                                     }],
                                 })(
-                                    <Select
+                                    <Select disabled={this.state.readOnly}
                                         placeholder="请选择"
 
                                     >
@@ -123,12 +151,12 @@ class ConfigurationInfo extends Component {
                             <Form.Item
                                 label="ABS/防抱死制动系统"
                             >
-                                {getFieldDecorator('productDate', {
+                                {getFieldDecorator('abs', {
                                     rules: [{
                                         required: true, message: '请选择!',
                                     }],
                                 })(
-                                    <Select placeholder="请选择">
+                                    <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="0">无</Option>
                                         <Option value="1">有</Option>
                                     </Select>
@@ -144,7 +172,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请选择!',
                                     }],
                                 })(
-                                    <Select placeholder="请选择">
+                                    <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="0">无</Option>
                                         <Option value="1">有</Option>
                                     </Select>
@@ -161,7 +189,7 @@ class ConfigurationInfo extends Component {
                                             required: true, message: '请选择 !',
                                         }],
                                 })(
-                                    <Select placeholder="请选择">
+                                    <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="0">无</Option>
                                         <Option value="1">有</Option>
                                     </Select>
@@ -180,7 +208,7 @@ class ConfigurationInfo extends Component {
                                             required: true, message: '请选择 !',
                                         }],
                                 })(
-                                    <Select placeholder="请选择">
+                                    <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="0">无</Option>
                                         <Option value="1">有</Option>
                                     </Select>
@@ -197,7 +225,7 @@ class ConfigurationInfo extends Component {
                                             required: true, message: '请选择 !',
                                         }],
                                 })(
-                                    <Select placeholder="请选择">
+                                    <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="0">无</Option>
                                         <Option value="1">有</Option>
                                     </Select>
@@ -214,7 +242,7 @@ class ConfigurationInfo extends Component {
                                             required: true, message: '请选择 !',
                                         }],
                                 })(
-                                    <Select placeholder="请选择">
+                                    <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="0">无</Option>
                                         <Option value="1">有</Option>
                                     </Select>
@@ -233,7 +261,7 @@ class ConfigurationInfo extends Component {
                                         required: true, message: '请选择 !',
                                     }],
                             })(
-                                <Select placeholder="请选择">
+                                <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                     <Option value="0">无</Option>
                                     <Option value="1">有</Option>
                                 </Select>
@@ -243,7 +271,14 @@ class ConfigurationInfo extends Component {
                     </Row>
                      
                     <Form.Item  >
-                        <Button type="primary" htmlType="submit">保存</Button>
+                        <Row>
+                            <Col span={4}>
+                                <Button type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                            </Col>
+                            <Col span={4}>
+                                <Button type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                            </Col>
+                        </Row>
                     </Form.Item>
                 </Form>
 

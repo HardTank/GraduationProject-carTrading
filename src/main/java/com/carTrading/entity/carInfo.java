@@ -46,7 +46,7 @@ public class CarInfo {
      * 出厂日期
      */
     @Column(name="product_date")
-    @JsonFormat(pattern = "yyyy-MM-dd ", timezone = "GMT+8")
+    @JsonFormat(pattern = "yyyy-MM ", timezone = "GMT+8")
     private Date productDate;
     /**
      * 厂商
@@ -55,7 +55,7 @@ public class CarInfo {
     /**
      * 款式
      */
-    private String Style;
+    private String type;
     /**
      * 颜色
      */
@@ -91,7 +91,7 @@ public class CarInfo {
     /**
      * 是否进口 1是 0否
      */
-    private String source;
+    private Integer source;
     /**
      * 表显里程
      */

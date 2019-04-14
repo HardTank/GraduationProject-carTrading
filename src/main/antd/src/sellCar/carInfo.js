@@ -13,53 +13,45 @@ const { Option } = Select;
 const { MonthPicker} = DatePicker;
 class CarInfo extends Component {
 
-          state={
+    state = {
 
-             readOnly:false,
+        readOnly: false,
+        save:false,
+    }
+  editForm=()=>{
+      this.setState({
+          readOnly: false,
+          save:false,
+      },()=>this.props.edit());
 
-         }
-
+  }
 
     handleSubmit = (e)=> {
         e.preventDefault();
-        this.setState({
-            readOnly:true,
-        })
-        this.props.form.validateFields((err, values) => {
+        this.props.form.validateFields((err,values)=>{
+            if(!err){
 
-            axios.get('http://localhost:8080/carInfo/save', {
-                    params: {
-                        name: values.name,
-                        pwd: values.pwd,
-                        pageIndex: 0,
-                        pageSize: 1,
-                    }
-                }
-            ).then(
-                r => {
-                    console.info(r)
-                    if (r.data.numberOfElements == 1) {
-
-                        message.config({
-                            top: 130,
-                            duration: 2,
-                            maxCount: 3,
-                        });
-                        message.info('登陆成功', 1);
-
-                    }
-                });
+                this.setState({
+                    readOnly: true,
+                    save:true},
+                    ()=>this.props.save())
+            }
+        });
 
 
-        })
 
     }
+    componentDidMount() {
 
+      //   var carInfo = sessionStorage.getItem("carInfo");
+      //   carInfo = JSON.parse(carInfo);
+      //   this.props.form.setFieldsValue(carInfo);
+    }
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
             <div className="divcss5">
-                <Form   layout="horizontal" style={{marginLeft:100}} onSubmit={this.handleSubmit}>
+                <Form layout="horizontal" style={{marginLeft:100}} onSubmit={this.handleSubmit}>
                     <Row gutter={8}>
                         <Col span={8}>
                             <Form.Item
@@ -71,7 +63,7 @@ class CarInfo extends Component {
                                             required: true, message: '请输入vin码!',
                                         }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -84,7 +76,7 @@ class CarInfo extends Component {
                                         required: true, message: '请输入厂商品牌!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -92,17 +84,16 @@ class CarInfo extends Component {
                             <Form.Item
                                 label="汽车类型"
                             >
-                                {getFieldDecorator('productDate', {
+                                {getFieldDecorator('type', {
                                     rules: [{
                                         required: true, message: '请输入汽车类型!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
                     </Row>
-
                     <Row gutter={8}>
                         <Col span={8}>
                             <Form.Item
@@ -113,7 +104,7 @@ class CarInfo extends Component {
                                         required: true, message: '请输入颜色!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly} />
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -124,12 +115,16 @@ class CarInfo extends Component {
                                 {getFieldDecorator('nature', {
                                     rules: [{
                                         required: true, message: '请输入使用性质!',
-                                    }, {
-                                        pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
-                                        message: "格式错误",
                                     }],
                                 })(
-                                    <Input disabled={this.state.readOnly}/>
+                                    <Select
+                                        placeholder="请选择" disabled={this.state.readOnly}
+
+                                    >
+                                        <Option value="营运">营运</Option>
+                                        <Option value="非营运">非营运</Option>
+
+                                    </Select>
                                 )}
                             </Form.Item>
                         </Col>
@@ -137,16 +132,12 @@ class CarInfo extends Component {
                             <Form.Item
                                 label="注册地"
                             >
-                                {getFieldDecorator('productDate', {
+                                {getFieldDecorator('registerPlace', {
                                     rules: [{
-                                        pattern: /^[\u4e00-\u9fa5]+(·[\u4e00-\u9fa5]+)*$/,
-                                        message: '格式错误'
-                                    },
-                                        {
-                                            required: true, message: '请输入注册地!',
-                                        }],
+                                        required: true, message: '请输入注册地!',
+                                    }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -161,7 +152,7 @@ class CarInfo extends Component {
                                         required: true, message: '请输入出厂日期!',
                                     }],
                                 })(
-                                    <MonthPicker  disabled={this.state.readOnly} style={{width:'100%'}}/>
+                                    <MonthPicker disabled={this.state.readOnly} style={{width:'100%'}}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -174,7 +165,7 @@ class CarInfo extends Component {
                                         required: true, message: '请输入排量!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -188,7 +179,7 @@ class CarInfo extends Component {
                                             required: true, message: '请选择驱动方式!',
                                         }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -204,7 +195,7 @@ class CarInfo extends Component {
                                             required: true, message: '请输入座位数!',
                                         }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -216,11 +207,11 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请输入发动机号!',
                                     }, {
-                                        pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
+                                        pattern: /^[0-9A-Za-z\-\－\u4e00-\u9fa5]{1,20}$/,
                                         message: "格式错误",
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -233,7 +224,14 @@ class CarInfo extends Component {
                                         required: true, message: '请选择来源!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Select
+                                        placeholder="请选择" disabled={this.state.readOnly}
+
+                                    >
+                                        <Option value="1">是</Option>
+                                        <Option value="0">否</Option>
+
+                                    </Select>
                                 )}
                             </Form.Item>
                         </Col>
@@ -244,11 +242,11 @@ class CarInfo extends Component {
                                 label="表显里程"
                             >
                                 {getFieldDecorator('mileage', {
-                                    rules: [{pattern: /^[0-9]*$/, message: '格式错误'}, {
+                                    rules: [{
                                         required: true, message: '请输入表显里程!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -262,14 +260,14 @@ class CarInfo extends Component {
                                     }],
                                 })(
                                     <Select
-                                        placeholder="请选择"  disabled={this.state.readOnly}
+                                        placeholder="请选择" disabled={this.state.readOnly}
 
                                     >
-                                        <Option value="AT">自动变速器</Option>
-                                        <Option value="MT">手动变速器</Option>
-                                        <Option value="AMT">手动/自动变速器</Option>
-                                        <Option value="CVT">无级变速器</Option>
-                                        <Option value="DCT">双离合自动变速器</Option>
+                                        <Option value="AT">AT</Option>
+                                        <Option value="MT">MT</Option>
+                                        <Option value="AMT">AMT</Option>
+                                        <Option value="CVT">CVT</Option>
+                                        <Option value="DCT">DCT</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -284,7 +282,7 @@ class CarInfo extends Component {
                                     }],
                                 })(
                                     <Select
-                                        placeholder="请选择"  disabled={this.state.readOnly}
+                                        placeholder="请选择" disabled={this.state.readOnly}
 
                                     >
                                         <Option value="国六">国六</Option>
@@ -308,7 +306,7 @@ class CarInfo extends Component {
                                         required: true, message: '请输入能源类型!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -321,7 +319,7 @@ class CarInfo extends Component {
                                         required: true, message: '请输入轮胎规格!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -334,16 +332,25 @@ class CarInfo extends Component {
                                         required: true, message: '请输入过户次数!',
                                     }],
                                 })(
-                                    <Input  disabled={this.state.readOnly}/>
+                                    <Input disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
                     </Row>
 
+
                     <Form.Item  >
-                        <Button type="primary" htmlType="submit">保存</Button>
+                        <Row>
+                            <Col span={4}>
+                                <Button type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                            </Col>
+                            <Col span={4}>
+                                <Button type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                            </Col>
+                        </Row>
                     </Form.Item>
                 </Form>
+
 
             </div>
         );

@@ -44,7 +44,7 @@ public class ConfigurationInfo {
      * 倒车影像
      */
     @Column(name="reversing_image")
-    private String reversingImage;
+    private Integer reversingImage;
     /**
      * 车外后视镜
      */

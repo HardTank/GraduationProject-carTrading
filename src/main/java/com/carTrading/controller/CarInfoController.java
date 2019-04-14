@@ -10,6 +10,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author tanlixin
  * @description
@@ -28,7 +32,17 @@ public class CarInfoController {
     }
 
     @RequestMapping("save")
-    public CarInfo saveCarInfo(CarInfo carInfo) {
+    public CarInfo saveCarInfo(CarInfo carInfo,String productDates) {
+        logger.info("productDate"+productDates);
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
+        Date date = null;
+        try {
+            date = format.parse(productDates.replace("\"",""));
+            carInfo.setProductDate(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if(carInfo.getId()!=null) {
             CarInfo car = carInfoService.getCar(carInfo);
             logger.info("更新二手车前" + car.toString() + carInfo.toString());
