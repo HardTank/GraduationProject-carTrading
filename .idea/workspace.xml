@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9b039b3c-0574-448a-9a9f-dbdfd42c9839" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/controller/ConfigurationInfoController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/controller/ProcedureInfoController.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/repository/ConfigurationInfoRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/repository/ProcedureInfoRepository.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/service/ConfigurationInfoService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/service/ProcedureInfoService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/antd/src/sellCar.js" afterPath="$PROJECT_DIR$/src/main/antd/src/sellCar.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/antd/src/sellCar/carInfo.js" afterPath="$PROJECT_DIR$/src/main/antd/src/sellCar/carInfo.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/antd/src/sellCar/configurationInfo.js" afterPath="$PROJECT_DIR$/src/main/antd/src/sellCar/configurationInfo.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/antd/src/sellCar/procedureInfo.js" afterPath="$PROJECT_DIR$/src/main/antd/src/sellCar/procedureInfo.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/carTrading/controller/CarInfoController.java" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/controller/CarInfoController.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/carTrading/entity/ConfigurationInfo.java" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/entity/ConfigurationInfo.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/carTrading/entity/carInfo.java" afterPath="$PROJECT_DIR$/src/main/java/com/carTrading/entity/carInfo.java" />
     </list>
     <ignored path="springboot-demo.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -125,7 +112,7 @@
       <file leaf-file-name="sellCar.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/antd/src/sellCar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.83809525">
+            <state vertical-scroll-proportion="0.9134948">
               <caret line="307" column="20" selection-start-line="307" selection-start-column="20" selection-end-line="307" selection-end-column="20" />
               <folding>
                 <element signature="e#780#831#0" expanded="false" />
@@ -1203,7 +1190,7 @@
       <workItem from="1554894695244" duration="46053000" />
       <workItem from="1555030534162" duration="43350000" />
       <workItem from="1555123772234" duration="42499000" />
-      <workItem from="1555227536414" duration="13487000" />
+      <workItem from="1555227536414" duration="13696000" />
     </task>
     <task id="LOCAL-00001" summary="构建初始结构">
       <created>1551410859579</created>
@@ -1289,11 +1276,17 @@
       <option name="project" value="LOCAL" />
       <updated>1555161343260</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="汽车信息提交完成,分开提交的话没有办法事务管理,时间与位置的问题需要仔细考虑一番,个人信息未见信息错乱问题">
+      <created>1555244282704</created>
+      <option name="number" value="00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1555244282704</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="399933000" />
+    <option name="totallyTimeSpent" value="400142000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="784" extended-state="6" />
@@ -1309,7 +1302,7 @@
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3885449" sideWeight="0.49241275" order="5" side_tool="false" content_ui="combo" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3018576" sideWeight="0.49241275" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.20864947" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.46358117" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32817337" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1369,7 +1362,8 @@
     <MESSAGE value="地址插件完成&#10;通过window.reload解决,组件值异常问题&#10;新增省市区字段&#10;金额的插入数据会出现延迟(偶尔,首充时较易出现)&#10;余额全部取出后会进行刷新(偶尔)" />
     <MESSAGE value="汽车基本信息录入的表单,&#10;背景的一些调整" />
     <MESSAGE value="解决参数为inull的问题,替换掉了暴力的reload,需要注意到,修改用户信息时是否还有缓存,wallet部分进行了改动,整体逻辑更加复杂,判断字符串的内容来解决值的来源,把汽车基本信息的表单写完了,但是位置的问题需要注意,可能是一个坑,今天注意更改了前几天遗留的各种bug" />
-    <option name="LAST_COMMIT_MESSAGE" value="解决参数为inull的问题,替换掉了暴力的reload,需要注意到,修改用户信息时是否还有缓存,wallet部分进行了改动,整体逻辑更加复杂,判断字符串的内容来解决值的来源,把汽车基本信息的表单写完了,但是位置的问题需要注意,可能是一个坑,今天注意更改了前几天遗留的各种bug" />
+    <MESSAGE value="汽车信息提交完成,分开提交的话没有办法事务管理,时间与位置的问题需要仔细考虑一番,个人信息未见信息错乱问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="汽车信息提交完成,分开提交的话没有办法事务管理,时间与位置的问题需要仔细考虑一番,个人信息未见信息错乱问题" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1771,7 +1765,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/antd/src/sellCar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.83809525">
+        <state vertical-scroll-proportion="0.9134948">
           <caret line="307" column="20" selection-start-line="307" selection-start-column="20" selection-end-line="307" selection-end-column="20" />
           <folding>
             <element signature="e#780#831#0" expanded="false" />
