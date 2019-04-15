@@ -287,13 +287,13 @@ else
             <div >
                 <Row style={{height:60}}>
                     <Col span={4} style={{height:60}}>
-                        <div className="walletPrice">总额:</div>
+                        <div className="walletPrice">总额:{(typeof(this.state.wallet)=='string'?wallet:this.state.wallet)+parseFloat(this.props.deposit)*1000}</div>
                     </Col>
                     <Col span={4} style={{height:60}}>
                         <div className="walletPrice">余额:{typeof(this.state.wallet)=='string'?wallet:this.state.wallet}元</div>
                     </Col>
                     <Col span={4} style={{height:60}}>
-                        <div className="walletPrice">保证金:</div>
+                        <div className="walletPrice">保证金:{parseFloat(this.props.deposit)*1000}元</div>
                     </Col>
                 </Row>
                 <Row style={{height:40}}><Col span={3} style={{height:40}}>

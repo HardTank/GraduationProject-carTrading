@@ -12,7 +12,9 @@ import EditPwd from './editPwd';
 import BaseInfoForm from'./baseInfoForm';
 import EditBaseInfoForm from'./editBaseInfo';
 import Wallet from './wallet';
-import SellCar from './sellCar'
+import SellCar from './sellCar';
+import OrderCar from './order/orderCar'
+import ResultConfirm from  './resultConfirm/resultConfirm'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const {   Sider, Content } = Layout;
 class PersonalCentral extends Component {
@@ -21,9 +23,9 @@ class PersonalCentral extends Component {
         this.state = {
             baseInfo: true,
             editInfo: true,
-            confirm: true,
+            confirm: false,
             order: true,
-            sellCar: false,
+            sellCar: true,
             myWallet: true,
             name:'',
             pwd: '',
@@ -37,6 +39,7 @@ class PersonalCentral extends Component {
             wallet:'',
             bankCardNum:'',
             openBank:'',
+            deposit:0,
         }
     }
 
@@ -113,8 +116,12 @@ class PersonalCentral extends Component {
             })
         }
         else if (item.key == "myWallet") {
+            var deposit=sessionStorage.getItem("deposit");
+            console.info("保证金"+deposit)
+
             this.setState({
-               myWallet: false,
+                myWallet: false,
+                deposit:deposit,
             })
         }
     }
@@ -145,6 +152,7 @@ class PersonalCentral extends Component {
                         sessionStorage.setItem("user",str);
                         var user = sessionStorage.getItem("user");
                         user = JSON.parse(user);
+
                        // this.props.form.setFieldsValue(user);
                         this.setState(
                             {
@@ -189,7 +197,7 @@ class PersonalCentral extends Component {
                             <Menu
                                 theme="light"
                                 mode="inline"
-                                defaultSelectedKeys={['sellCar']}
+                                defaultSelectedKeys={['confirm']}
                                 inlineCollapsed={true}
                                 onSelect={(item) => {
                                 this.handleOk(item);
@@ -222,12 +230,20 @@ class PersonalCentral extends Component {
                         </div>
                     </Sider>
                     <Content style={{marginLeft: 20, overflow: 'auto', height: '80vh'}}>
+
+                        <div hidden={this.state.confirm}>
+                            < ResultConfirm></ ResultConfirm>
+                        </div>
+                        <div hidden={this.state.order}>
+                            <OrderCar></OrderCar>
+                        </div>
                         <div hidden={this.state.sellCar}>
                             <SellCar></SellCar>
                         </div>
                         <div hidden={this.state.myWallet}>
                             <Wallet
                                 wallet={this.state.wallet}
+                                deposit={this.state.deposit}
                             ></Wallet>
                             </div>
                         <div hidden={this.state.baseInfo}>
