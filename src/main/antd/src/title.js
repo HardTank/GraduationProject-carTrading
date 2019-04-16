@@ -23,10 +23,11 @@ class Title extends Component {
         registerVisible: false,
 
     };
-
+//显示登陆组件
     showModal = (target)=> {
         this.setState({loginVisible: true, target: target});
     }
+    //显示注册组件
     showRegister = (e)=> {
         e.preventDefault();
         this.setState({loginVisible: false, registerVisible: true});
@@ -35,7 +36,7 @@ class Title extends Component {
 
 
 
-
+//判断登陆状态
     judgeLogin = (e, target)=> {
         e.preventDefault();
         var userId = sessionStorage.getItem("userId");
@@ -57,6 +58,7 @@ class Title extends Component {
             this.setState({target: target})
         }
     }
+    //退出登陆
     exitLogin = (e)=> {
         e.preventDefault();
         var userId = sessionStorage.setItem("userId", 0);
@@ -67,9 +69,11 @@ class Title extends Component {
 
         });
     }
+   // 隐藏插件
     handleCancel = ()=> {
         this.setState({loginVisible: false, registerVisible: false});
     }
+    //用户的登陆数据进行判断
     handleOk = (e) => {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
@@ -129,10 +133,11 @@ class Title extends Component {
 
         });
     }
+    //关联form表单
     saveFormRef = (form) => {
         this.form = form;
     };
-
+//注册信息提交
     handleSubmit = (user) => {
         console.info(user);
         axios.get('http://localhost:8080/user/save', {
@@ -176,7 +181,7 @@ class Title extends Component {
         );
 
     }
-
+//自动渲染界面
     componentDidMount() {
         var userId = sessionStorage.getItem("userId");
         if (userId > 0) {

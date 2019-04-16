@@ -1,9 +1,7 @@
 package com.carTrading.service;
 
-import com.carTrading.entity.CarInfo;
-import com.carTrading.entity.OrderCar;
-import com.carTrading.entity.Page;
-import com.carTrading.entity.TransactionRecord;
+import com.carTrading.entity.*;
+import com.carTrading.repository.MyCarRepository;
 import com.carTrading.repository.OrderRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +23,8 @@ public class OrderService {
     TransactionRecordService transactionRecordService;
     @Autowired
     CarInfoService carInfoService;
+    @Autowired
+    MyCarRepository myCarRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 动态查询
@@ -45,28 +45,69 @@ public class OrderService {
 //        page = orderRepository.findAll(ex, pageRequest);
 //        return page;
 //    }
-    /** 查找用户订阅的汽车信息*/
-    public Page<OrderCar> getList(Integer userId, int pageIndex, int pageSize,int state) {
+
+    /**
+     * 查找用户订阅的汽车信息
+     */
+    public Page<OrderCar> getList(Integer userId, int pageIndex, int pageSize, int state) {
         logger.info("查找订阅信息");
         Page<OrderCar> page = null;
 
-        List<OrderCar> list = orderRepository.findById(userId,pageIndex,pageSize,state);
-        TransactionRecord record=new TransactionRecord();
+        List<OrderCar> list = orderRepository.findById(userId, pageIndex, pageSize, state);
+        TransactionRecord record = new TransactionRecord();
         record.setUserId(userId);
-        int totalNumber= (int)transactionRecordService.getList(record,0,1).getTotalElements();
-        page=new Page(totalNumber,pageIndex,pageSize,list);
+        record.setState(0);
+        int totalNumber = (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
+        page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
-    /**查找用户自己的汽车信息*/
+
+    /**
+     * 查找用户订阅的汽车竞拍成功信息
+     */
+    public Page<OrderCar> getListResult(Integer userId, int pageIndex, int pageSize) {
+        logger.info("查找竞拍成功信息");
+        Page<OrderCar> page = null;
+
+        List<OrderCar> list = orderRepository.findByIdResult(userId, pageIndex, pageSize);
+        CarInfo car = new CarInfo();
+        car.setOwnerId(userId);
+        car.setState(2);
+        int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
+        car.setState(3);
+        totalNumber += (int) carInfoService.getList(car, 0, 1).getTotalElements();
+        page = new Page(totalNumber, pageIndex, pageSize, list);
+        return page;
+    }
+
+    /**
+     * 查找用户自己的汽车交易成功信息
+     */
     public Page<OrderCar> getMyList(Integer userId, int pageIndex, int pageSize) {
         logger.info("查找订阅信息");
         Page<OrderCar> page = null;
 
-        List<OrderCar> list = orderRepository.findMyCar(userId,pageIndex,pageSize);
-        CarInfo car=new CarInfo();
+        List<OrderCar> list = orderRepository.findMyCar(userId, pageIndex, pageSize);
+        TransactionRecord record = new TransactionRecord();
+        record.setUserId(userId);
+        int totalNumber = (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
+
+        page = new Page(totalNumber, pageIndex, pageSize, list);
+        return page;
+    }
+
+    /**
+     * 查找用户自己的汽车信息
+     */
+    public Page<MyCar> getAllCar(Integer userId, int pageIndex, int pageSize) {
+        logger.info("查找订阅信息");
+        Page<MyCar> page = null;
+
+        List<MyCar> list = myCarRepository.findCar(userId, pageIndex, pageSize);
+        CarInfo car = new CarInfo();
         car.setOwnerId(userId);
-        int totalNumber= (int)carInfoService.getList(car,0,1).getTotalElements();
-        page=new Page(totalNumber,pageIndex,pageSize,list);
+        int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
+        page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
 }

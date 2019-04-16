@@ -25,32 +25,40 @@ public class CarInfoController {
     @Autowired
     CarInfoService carInfoService;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    //获取需要展示的汽车信息
     @RequestMapping(value = "/getList")
     public Page<CarInfo> getList(CarInfo car, int pageIndex, int pageSize) {
-        Page<CarInfo>page=carInfoService.getList(car,pageIndex,pageSize);
+        Page<CarInfo> page = carInfoService.getList(car, pageIndex, pageSize);
         return page;
     }
 
+    //插入更新存储的二手车信息
     @RequestMapping("save")
-    public CarInfo saveCarInfo(CarInfo carInfo,String productDates) {
-        logger.info("productDate"+productDates);
+    public CarInfo saveCarInfo(CarInfo carInfo, String productDates) {
+        logger.info("productDate" + productDates);
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM");
         Date date = null;
-        try {
-            date = format.parse(productDates.replace("\"",""));
-            carInfo.setProductDate(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
+        //转化日期格式
+        if (productDates != null) {
+            try {
+
+                date = format.parse(productDates.replace("\"", ""));
+                carInfo.setProductDate(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
-        if(carInfo.getId()!=null) {
+
+        if (carInfo.getId() != null) {
             CarInfo car = carInfoService.getCar(carInfo);
             logger.info("更新二手车前" + car.toString() + carInfo.toString());
+            //处理null值
             UpdateNotNull.copyNonNullProperties(carInfo, car);
             logger.info("更新二手车" + car.toString() + carInfo.toString());
             carInfo = carInfoService.save(car);
-        }
-        else{
+        } else {
             logger.info("添加二手车" + carInfo.toString());
             carInfo = carInfoService.save(carInfo);
 

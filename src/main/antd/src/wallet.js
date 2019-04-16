@@ -128,33 +128,7 @@ else
 
                 this.changeWallet(1, values.withdraw);
                 this.handleCancel();
-                axios.get('http://localhost:8080/user/save', {
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        crossDomain: true,
-                        params: {
-                            id: this.state.userId,
-                            wallet: wallet,
-                        }
-                    }
-                ).then(
-                    r => {
 
-                        if (r.status == 200) {
-                            sessionStorage.setItem("userId", r.data.id);
-                            var str = JSON.stringify(r.data);
-                            sessionStorage.setItem("user", str);
-                            this.setState({
-                                withdrawVisible: false,
-                                wallet:wallet,
-                                //wallet: parseFloat(this.state.wallet) - values.withdraw,
-
-                            })
-                        }
-                        ;
-                    }
-                );
 
             }
 

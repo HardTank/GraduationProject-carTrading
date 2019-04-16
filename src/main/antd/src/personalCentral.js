@@ -21,25 +21,25 @@ class PersonalCentral extends Component {
     constructor() {
         super();
         this.state = {
-            baseInfo: true,
+            baseInfo: false,
             editInfo: true,
-            confirm: false,
+            confirm: true,
             order: true,
             sellCar: true,
             myWallet: true,
-            name:'',
+            name: '',
             pwd: '',
-            mail:'',
+            mail: '',
             phone: '',
             cardId: '',
-            province:'',
-            city:'',
-            county:'',
-            address:'',
-            wallet:'',
-            bankCardNum:'',
-            openBank:'',
-            deposit:0,
+            province: '',
+            city: '',
+            county: '',
+            address: '',
+            wallet: '',
+            bankCardNum: '',
+            openBank: '',
+            deposit: 0,
         }
     }
 
@@ -48,7 +48,7 @@ class PersonalCentral extends Component {
         autoCompleteResult: [],
     };
 
-
+//判断两次密码
     validateToNextPassword = (rule, value, callback) => {
         const form = this.props.form;
         if (value && this.state.confirmDirty) {
@@ -57,7 +57,7 @@ class PersonalCentral extends Component {
         callback();
     }
 
-
+//切换不同页面
     handleOk = (item)=> {
         this.setState({
             baseInfo: true,
@@ -65,12 +65,12 @@ class PersonalCentral extends Component {
             confirm: true,
             order: true,
             sellCar: true,
-           myWallet: true,
+            myWallet: true,
         })
         if (item.key == "baseInfo") {
             var user = sessionStorage.getItem("user");
             user = JSON.parse(user);
-         //   this.props.form.setFieldsValue(user);
+            //   this.props.form.setFieldsValue(user);
             this.setState(
                 {
                     name: user.name,
@@ -79,18 +79,18 @@ class PersonalCentral extends Component {
                     phone: user.phone,
                     cardId: user.cardId,
                     address: user.address,
-                    bankCardNum:user.bankCardNum,
-                    openBank:user.openBank,
-                    province:user.province,
-                    city:user.city,
-                    county:user.county,
+                    bankCardNum: user.bankCardNum,
+                    openBank: user.openBank,
+                    province: user.province,
+                    city: user.city,
+                    county: user.county,
                 })
             this.setState({
                     baseInfo: false,
                 }
             )
         }
-       else if (item.key == "editInfo") {
+        else if (item.key == "editInfo") {
             this.setState({
                 editInfo: false,
 
@@ -98,9 +98,9 @@ class PersonalCentral extends Component {
             var user = sessionStorage.getItem("user");
             user = JSON.parse(user);
             user.area = user.province + "/" + user.city + "/" + user.county;
-                this.form.setFieldsValue(user);
+            this.form.setFieldsValue(user);
         }
-       else if (item.key == "confirm") {
+        else if (item.key == "confirm") {
             this.setState({
                 confirm: false,
             })
@@ -116,22 +116,23 @@ class PersonalCentral extends Component {
             })
         }
         else if (item.key == "myWallet") {
-            var deposit=sessionStorage.getItem("deposit");
-            console.info("保证金"+deposit)
-
+            var deposit = sessionStorage.getItem("deposit");
+            var wallet = parseFloat(sessionStorage.getItem("wallet"));
+            console.info("保证金" + deposit)
             this.setState({
                 myWallet: false,
-                deposit:deposit,
+                deposit: deposit,
+                wallet: wallet,
             })
         }
     }
-
+//自动渲染页面
     componentDidMount() {
         var userId = sessionStorage.getItem("userId");
         if (userId == null || userId == 0) {
             window.location.href = "#/index";
         }
-        else{
+        else {
             axios.get('http://localhost:8080/user/login', {
                     xhrFields: {
                         withCredentials: true
@@ -147,13 +148,18 @@ class PersonalCentral extends Component {
                 r => {
 
                     if (r.status == 200) {
+                        //存储用户Id
                         sessionStorage.setItem("userId", r.data.id);
                         var str = JSON.stringify(r.data);
-                        sessionStorage.setItem("user",str);
+                        sessionStorage.setItem("user", str);
+                        //获取用户信息
                         var user = sessionStorage.getItem("user");
                         user = JSON.parse(user);
-
-                       // this.props.form.setFieldsValue(user);
+                        sessionStorage.setItem("userId", r.data.id);
+                        //存储钱包信息
+                        console.info("钱包余额" + r.data.wallet);
+                        sessionStorage.setItem("wallet", r.data.wallet);
+                        // this.props.form.setFieldsValue(user);
                         this.setState(
                             {
                                 name: user.name,
@@ -162,12 +168,12 @@ class PersonalCentral extends Component {
                                 phone: user.phone,
                                 cardId: user.cardId,
                                 address: user.address,
-                                bankCardNum:user.bankCardNum,
-                                openBank:user.openBank,
-                                province:user.province,
-                                city:user.city,
-                                county:user.county,
-                                wallet:user.wallet,
+                                bankCardNum: user.bankCardNum,
+                                openBank: user.openBank,
+                                province: user.province,
+                                city: user.city,
+                                county: user.county,
+                                wallet: user.wallet,
                             })
                     }
                     ;
@@ -176,11 +182,12 @@ class PersonalCentral extends Component {
         }
 
 
-
     }
+//关联form表单数据
     saveFormRef = (form) => {
         this.form = form;
     };
+
     render() {
         const TabPane = Tabs.TabPane;
 
@@ -197,7 +204,7 @@ class PersonalCentral extends Component {
                             <Menu
                                 theme="light"
                                 mode="inline"
-                                defaultSelectedKeys={['confirm']}
+                                defaultSelectedKeys={['baseInfo']}
                                 inlineCollapsed={true}
                                 onSelect={(item) => {
                                 this.handleOk(item);
@@ -245,7 +252,7 @@ class PersonalCentral extends Component {
                                 wallet={this.state.wallet}
                                 deposit={this.state.deposit}
                             ></Wallet>
-                            </div>
+                        </div>
                         <div hidden={this.state.baseInfo}>
                             <BaseInfoForm
                                 name={this.state.name}

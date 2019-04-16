@@ -16,23 +16,110 @@ class ResultConfirm extends Component {
         userId: 0,
         result: {},
         pageIndex: 0,
-        pageSize: 4,
+        pageSize: 10,
         pay: '',
-        myCar:[],
+        myCar: [],
 
     }
+//支付竞拍的汽车的交易金额
+    payMoney = (record)=> {
+        var wallet=parseFloat(sessionStorage.getItem("wallet" ));
+       //判断是否已经付款
+        if(record.state==3){
+           message.config({
+               top: 130,
+               duration: 2,
+               maxCount: 3,
+           });
+           message.info('已支付', 1);
+       }
+      else  if(record.price*10000>wallet){
+           message.config({
+               top: 130,
+               duration: 2,
+               maxCount: 3,
+           });
+           message.info('余额不足,请充值', 1);
+       }else{
+           wallet=wallet-record.price*10000;
+           //更新余额
+           sessionStorage.setItem("wallet",wallet);
+           var userId = sessionStorage.getItem("userId");
+           axios.get('http://localhost:8080/wallet/save', {
+                   params: {
+                       userId: userId,
+                       amount: record.price*10000,
+                       type: 4,
+                   }
+               }
+           ).then(
+               r => {
+
+                   if(r.status==200){
+                       this.changeWallet(record.id,userId,wallet)
+                   }
+               }
 
 
+           )
+       }
+    }
+    //更新用户余额
+    changeWallet=(id,userId,wallet)=>{
+        axios.get('http://localhost:8080/user/save', {
+                xhrFields: {
+                    withCredentials: true
+                },
+                crossDomain: true,
+                params: {
+                    id: userId,
+                    wallet: wallet,
+                    state:3,
+                }
+            }
+        ).then(
+            r => {
 
-    //获取table展示的数据
+                if(r.status==200){
+                    axios.get('http://localhost:8080/carInfo/save', {
+                            xhrFields: {
+                                withCredentials: true
+                            },
+                            crossDomain: true,
+                            params: {
+                                id: id,
+                                state:3,
+                            }
+                        }
+                    ).then(
+                        r =>{
+
+                        if(r.status==200){
+                            message.config({
+                                top: 130,
+                                duration: 2,
+                                maxCount: 3,
+                            });
+                            message.info('支付成功', 1);
+                            this.show(0);
+                        }
+                    })
+
+                }
+            }
+        );
+    }
+
+    //获取竞拍车辆展示的数据
     show = (page)=> {
+        alert(11)
         var userId = sessionStorage.getItem("userId");
-        axios.get('http://localhost:8080/order/getList', {
+        axios.get('http://localhost:8080/order/getListResult', {
                 params: {
                     userId: userId,
                     pageIndex: page,
                     pageSize: this.state.pageSize,
-                    state:1,
+
                 }
 
 
@@ -52,34 +139,35 @@ class ResultConfirm extends Component {
         )
 
     }
-showMyCar=(page)=>{
-    var userId = sessionStorage.getItem("userId");
-    axios.get('http://localhost:8080/order/getMyList', {
-            params: {
-                userId: userId,
-                pageIndex: page,
-                pageSize: this.state.pageSize,
+   // 展示我的汽车的数据
+    showMyCar = (page)=> {
+        var userId = sessionStorage.getItem("userId");
+        axios.get('http://localhost:8080/order/getMyList', {
+                params: {
+                    userId: userId,
+                    pageIndex: page,
+                    pageSize: this.state.pageSize,
+
+                }
+
 
             }
+            //axios No 'Access-Control-Allow-Origin' header is present on the requested resource.   安装chrome 插件:Allow-Control-Allow-Origin
 
+        ).then(
+            r => {
+                var data = r.data;
+                console.info(data)
 
-        }
-        //axios No 'Access-Control-Allow-Origin' header is present on the requested resource.   安装chrome 插件:Allow-Control-Allow-Origin
+                this.setState({
+                    myCar: data,
+                });
+                console.info(r);
+            }
+        )
+    }
 
-    ).then(
-        r => {
-            var data = r.data;
-            console.info(data)
-
-            this.setState({
-                myCar: data,
-            });
-            console.info(r);
-        }
-    )
-}
-
-    //table展示列
+    //竞拍的汽车的table展示列
     columns = [{
         title: 'ID',
         dataIndex: 'id',
@@ -97,51 +185,55 @@ showMyCar=(page)=>{
         title: '款式',
         dataIndex: 'productDate',
         key: 'productDate',
-    },{
+    }, {
         title: '变速器',
         key: 'transmission',
         dataIndex: 'transmission',
 
-    },{
+    }, {
         title: '排放',
         key: 'discharge',
         dataIndex: 'discharge',
 
-    },{
+    }, {
         title: '型号',
         key: 'type',
         dataIndex: 'type',
 
-    },{
+    }, {
         title: '保证金',
         key: 'deposit',
         dataIndex: 'deposit',
-        render:(text, record)=>(
+        render: (text, record)=>(
             <span>{text}元</span>
         )
 
-    },{
+    }, {
         title: '成交价',
         key: 'price',
         dataIndex: 'price',
-        render:(text, record)=>(
+        render: (text, record)=>(
             <span>{text}万元</span>
         )
     }
-        ,{
+        , {
             title: '状态',
             key: 'state',
             dataIndex: 'state',
-
+            render: (text, record)=>(
+                <span>{text == 3 ? '已支付' : '等待支付'}</span>
+            )
         }, {
-        title: '操作',
-        dataIndex: 'action',
-        render: (text, record) => (
-            <div>
-                <a className="render_a" onClick={() => this.showModal(record)}>付款</a>
-            </div>
-        )
-    }];
+            title: '操作',
+            dataIndex: 'action',
+            render: (text, record) => (
+                <div>
+
+                    <a className="render_a" onClick={() => this.payMoney(record)}>付款</a>
+                </div>
+            )
+        }];
+    //我的汽车数据列表
     carColumns = [{
         title: 'ID',
         dataIndex: 'id',
@@ -159,44 +251,46 @@ showMyCar=(page)=>{
         title: '款式',
         dataIndex: 'productDate',
         key: 'productDate',
-    },{
+    }, {
         title: '变速器',
         key: 'transmission',
         dataIndex: 'transmission',
 
-    },{
+    }, {
         title: '排放',
         key: 'discharge',
         dataIndex: 'discharge',
 
-    },{
+    }, {
         title: '型号',
         key: 'type',
         dataIndex: 'type',
 
-    },{
+    }, {
         title: '保证金',
         key: 'deposit',
         dataIndex: 'deposit',
-        render:(text, record)=>(
+        render: (text, record)=>(
             <span>{text}元</span>
         )
 
-    },{
+    }, {
         title: '成交价',
         key: 'price',
         dataIndex: 'price',
-        render:(text, record)=>(
+        render: (text, record)=>(
             <span>{text}万元</span>
         )
     }
-        ,{
+        , {
             title: '状态',
             key: 'state',
             dataIndex: 'state',
-
+            render: (text, record)=>(
+                <span>{text !=5 ? '转帐中' : '已到账'}</span>
+            )
         }];
-    //自动加载
+    //自动加载信息
     componentDidMount() {
 
         var userId = sessionStorage.getItem("userId");

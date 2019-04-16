@@ -16,13 +16,13 @@ class OrderCar extends Component {
         userId: 0,
         result: {},
         pageIndex: 0,
-        pageSize: 4,
-        pay: ''
+        pageSize: 10,
+        pay: '',
+        myCar:[],
     }
 
 
-
-    //获取table展示的数据
+    //获取用户订阅的汽车展示的数据
     show = (page)=> {
         var userId = sessionStorage.getItem("userId");
         axios.get('http://localhost:8080/order/getList', {
@@ -30,7 +30,7 @@ class OrderCar extends Component {
                     userId: userId,
                     pageIndex: page,
                     pageSize: this.state.pageSize,
-                    state:0,
+                    state: 1,
                 }
 
 
@@ -49,8 +49,33 @@ class OrderCar extends Component {
             }
         )
     }
+//获取我卖的车的展示数据
+    showMyCar = (page)=> {
+        var userId = sessionStorage.getItem("userId");
+        axios.get('http://localhost:8080/order/getAllList', {
+                params: {
+                    userId: 9,
+                    pageIndex: 0,
+                    pageSize: 9,
+
+                }
 
 
+            }
+            //axios No 'Access-Control-Allow-Origin' header is present on the requested resource.   安装chrome 插件:Allow-Control-Allow-Origin
+
+        ).then(
+            r => {
+                var data = r.data;
+                console.info(data)
+
+                this.setState({
+                    myCar: data,
+                });
+                console.info(r);
+            }
+        )
+    }
     //table展示列
     columns = [{
         title: 'ID',
@@ -69,12 +94,66 @@ class OrderCar extends Component {
         title: '款式',
         dataIndex: 'productDate',
         key: 'productDate',
-    },{
-            title: '变速器',
-            key: 'transmission',
-            dataIndex: 'transmission',
+    }, {
+        title: '变速器',
+        key: 'transmission',
+        dataIndex: 'transmission',
 
-        },{
+    }, {
+        title: '排放',
+        key: 'discharge',
+        dataIndex: 'discharge',
+
+    }, {
+        title: '型号',
+        key: 'type',
+        dataIndex: 'type',
+
+    }, {
+        title: '保证金',
+        key: 'deposit',
+        dataIndex: 'deposit',
+        render: (text, record)=>(
+            <span>{text}元</span>
+        )
+
+    }, {
+        title: '起拍价',
+        key: 'startPrice',
+        dataIndex: 'startPrice',
+        render: (text, record)=>(
+            <span>{text}万元</span>
+        )
+    }, {
+        title: '开始时间',
+        key: 'auctionTime',
+        dataIndex: 'auctionTime',
+
+    }];
+    //我卖的车的数据展示列
+    carColumns = [{
+        title: 'ID',
+        dataIndex: 'id',
+        key: 'id',
+        className: 'hidden',
+    }, {
+        title: '序号',
+        width: 80,
+        render: (text, record, index) => `${index + 1}`
+    }, {
+        title: '品牌',
+        dataIndex: 'brand',
+        key: 'brand',
+    }, {
+        title: '款式',
+        dataIndex: 'productDate',
+        key: 'productDate',
+    },{
+        title: '变速器',
+        key: 'transmission',
+        dataIndex: 'transmission',
+
+    },{
         title: '排放',
         key: 'discharge',
         dataIndex: 'discharge',
@@ -84,27 +163,15 @@ class OrderCar extends Component {
         key: 'type',
         dataIndex: 'type',
 
-    },{
-        title: '保证金',
-        key: 'deposit',
-        dataIndex: 'deposit',
-        render:(text, record)=>(
-            <span>{text}元</span>
-        )
-
-    },{
-        title: '起拍价',
-        key: 'startPrice',
-        dataIndex: 'startPrice',
-        render:(text, record)=>(
-            <span>{text}万元</span>
-        )
-    },{
-        title: '开始时间',
-        key: 'auctionTime',
-        dataIndex: 'auctionTime',
-
-    }];
+    }
+        ,{
+            title: '状态',
+            key: 'state',
+            dataIndex: 'state',
+            render: (text, record)=>(
+                <span>{text==0}待审核</span>
+            )
+        }];
     //自动加载
     componentDidMount() {
 
@@ -117,21 +184,38 @@ class OrderCar extends Component {
                 userId: userId,
             })
         this.show(0);
-
+        this.showMyCar(0);
     }
 
     render() {
 
+
+        const TabPane = Tabs.TabPane;
         return (
             <div >
+                <Tabs defaultActiveKey="editBaseInfo">
+                    <TabPane tab="竞拍车辆" key="editBaseInfo">
 
-                <Table rowKey="id" columns={this.columns} dataSource={this.state.result.items}
-                       pagination={false}></Table>
-                <Pagination showQuickJumper defaultCurrent={1}
-                            total={this.state.result.totalNumber} current={this.state.result.currentIndex+1}
-                            defaultPageSize={this.state.pageSize}
-                            onChange={(page)=>{this.show(page-1)}
+                        <Table rowKey="id" columns={this.columns} dataSource={this.state.result.items}
+                               pagination={false}></Table>
+                        <Pagination showQuickJumper defaultCurrent={1}
+                                    total={this.state.result.totalNumber} current={this.state.result.currentIndex+1}
+                                    defaultPageSize={this.state.pageSize}
+                                    onChange={(page)=>{this.show(page-1)}
                             }></Pagination>
+                    </TabPane>
+                    <TabPane tab="我的汽车" key="editPwd">
+
+                        <Table rowKey="id" columns={this.carColumns} dataSource={this.state.myCar.items}
+                               pagination={false}></Table>
+                        <Pagination showQuickJumper defaultCurrent={1}
+                                    total={this.state.myCar.totalNumber} current={this.state.myCar.currentIndex+1}
+                                    defaultPageSize={this.state.pageSize}
+                                    onChange={(page)=>{this.showMyCar(page-1)}
+                            }></Pagination>
+                    </TabPane>
+                </Tabs>
+
             </div>
 
 
