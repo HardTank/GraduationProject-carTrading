@@ -99,6 +99,7 @@ class Title extends Component {
 
                             //   alert(token)
                             sessionStorage.setItem("userId", r.data.content[0].id);
+                            sessionStorage.setItem("role",r.data.content[0].role);
                             message.config({
                                 top: 130,
                                 duration: 2,
@@ -261,8 +262,8 @@ class Title extends Component {
                                         </div>
                                     </Col>
                                     <Col span={4}>
-                                        <div className={target=="managerCentral"?"select":""}
-                                             onClick={(ev) => {this.judgeLogin(ev,"managerCentral")}}>管理中心
+                                        <div className={target=="adminCentral"?"select":""}
+                                             onClick={(ev) => {this.judgeLogin(ev,"adminCentral")}}>管理中心
                                         </div>
                                     </Col>
                                     <Col span={8}>
@@ -297,7 +298,7 @@ class Title extends Component {
                     <Form onSubmit={this.handleOk} className="login-form">
                         <Form.Item>
                             {getFieldDecorator('name', {
-                                rules: [{required: true, message: '请输入用户名/邮箱/手机号码!'}],
+                                rules: [{required: true, message: '请输入用户名!'}],
                             })(
                                 <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
                                        placeholder="用户名/邮箱/手机号码"/>

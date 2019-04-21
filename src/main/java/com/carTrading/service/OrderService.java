@@ -110,4 +110,18 @@ public class OrderService {
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
+    /**
+     * 查找等待审核的汽车信息
+     */
+    public Page<OrderCar> getAllReview( int pageIndex, int pageSize, int state) {
+        logger.info("查找订阅信息");
+        Page<OrderCar> page = null;
+
+        List<OrderCar> list = orderRepository.findAllReview( pageIndex, pageSize, state);
+        CarInfo car = new CarInfo();
+        car.setState(state);
+        int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
+        page = new Page(totalNumber, pageIndex, pageSize, list);
+        return page;
+    }
 }

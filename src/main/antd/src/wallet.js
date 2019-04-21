@@ -252,6 +252,7 @@ else
         this.show(0);
 
     }
+    url='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
 
     render() {
         const TabPane = Tabs.TabPane;

@@ -112,7 +112,6 @@ class ResultConfirm extends Component {
 
     //获取竞拍车辆展示的数据
     show = (page)=> {
-        alert(11)
         var userId = sessionStorage.getItem("userId");
         axios.get('http://localhost:8080/order/getListResult', {
                 params: {

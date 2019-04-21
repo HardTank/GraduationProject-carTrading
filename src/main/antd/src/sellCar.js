@@ -11,15 +11,87 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import CarInfo from './sellCar/carInfo'
 import ConfigurationInfo from './sellCar/configurationInfo'
 import ProcedureInfo from './sellCar/procedureInfo'
+import moment from "moment";
 class SellCar extends Component {
     state = {
         saveCarInfo: false,
         saveConfigurationInfo: false,
         saveProcedureInfo: false,
     }
+    componentDidMount() {
+
+       console.info("传过来的id"+this.props.carId)
+        var id=this.props.carId;
+        if(id!=null){
+            var carInfo;
+            var procedureInfo;
+            var configurationInfo;
+            axios.get('http://localhost:8080/carInfo/getList', {
+                    params: {
+                        id:id,
+                        pageSize:10,
+                        pageIndex:0,
+                    }
+                }
+            ).then(
+                r => {
+                      carInfo=r.data.content[0]
+                     this.setCarValue(carInfo)
+                }
+            );
+            axios.get('http://localhost:8080/procedureInfo/getList', {
+                    params: {
+                        carId:id,
+                        pageSize:10,
+                        pageIndex:0,
+                    }
+                }
+            ).then(
+                r => {
+                    procedureInfo=r.data.content[0]
+                    this. setProcedureValue(procedureInfo);
+                }
+            );
+        }
+
+
+    }
+    setCarValue(car){
+        console.info("传过来的时间"+car.productDate+typeof (car.productDate))
+        if(car.source=='1')
+            car.source='是';
+        if(car.source=='0')
+            car.source='否'
+        car.productDate= moment(car.productDate, 'YYYY-MM-DD');
+        console.info("传过来后的时间"+car.productDate+typeof ( car.productDate));
+        this.carInfoForm.setFieldsValue(car);
+      //  this.procedureInfoForm.setFieldsValue(procedureInfo);
+      //configurationInfo
+    }
+    setProcedureValue(procedureInfo){
+        console.info("p传过来的时间"+procedureInfo.commercialInsuranceValidityDate+typeof (procedureInfo))
+        //if(car.source=='1')
+        //    car.source='是';
+        //if(car.source=='0')
+        //    car.source='否'
+        //console.info("传过来后的时间"+car.productDate+typeof ( car.productDate));
+        //this.carInfoForm.setFieldsValue(car);
+        procedureInfo.yearlyInspectionValidityDate= moment( procedureInfo.yearlyInspectionValidityDate, 'YYYY-MM-DD');
+        procedureInfo.commercialInsuranceValidityDate= moment( procedureInfo.commercialInsuranceValidityDate, 'YYYY-MM-DD');
+        procedureInfo.compulsoryInsuranceValidityDate= moment( procedureInfo.compulsoryInsuranceValidityDate, 'YYYY-MM-DD');
+        this.procedureInfoForm.setFieldsValue(procedureInfo);
+        //configurationInfo
+    }
+
     /**二手车基本信息的数据保存修改*/
     saveCarInfo = ()=> {
         this.setState({saveCarInfo: true,})
+        this.carInfoForm.validateFields((err, values)=> {
+            if (!err) {
+               console.info(values)
+            }
+        })
+
     }
     editCarInfo = ()=> {
         this.setState({saveCarInfo: false,})

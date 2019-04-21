@@ -39,12 +39,12 @@ public class ConfigurationInfo {
     /**
      * 防抱死制动系统
      */
-    private Integer abs;
+    private String abs;
     /**
      * 倒车影像
      */
     @Column(name="reversing_image")
-    private Integer reversingImage;
+    private String reversingImage;
     /**
      * 车外后视镜
      */
@@ -59,15 +59,15 @@ public class ConfigurationInfo {
      * 定速巡航
      */
     @Column(name="cruise_control")
-    private Integer cruiseControl;
+    private String cruiseControl;
     /**
      * 倒车雷达
      */
-    private Integer radar;
+    private String radar;
     /**
      * 气囊
      */
-    private Integer gasbag;
+    private String gasbag;
     /**
      * 轮毂
      */
@@ -80,10 +80,10 @@ public class ConfigurationInfo {
     /**
      * 导航
      */
-    private Integer navigation;
+    private String navigation;
     /**
      * 天窗
      */
-    private Integer skylight;
+    private String skylight;
 
 }

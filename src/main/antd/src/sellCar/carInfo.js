@@ -228,8 +228,8 @@ class CarInfo extends Component {
                                         placeholder="请选择" disabled={this.state.readOnly}
 
                                     >
-                                        <Option value="1">是</Option>
-                                        <Option value="0">否</Option>
+                                        <Option value="是">是</Option>
+                                        <Option value="否">否</Option>
 
                                     </Select>
                                 )}

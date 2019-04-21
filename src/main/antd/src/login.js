@@ -52,7 +52,7 @@ class LoginForm extends  React.Component {
                 <Form onSubmit={onOk} className="login-form">
             <Form.Item>
             {getFieldDecorator('name', {
-            rules: [{ required: true, message: '请输入用户名/邮箱/手机号码!' }],
+            rules: [{ required: true, message: '请输入用户名!' }],
         })(
             <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="用户名/邮箱/手机号码" />
         )}

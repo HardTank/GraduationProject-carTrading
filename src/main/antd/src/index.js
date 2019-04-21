@@ -5,7 +5,8 @@ import Title  from './title';
 import Login from './login'
 import HomePage from './homePage'
 import TradingHall  from './tradingHall';
-import PersonalCentral from './personalCentral'
+import PersonalCentral from './personalCentral';
+import AdminCentral from './admin/adminCentral'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import * as serviceWorker from './serviceWorker';
 import {LocaleProvider} from 'antd';
@@ -21,6 +22,8 @@ ReactDOM.render(
                 <Route path="/tradingHall" component={TradingHall}/>
                 <Route path="/tradingHall" component={TradingHall}/>
                 <Route path="/personalCentral" component={PersonalCentral}/>
+                <Route path="/adminCentral" component={AdminCentral}/>
+
                 <Route path="/" component={HomePage}/>
             </Switch>
         </Router>

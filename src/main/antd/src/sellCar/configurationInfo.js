@@ -157,8 +157,8 @@ class ConfigurationInfo extends Component {
                                     }],
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
-                                        <Option value="0">无</Option>
-                                        <Option value="1">有</Option>
+                                        <Option value="无">无</Option>
+                                        <Option value="有">有</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -173,8 +173,8 @@ class ConfigurationInfo extends Component {
                                     }],
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
-                                        <Option value="0">无</Option>
-                                        <Option value="1">有</Option>
+                                        <Option value="无">无</Option>
+                                        <Option value="有">有</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -190,8 +190,8 @@ class ConfigurationInfo extends Component {
                                         }],
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
-                                        <Option value="0">无</Option>
-                                        <Option value="1">有</Option>
+                                        <Option value="无">无</Option>
+                                        <Option value="有">有</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -209,8 +209,8 @@ class ConfigurationInfo extends Component {
                                         }],
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
-                                        <Option value="0">无</Option>
-                                        <Option value="1">有</Option>
+                                        <Option value="无">无</Option>
+                                        <Option value="有">有</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -226,8 +226,8 @@ class ConfigurationInfo extends Component {
                                         }],
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
-                                        <Option value="0">无</Option>
-                                        <Option value="1">有</Option>
+                                        <Option value="无">无</Option>
+                                        <Option value="有">有</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -243,8 +243,8 @@ class ConfigurationInfo extends Component {
                                         }],
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
-                                        <Option value="0">无</Option>
-                                        <Option value="1">有</Option>
+                                        <Option value="无">无</Option>
+                                        <Option value="有">有</Option>
                                     </Select>
                                 )}
                             </Form.Item>
@@ -262,8 +262,8 @@ class ConfigurationInfo extends Component {
                                     }],
                             })(
                                 <Select placeholder="请选择"  disabled={this.state.readOnly}>
-                                    <Option value="0">无</Option>
-                                    <Option value="1">有</Option>
+                                    <Option value="无">无</Option>
+                                    <Option value="有">有</Option>
                                 </Select>
                             )}
                         </Form.Item>

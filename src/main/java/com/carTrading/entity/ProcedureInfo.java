@@ -37,25 +37,25 @@ public class ProcedureInfo {
     /**
      * 登记证 0没有 1有
      */
-    private Integer registration;
+    private String registration;
     /**
      * 车船税
      */
     @Column(name="vehicle_tax")
-    private Integer vehicleTax;
+    private String vehicleTax;
     /**
      * 车身铭牌 0无 1有
      */
-    private Integer nameplate;
+    private String nameplate;
     /**
      * 备用钥匙
      */
     @Column(name="spare_key")
-    private Integer spareKey;
+    private String spareKey;
     /**
      * 行驶证
      */
-    private Integer license;
+    private String license;
     /**
      * 交强险有效期
      */
@@ -71,6 +71,7 @@ public class ProcedureInfo {
     /**
      * 商业保险到期时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     @Column(name="commercial_insurance_validity_date")
     private Date commercialInsuranceValidityDate;
     /**
@@ -88,10 +89,10 @@ public class ProcedureInfo {
      * 购置税证0 无1 有
      */
     @Column(name="purchase_tax_certificate")
-    private Integer purchaseTaxCertificate;
+    private String purchaseTaxCertificate;
     /**
      * 违章记录
      */
     @Column(name="violation_record")
-    private Integer violationRecord;
+    private String violationRecord;
 }

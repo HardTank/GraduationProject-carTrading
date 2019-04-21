@@ -28,6 +28,7 @@ public class ProcedureInfoController {
     @RequestMapping(value = "/getList")
     public Page<ProcedureInfo> getList(ProcedureInfo car, int pageIndex, int pageSize) {
         Page<ProcedureInfo>page=procedureInfoService.getList(car,pageIndex,pageSize);
+
         return page;
     }
 

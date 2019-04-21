@@ -29,6 +29,7 @@ public class CarInfoController {
     //获取需要展示的汽车信息
     @RequestMapping(value = "/getList")
     public Page<CarInfo> getList(CarInfo car, int pageIndex, int pageSize) {
+       logger.info("路径-------------------------------------");
         Page<CarInfo> page = carInfoService.getList(car, pageIndex, pageSize);
         return page;
     }

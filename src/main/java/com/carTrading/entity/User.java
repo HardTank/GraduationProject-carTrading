@@ -83,6 +83,10 @@ public class User {
      * 县区
      */
     private String county;
+    /**
+     * 用户角色
+     */
+    private Integer role;
 
     public User(String name, String pwd, String mail, String gender, String cardId, String phone, String address, String bankCardNum, String openBank) {
         this.name = name;
