@@ -91,7 +91,7 @@ public class CarInfo {
     /**
      * 是否进口 1是 0否
      */
-    private Integer source;
+    private String source;
     /**
      * 表显里程
      */

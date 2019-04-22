@@ -9,3 +9,9 @@
  .login-form-button {
     width: 100%;
 }
+.uploadTag{
+    width:102px;
+    height:30px;
+    font-size:20px;
+    align:'center';
+}

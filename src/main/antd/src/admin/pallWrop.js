@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { Icon, Modal, Upload } from 'antd';
+import { Icon, Modal, Upload,Button } from 'antd';
 import payOne from '../image/1000.jpg'
 export default class PallWrop extends React.Component {
     state = {
         previewVisible: false,
         previewImage: '',
-        fileList: [{
+        fileList: [/*{
             uid: '-1',
             name: 'xxx.png',
             status: 'done',
             url: payOne,
-        }],
+        }*/],
     };
     handleCancel = () => this.setState({ previewVisible: false })
 
@@ -32,7 +32,7 @@ export default class PallWrop extends React.Component {
             </div>
         );
         return (
-            <div className="clearfix">
+            <div  >
                 <Upload
                     action="http://localhost:8080/upload/image"
                     listType="picture-card"
@@ -45,8 +45,9 @@ export default class PallWrop extends React.Component {
 
                 })}
                 >
-                    {fileList.length >= 1 ? null : uploadButton}
+                    {fileList.length >=1? null : uploadButton}
                 </Upload>
+
                 <Modal visible={previewVisible} footer={null} onCancel={this.handleCancel}>
                     <img alt="example" style={{ width: '100%' }} src={previewImage} />
                 </Modal>

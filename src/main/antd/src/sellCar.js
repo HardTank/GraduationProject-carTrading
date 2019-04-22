@@ -52,6 +52,19 @@ class SellCar extends Component {
                     this. setProcedureValue(procedureInfo);
                 }
             );
+            axios.get('http://localhost:8080/configurationInfo/getList', {
+                    params: {
+                        carId:id,
+                        pageSize:10,
+                        pageIndex:0,
+                    }
+                }
+            ).then(
+                r => {
+                    configurationInfo=r.data.content[0]
+                    this.setConfigurationValue(configurationInfo);
+                }
+            );
         }
 
 
@@ -69,17 +82,17 @@ class SellCar extends Component {
       //configurationInfo
     }
     setProcedureValue(procedureInfo){
-        console.info("p传过来的时间"+procedureInfo.commercialInsuranceValidityDate+typeof (procedureInfo))
-        //if(car.source=='1')
-        //    car.source='是';
-        //if(car.source=='0')
-        //    car.source='否'
-        //console.info("传过来后的时间"+car.productDate+typeof ( car.productDate));
+        console.info("p传过来的时间"+typeof (procedureInfo))
         //this.carInfoForm.setFieldsValue(car);
         procedureInfo.yearlyInspectionValidityDate= moment( procedureInfo.yearlyInspectionValidityDate, 'YYYY-MM-DD');
         procedureInfo.commercialInsuranceValidityDate= moment( procedureInfo.commercialInsuranceValidityDate, 'YYYY-MM-DD');
         procedureInfo.compulsoryInsuranceValidityDate= moment( procedureInfo.compulsoryInsuranceValidityDate, 'YYYY-MM-DD');
         this.procedureInfoForm.setFieldsValue(procedureInfo);
+        //configurationInfo
+    }
+    setConfigurationValue(configurationInfo){
+        console.info("传过来的configurationInfo"+configurationInfo)
+        this.configurationInfoForm.setFieldsValue(configurationInfo);
         //configurationInfo
     }
 

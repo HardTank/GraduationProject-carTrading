@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import '../css/personal.css';
 import {
-    message,Table,Pagination,Form, Upload, Button, Icon,Modal,Tabs
+    message,Table,Pagination,Form, Upload, Button, Icon,Modal,Tabs,Row,Col,Tag,
 } from 'antd';
 import {LocaleProvider} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
@@ -13,6 +13,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import PallWrop from './pallWrop';
 import SellCar from '../sellCar';
 import Examine from './examine'
+
 class Review extends Component {
     constructor() {
         super();
@@ -23,7 +24,7 @@ class Review extends Component {
             result: [],
             visible: false,
             carVisible: false,
-            carID:'',
+            carID: '',
         }
     }
 
@@ -118,7 +119,7 @@ class Review extends Component {
         console.info(id);
         this.setState({
             carVisible: true,
-            carId:id,
+            carId: id,
         })
     }
     columns = [{
@@ -178,6 +179,10 @@ class Review extends Component {
     }
 
     render() {
+        const module = require('./examine')
+        const { stage } = this.state;
+        let stageList = [];
+        var names = ['Alice', 'Emily', 'Kate'];
 
         const TabPane = Tabs.TabPane;
         return (
@@ -221,15 +226,57 @@ class Review extends Component {
                     <Tabs defaultActiveKey="editBaseInfo">
                         <TabPane tab="基本信息审核" key="editBaseInfo">
                             <SellCar
-                            carId={this.state.carId}
-
+                                carId={this.state.carId}
                             ></SellCar>
                         </TabPane>
                         <TabPane tab="汽车检查" key="editPwd">
 
+                            <Examine
+                                carId={this.state.carId}
+
+                            ></Examine>
+
+
                         </TabPane>
                         <TabPane tab="图片上传" key="upload">
+                            <h2>外部</h2>
+                            <hr/>
+                            <Row  >
 
+                                <Col span={6}> <PallWrop></PallWrop></Col>
+                                <Col span={6}> <PallWrop></PallWrop></Col>
+                                <Col span={6}> <PallWrop></PallWrop></Col>
+                                <Col span={6}> <PallWrop></PallWrop></Col>
+
+                            </Row>
+                            <Row  >
+
+                                <Col span={6}  >
+                                    <Button type="primary" style={{width:102}}>正面</Button></Col>
+                                <Col span={6}>
+                                    <Button type="primary" style={{width:102}}>后面</Button></Col>
+                                <Col span={6}>
+                                    <Button type="primary" style={{width:102}}>左侧面</Button></Col>
+                                <Col span={6}>
+                                    <Button type="primary" style={{width:102}}>右侧面</Button></Col>
+
+                            </Row>
+                            <h2>内部</h2>
+                            <hr/>
+                            <Row>
+                                <Col span={6}>
+                                    <PallWrop></PallWrop>
+                                    <Button type="primary" style={{width:102}}>正面</Button>
+                                </Col>
+                                <Col span={6}> <PallWrop></PallWrop>
+                                    <Button type="primary" style={{width:102}}>后面</Button></Col>
+                                <Col span={6}> <PallWrop></PallWrop>
+                                    <Button type="primary" style={{width:102}}>左侧面</Button></Col>
+                                <Col span={6}> <PallWrop></PallWrop>
+                                    <Button type="primary" style={{width:102}}>右侧面</Button></Col>
+
+
+                            </Row>
                         </TabPane>
                     </Tabs>
 
