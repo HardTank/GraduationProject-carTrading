@@ -10,6 +10,7 @@ import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Location from'./Location'
 import Address from '../address'
+import moment from "moment";
 const { Option } = Select;
 const { MonthPicker} = DatePicker;
 class procedureInfo extends Component {
@@ -40,6 +41,39 @@ class procedureInfo extends Component {
             }
         });
 
+
+
+    }
+    setProcedureValue(procedureInfo) {
+        console.info("p传过来的时间" + typeof (procedureInfo))
+        //this.carInfoForm.setFieldsValue(car);
+        procedureInfo.yearlyInspectionValidityDate = moment(procedureInfo.yearlyInspectionValidityDate, 'YYYY-MM-DD');
+        procedureInfo.commercialInsuranceValidityDate = moment(procedureInfo.commercialInsuranceValidityDate, 'YYYY-MM-DD');
+        procedureInfo.compulsoryInsuranceValidityDate = moment(procedureInfo.compulsoryInsuranceValidityDate, 'YYYY-MM-DD');
+        this.props.form.setFieldsValue(procedureInfo);
+        //configurationInfo
+    }
+    componentDidMount() {
+
+        console.info("configurationInfo传过来的id" + this.props.carId)
+        var id = this.props.carId;
+        if (id != null) {
+            var procedureInfo;
+            axios.get('http://localhost:8080/procedureInfo/getList', {
+                    params: {
+                        carId: id,
+                        pageSize: 10,
+                        pageIndex: 0,
+                    }
+                }
+            ).then(
+                r => {
+                    procedureInfo = r.data.content[0]
+                    this.setProcedureValue(procedureInfo);
+                }
+            );
+
+        }
 
 
     }
@@ -257,14 +291,16 @@ class procedureInfo extends Component {
                             </Form.Item>
                         </Col>
                     </Row>
-
                     <Form.Item  >
                         <Row>
                             <Col span={4}>
-                                <Button type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                                <Button icon="save" type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
                             </Col>
                             <Col span={4}>
-                                <Button type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                                <Button icon="edit" type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                            </Col>
+                            <Col span={4}>
+                                <Button icon="redo" type="primary"   onClick={this.props.emptyForm}>清空</Button>
                             </Col>
                         </Row>
                     </Form.Item>

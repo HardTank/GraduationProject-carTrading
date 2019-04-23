@@ -13,6 +13,7 @@ import BaseInfoForm from'./baseInfoForm';
 import EditBaseInfoForm from'./editBaseInfo';
 import Wallet from './wallet';
 import SellCar from './sellCar';
+import AddCar from './sellCar/addCar'
 import OrderCar from './order/orderCar'
 import ResultConfirm from  './resultConfirm/resultConfirm'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
@@ -245,7 +246,8 @@ class PersonalCentral extends Component {
                             <OrderCar></OrderCar>
                         </div>
                         <div hidden={this.state.sellCar}>
-                            <SellCar></SellCar>
+
+                            <AddCar></AddCar>
                         </div>
                         <div hidden={this.state.myWallet}>
                             <Wallet

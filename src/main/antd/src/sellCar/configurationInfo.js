@@ -8,7 +8,7 @@ import {LocaleProvider} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-
+import moment from "moment";
 const { Option } = Select;
 const { MonthPicker} = DatePicker;
 class ConfigurationInfo extends Component {
@@ -39,6 +39,50 @@ class ConfigurationInfo extends Component {
 
 
 
+    }
+    componentDidMount() {
+
+        console.info("configurationInfo传过来的id" + this.props.carId)
+        var id = this.props.carId;
+        if (id != null) {
+            var carInfo;
+            var procedureInfo;
+            var configurationInfo;
+
+            //axios.get('http://localhost:8080/procedureInfo/getList', {
+            //        params: {
+            //            carId: id,
+            //            pageSize: 10,
+            //            pageIndex: 0,
+            //        }
+            //    }
+            //).then(
+            //    r => {
+            //        procedureInfo = r.data.content[0]
+            //        this.setProcedureValue(procedureInfo);
+            //    }
+            //);
+            axios.get('http://localhost:8080/configurationInfo/getList', {
+                    params: {
+                        carId: id,
+                        pageSize: 10,
+                        pageIndex: 0,
+                    }
+                }
+            ).then(
+                r => {
+                    configurationInfo = r.data.content[0]
+                    this.setConfigurationValue(configurationInfo);
+                }
+            );
+        }
+
+
+    }
+    setConfigurationValue(configurationInfo) {
+        console.info("传过来的configurationInfo" + configurationInfo)
+        this.props.form.setFieldsValue(configurationInfo);
+        //configurationInfo
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -269,14 +313,17 @@ class ConfigurationInfo extends Component {
                         </Form.Item>
                     </Col>
                     </Row>
-                     
+
                     <Form.Item  >
                         <Row>
                             <Col span={4}>
-                                <Button type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                                <Button icon="save" type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
                             </Col>
                             <Col span={4}>
-                                <Button type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                                <Button icon="edit" type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                            </Col>
+                            <Col span={4}>
+                                <Button icon="redo" type="primary"   onClick={this.props.emptyForm}>清空</Button>
                             </Col>
                         </Row>
                     </Form.Item>

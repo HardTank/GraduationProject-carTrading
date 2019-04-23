@@ -9,7 +9,9 @@ import axios from 'axios'//这是模块的加载机制，直接写依赖库的�
 import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Address from'../address'
+import moment from "moment";
 const { Option } = Select;
+
 const { MonthPicker} = DatePicker;
 class CarInfo extends Component {
 
@@ -41,11 +43,70 @@ class CarInfo extends Component {
 
 
     }
-    componentDidMount() {
 
-      //   var carInfo = sessionStorage.getItem("carInfo");
-      //   carInfo = JSON.parse(carInfo);
-      //   this.props.form.setFieldsValue(carInfo);
+
+        componentDidMount() {
+
+            console.info("carInfo传过来的id" + this.props.carId)
+            var id = this.props.carId;
+            if (id != null) {
+                var carInfo;
+                var procedureInfo;
+                var configurationInfo;
+                axios.get('http://localhost:8080/carInfo/getList', {
+                        params: {
+                            id: id,
+                            pageSize: 10,
+                            pageIndex: 0,
+                        }
+                    }
+                ).then(
+                    r => {
+                        carInfo = r.data.content[0]
+                        this.setCarValue(carInfo)
+                    }
+                );
+                //axios.get('http://localhost:8080/procedureInfo/getList', {
+                //        params: {
+                //            carId: id,
+                //            pageSize: 10,
+                //            pageIndex: 0,
+                //        }
+                //    }
+                //).then(
+                //    r => {
+                //        procedureInfo = r.data.content[0]
+                //        this.setProcedureValue(procedureInfo);
+                //    }
+                //);
+                //axios.get('http://localhost:8080/configurationInfo/getList', {
+                //        params: {
+                //            carId: id,
+                //            pageSize: 10,
+                //            pageIndex: 0,
+                //        }
+                //    }
+                //).then(
+                //    r => {
+                //        configurationInfo = r.data.content[0]
+                //        this.setConfigurationValue(configurationInfo);
+                //    }
+                //);
+            }
+
+
+        }
+    setCarValue(car) {
+        console.info("传过来的时间" + car.productDate + typeof (car.productDate))
+        if (car.source == '1')
+            car.source = '是';
+        if (car.source == '0')
+            car.source = '否'
+        car.productDate = moment(car.productDate, 'YYYY-MM-DD');
+        console.info("传过来后的时间" + car.productDate + typeof ( car.productDate));
+        this.props.form.setFieldsValue(car);
+        //  this.procedureInfoForm.setFieldsValue(procedureInfo);
+        //configurationInfo
     }
     render() {
         const { getFieldDecorator } = this.props.form;
@@ -228,8 +289,8 @@ class CarInfo extends Component {
                                         placeholder="请选择" disabled={this.state.readOnly}
 
                                     >
-                                        <Option value="是">是</Option>
-                                        <Option value="否">否</Option>
+                                        <Option value="1">是</Option>
+                                        <Option value="0">否</Option>
 
                                     </Select>
                                 )}
@@ -342,10 +403,13 @@ class CarInfo extends Component {
                     <Form.Item  >
                         <Row>
                             <Col span={4}>
-                                <Button type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                                <Button icon="save" type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
                             </Col>
                             <Col span={4}>
-                                <Button type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                                <Button icon="edit" type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                            </Col>
+                            <Col span={4}>
+                                <Button icon="redo" type="primary"   onClick={this.props.emptyForm}>清空</Button>
                             </Col>
                         </Row>
                     </Form.Item>
