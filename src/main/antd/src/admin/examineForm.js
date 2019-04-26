@@ -31,6 +31,7 @@ class ExamineForm extends  React.Component {
                         label="装置名">
                         {getFieldDecorator('device', {
                             rules: [{ required: true, message: '请输入装置名!' }],
+                            initialValue:this.props.device.toString(),
                         })(
                             <Input   />
                         )}
@@ -39,6 +40,7 @@ class ExamineForm extends  React.Component {
                     label="异常情况">
                         {getFieldDecorator('abnormal', {
                             rules: [{ required: true, message: '请输入异常情况!' }],
+                            initialValue:this.props.abnormal.toString(),
                         })(
                             <Input   />
                         )}
@@ -47,6 +49,7 @@ class ExamineForm extends  React.Component {
                         label="检查所属类别">
                         {getFieldDecorator('category', {
                             rules: [{ required: true, message: '请输入检查所属类别!' }],
+                            initialValue:this.props.category.toString(),
                         })(
                             <Select
                                 placeholder="请选择"
@@ -62,7 +65,7 @@ class ExamineForm extends  React.Component {
                         )}
                     </Form.Item>
                     <Button type="primary" htmlType="submit" className="login-form-button">
-                        添加
+                        确定
                     </Button><br/>
                 </Form>
             </Modal>

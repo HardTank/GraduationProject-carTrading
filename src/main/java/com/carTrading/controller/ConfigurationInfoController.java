@@ -27,7 +27,14 @@ public class ConfigurationInfoController {
         Page<ConfigurationInfo>page=configurationInfoService.getList(configurationInfo,pageIndex,pageSize);
         return page;
     }
-
+    /**根据carId得到主键*/
+    @RequestMapping(value = "/getId")
+    public ConfigurationInfo getList(Integer carId) {
+      // Integer id=configurationInfoService.getId(carId);
+        ConfigurationInfo c=configurationInfoService.getId(carId);
+       // c.setId(id.longValue());
+        return c;
+    }
     @RequestMapping("save")
     public ConfigurationInfo saveConfigurationInfo(ConfigurationInfo configurationInfo,String productDates) {
         logger.info("productDate"+productDates);

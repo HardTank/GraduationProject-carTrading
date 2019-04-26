@@ -26,9 +26,9 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     public MultipartConfigElement multipartConfigElement(){
         MultipartConfigFactory factory = new MultipartConfigFactory();
         //文件最大KB,MB
-        factory.setMaxFileSize("2MB");
+        factory.setMaxFileSize("20MB");
         //设置总上传数据总大小
-        factory.setMaxRequestSize("100MB");
+        factory.setMaxRequestSize("1000MB");
         return factory.createMultipartConfig();
     }
 }

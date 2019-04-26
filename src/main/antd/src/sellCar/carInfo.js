@@ -16,86 +16,95 @@ const { MonthPicker} = DatePicker;
 class CarInfo extends Component {
 
     state = {
-
+        name:'tlx',
         readOnly: false,
-        save:false,
+        save: false,
     }
-  editForm=()=>{
-      this.setState({
-          readOnly: false,
-          save:false,
-      },()=>this.props.edit());
+    editForm = ()=> {
+        this.setState({
+            readOnly: false,
+            save: false,
+        }, ()=>this.props.edit());
 
-  }
+    }
 
     handleSubmit = (e)=> {
         e.preventDefault();
-        this.props.form.validateFields((err,values)=>{
-            if(!err){
-
+        this.props.form.validateFields((err, values)=> {
+            if (!err) {
+                var id = this.props.carId;
+                if (id != null) {
+                    var str = JSON.stringify(values);
+                    sessionStorage.setItem("carInfo", str);
+                }
                 this.setState({
-                    readOnly: true,
-                    save:true},
+                        readOnly: true,
+                        save: true
+                    },
                     ()=>this.props.save())
             }
         });
 
 
-
     }
 
 
-        componentDidMount() {
+    componentDidMount() {
 
-            console.info("carInfo传过来的id" + this.props.carId)
-            var id = this.props.carId;
-            if (id != null) {
-                var carInfo;
-                var procedureInfo;
-                var configurationInfo;
-                axios.get('http://localhost:8080/carInfo/getList', {
-                        params: {
-                            id: id,
-                            pageSize: 10,
-                            pageIndex: 0,
-                        }
+        console.info("carInfo传过来的id" + this.props.carId)
+        var id = this.props.carId;
+        if (id != null) {
+            this.setState({
+                save: true,
+                readOnly: true,
+            })
+            var carInfo;
+            var procedureInfo;
+            var configurationInfo;
+            axios.get('http://localhost:8080/carInfo/getList', {
+                    params: {
+                        id: id,
+                        pageSize: 10,
+                        pageIndex: 0,
                     }
-                ).then(
-                    r => {
-                        carInfo = r.data.content[0]
-                        this.setCarValue(carInfo)
-                    }
-                );
-                //axios.get('http://localhost:8080/procedureInfo/getList', {
-                //        params: {
-                //            carId: id,
-                //            pageSize: 10,
-                //            pageIndex: 0,
-                //        }
-                //    }
-                //).then(
-                //    r => {
-                //        procedureInfo = r.data.content[0]
-                //        this.setProcedureValue(procedureInfo);
-                //    }
-                //);
-                //axios.get('http://localhost:8080/configurationInfo/getList', {
-                //        params: {
-                //            carId: id,
-                //            pageSize: 10,
-                //            pageIndex: 0,
-                //        }
-                //    }
-                //).then(
-                //    r => {
-                //        configurationInfo = r.data.content[0]
-                //        this.setConfigurationValue(configurationInfo);
-                //    }
-                //);
-            }
-
-
+                }
+            ).then(
+                r => {
+                    carInfo = r.data.content[0]
+                    this.setCarValue(carInfo)
+                }
+            );
+            //axios.get('http://localhost:8080/procedureInfo/getList', {
+            //        params: {
+            //            carId: id,
+            //            pageSize: 10,
+            //            pageIndex: 0,
+            //        }
+            //    }
+            //).then(
+            //    r => {
+            //        procedureInfo = r.data.content[0]
+            //        this.setProcedureValue(procedureInfo);
+            //    }
+            //);
+            //axios.get('http://localhost:8080/configurationInfo/getList', {
+            //        params: {
+            //            carId: id,
+            //            pageSize: 10,
+            //            pageIndex: 0,
+            //        }
+            //    }
+            //).then(
+            //    r => {
+            //        configurationInfo = r.data.content[0]
+            //        this.setConfigurationValue(configurationInfo);
+            //    }
+            //);
         }
+
+
+    }
+
     setCarValue(car) {
         console.info("传过来的时间" + car.productDate + typeof (car.productDate))
         if (car.source == '1')
@@ -108,6 +117,7 @@ class CarInfo extends Component {
         //  this.procedureInfoForm.setFieldsValue(procedureInfo);
         //configurationInfo
     }
+
     render() {
         const { getFieldDecorator } = this.props.form;
         return (
@@ -135,7 +145,9 @@ class CarInfo extends Component {
                                 {getFieldDecorator('brand', {
                                     rules: [{
                                         required: true, message: '请输入厂商品牌!',
-                                    }],
+                                    }]
+                                    ,
+
                                 })(
                                     <Input disabled={this.state.readOnly}/>
                                 )}
@@ -177,6 +189,7 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请输入使用性质!',
                                     }],
+                                    initialValue:'非营运',
                                 })(
                                     <Select
                                         placeholder="请选择" disabled={this.state.readOnly}
@@ -194,12 +207,13 @@ class CarInfo extends Component {
                                 label="注册地"
                             >
                                 {getFieldDecorator('registerPlace', {
-                                    rules: [{
-                                        required: true, message: '请输入注册地!',
-                                    }],
+
+                                    rules: [,{
+                                    required: true, message: '请输入注册地!',
+                                }],
                                 })(
                                     <Input disabled={this.state.readOnly}/>
-                                )}
+                                    )}
                             </Form.Item>
                         </Col>
                     </Row>
@@ -239,8 +253,17 @@ class CarInfo extends Component {
                                         {
                                             required: true, message: '请选择驱动方式!',
                                         }],
+                                    initialValue:'两驱',
                                 })(
-                                    <Input disabled={this.state.readOnly}/>
+
+                                    <Select
+                                    placeholder="请选择" disabled={this.state.readOnly}
+
+                                    >
+                                    <Option value="两驱">两驱</Option>
+                                    <Option value="四驱">四驱</Option>
+
+                                    </Select>
                                 )}
                             </Form.Item>
                         </Col>
@@ -255,6 +278,7 @@ class CarInfo extends Component {
                                         {
                                             required: true, message: '请输入座位数!',
                                         }],
+                                    initialValue:'5',
                                 })(
                                     <Input disabled={this.state.readOnly}/>
                                 )}
@@ -284,13 +308,14 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择来源!',
                                     }],
+                                    initialValue:'否',
                                 })(
                                     <Select
                                         placeholder="请选择" disabled={this.state.readOnly}
 
                                     >
-                                        <Option value="1">是</Option>
-                                        <Option value="0">否</Option>
+                                        <Option value="是">是</Option>
+                                        <Option value="否">否</Option>
 
                                     </Select>
                                 )}
@@ -403,13 +428,16 @@ class CarInfo extends Component {
                     <Form.Item  >
                         <Row>
                             <Col span={4}>
-                                <Button icon="save" type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                                <Button icon="save" type="primary" hidden={this.props.carId!=null}
+                                        disabled={this.state.save} htmlType="submit">保存</Button>
                             </Col>
                             <Col span={4}>
-                                <Button icon="edit" type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                                <Button icon="edit" type="primary" hidden={this.props.carId!=null}
+                                        disabled={!this.state.save} onClick={this.editForm}>修改</Button>
                             </Col>
                             <Col span={4}>
-                                <Button icon="redo" type="primary"   onClick={this.props.emptyForm}>清空</Button>
+                                <Button icon="redo" type="primary" hidden={this.props.carId!=null}
+                                        onClick={this.props.emptyForm}>清空</Button>
                             </Col>
                         </Row>
                     </Form.Item>

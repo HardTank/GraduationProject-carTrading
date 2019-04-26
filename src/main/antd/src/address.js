@@ -10526,7 +10526,7 @@ class Address extends Component {
 
         return (
 
-            <Cascader options={addressOptions} placeholder={this.state.value} className="placeholder"
+            <Cascader disabled={this.props.disabled} options={addressOptions} placeholder={this.state.value} className="placeholder"
                        onChange={this. handleChange}/>
 
         )

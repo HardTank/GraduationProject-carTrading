@@ -31,6 +31,11 @@ class procedureInfo extends Component {
         e.preventDefault();
         this.props.form.validateFields((err,values)=>{
             if(!err){
+                var id = this.props.carId;
+                if (id != null) {
+                    var str = JSON.stringify(values);
+                    sessionStorage.setItem("procedureInfo",str);
+                }
                 console.info(values);
                 var str = JSON.stringify(values);
                 console.info(str);
@@ -50,6 +55,7 @@ class procedureInfo extends Component {
         procedureInfo.yearlyInspectionValidityDate = moment(procedureInfo.yearlyInspectionValidityDate, 'YYYY-MM-DD');
         procedureInfo.commercialInsuranceValidityDate = moment(procedureInfo.commercialInsuranceValidityDate, 'YYYY-MM-DD');
         procedureInfo.compulsoryInsuranceValidityDate = moment(procedureInfo.compulsoryInsuranceValidityDate, 'YYYY-MM-DD');
+
         this.props.form.setFieldsValue(procedureInfo);
         //configurationInfo
     }
@@ -59,6 +65,10 @@ class procedureInfo extends Component {
         var id = this.props.carId;
         if (id != null) {
             var procedureInfo;
+            this.setState({
+                save:true,
+                readOnly:true,
+            })
             axios.get('http://localhost:8080/procedureInfo/getList', {
                     params: {
                         carId: id,
@@ -136,7 +146,7 @@ class procedureInfo extends Component {
                                         required: true, message: '请选择!',
                                     }],
                                 })(
-                                    <DatePicker disabled={this.state.readOnly}/>
+                                    <DatePicker style={{width:'100%'}} disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -149,7 +159,7 @@ class procedureInfo extends Component {
                                         required: true, message: '请选择!',
                                     }],
                                 })(
-                                    <DatePicker disabled={this.state.readOnly}/>
+                                    <DatePicker style={{width:'100%'}} disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -162,7 +172,7 @@ class procedureInfo extends Component {
                                         required: true, message: '请选择!',
                                     }],
                                 })(
-                                    <DatePicker disabled={this.state.readOnly}/>
+                                    <DatePicker style={{width:'100%'}} disabled={this.state.readOnly}/>
                                 )}
                             </Form.Item>
                         </Col>
@@ -177,6 +187,7 @@ class procedureInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择!',
                                     }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -193,6 +204,7 @@ class procedureInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择!',
                                     }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -210,6 +222,7 @@ class procedureInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -229,6 +242,7 @@ class procedureInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -246,6 +260,7 @@ class procedureInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -263,6 +278,7 @@ class procedureInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -282,6 +298,7 @@ class procedureInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -294,13 +311,13 @@ class procedureInfo extends Component {
                     <Form.Item  >
                         <Row>
                             <Col span={4}>
-                                <Button icon="save" type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                                <Button icon="save" type="primary"  hidden={this.props.carId!=null} disabled={this.state.save} htmlType="submit">保存</Button>
                             </Col>
                             <Col span={4}>
-                                <Button icon="edit" type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                                <Button icon="edit" type="primary"  hidden={this.props.carId!=null} disabled={!this.state.save} onClick={this.editForm}>修改</Button>
                             </Col>
                             <Col span={4}>
-                                <Button icon="redo" type="primary"   onClick={this.props.emptyForm}>清空</Button>
+                                <Button icon="redo" type="primary"  hidden={this.props.carId!=null}   onClick={this.props.emptyForm}>清空</Button>
                             </Col>
                         </Row>
                     </Form.Item>

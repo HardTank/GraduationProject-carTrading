@@ -35,7 +35,7 @@ public class DeviceInspectionService {
         /**创建实例*/
         Example<DeviceInspection> ex = Example.of(deviceInspection, matcher);
         /**排序查询*/
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Sort sort = new Sort(Sort.Direction.DESC, "createDate");
         /**分页查询*/
         PageRequest pageRequest = new PageRequest(pageIndex, pageSize, sort);
         page = deviceInspectionRepository.findAll(ex, pageRequest);
@@ -46,10 +46,19 @@ public class DeviceInspectionService {
      */
     @Transactional(rollbackFor = Exception.class)
     public  DeviceInspection  save(DeviceInspection deviceInspection) {
-        logger.info("更新二手车信息");
+        logger.info("更新检查信息");
         Date date=new java.util.Date();
         deviceInspection.setCreateDate(date);
         deviceInspection = deviceInspectionRepository.save(deviceInspection);
+        return deviceInspection;
+    }
+    /**
+     * 删除数据
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public  DeviceInspection delete(DeviceInspection deviceInspection) {
+          logger.info("删除检查信息");
+          deviceInspectionRepository.delete(deviceInspection);
         return deviceInspection;
     }
 }

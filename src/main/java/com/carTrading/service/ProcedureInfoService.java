@@ -57,4 +57,9 @@ public class ProcedureInfoService {
         ProcedureInfo procedure =procedureInfoRepository.findOne(procedureInfo.getId());
         return procedure;
     }
+    /**根据carId找到主键*/
+    public  ProcedureInfo getId(Integer carId){
+        ProcedureInfo p=procedureInfoRepository.findIdByCar(carId);
+        return p;
+    }
 }

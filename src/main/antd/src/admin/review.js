@@ -12,8 +12,10 @@ import BaseInfoForm from '../baseInfoForm'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import PallWrop from './pallWrop';
 import SellCar from '../sellCar';
-import Examine from './examine'
-
+import Examine from './examine';
+import UploadFile from './uploadFile';
+import AuctionInfo from './auctionInfoForrm'
+const FormItem = Form.Item;
 class Review extends Component {
     constructor() {
         super();
@@ -25,6 +27,7 @@ class Review extends Component {
             visible: false,
             carVisible: false,
             carID: '',
+            list: [],
         }
     }
 
@@ -113,15 +116,29 @@ class Review extends Component {
             visible: false,
             carVisible: false,
         })
+        sessionStorage.setItem("carInfo", null);
+        sessionStorage.setItem("procedureInfo", null);
+        sessionStorage.setItem("configurationInfo", null);
     }
+
     showModal = (e, id)=> {
         e.preventDefault();
         console.info(id);
+
+
         this.setState({
             carVisible: true,
             carId: id,
         })
     }
+    //handleOnChange = ({ fileList }) => {
+    //    console.log(fileList)
+    //    return fileList.map(file => ({
+    //        status: file.status,
+    //        uid: file.uid,
+    //        url: file.response?file.response.data.url:file.url,
+    //    }));
+    //};
     columns = [{
         title: 'ID',
         dataIndex: 'id',
@@ -179,10 +196,6 @@ class Review extends Component {
     }
 
     render() {
-        const module = require('./examine')
-        const { stage } = this.state;
-        let stageList = [];
-        var names = ['Alice', 'Emily', 'Kate'];
 
         const TabPane = Tabs.TabPane;
         return (
@@ -224,7 +237,7 @@ class Review extends Component {
                     destroyOnClose={true}
                 >
                     <Tabs defaultActiveKey="editBaseInfo">
-                        <TabPane tab="基本信息审核" key="editBaseInfo">
+                        <TabPane tab="汽车信息" key="editBaseInfo">
                             <SellCar
                                 carId={this.state.carId}
                             ></SellCar>
@@ -238,45 +251,18 @@ class Review extends Component {
 
 
                         </TabPane>
-                        <TabPane tab="图片上传" key="upload">
-                            <h2>外部</h2>
-                            <hr/>
-                            <Row  >
+                        <TabPane tab="竞拍信息" key="auctionInfo">
 
-                                <Col span={6}> <PallWrop></PallWrop></Col>
-                                <Col span={6}> <PallWrop></PallWrop></Col>
-                                <Col span={6}> <PallWrop></PallWrop></Col>
-                                <Col span={6}> <PallWrop></PallWrop></Col>
+                            <AuctionInfo
+                                carId={this.state.carId}
+                                ref={this.saveFormRef}
 
-                            </Row>
-                            <Row  >
+                                onCancel={this.handleCancel}
 
-                                <Col span={6}  >
-                                    <Button type="primary" style={{width:102}}>正面</Button></Col>
-                                <Col span={6}>
-                                    <Button type="primary" style={{width:102}}>后面</Button></Col>
-                                <Col span={6}>
-                                    <Button type="primary" style={{width:102}}>左侧面</Button></Col>
-                                <Col span={6}>
-                                    <Button type="primary" style={{width:102}}>右侧面</Button></Col>
-
-                            </Row>
-                            <h2>内部</h2>
-                            <hr/>
-                            <Row>
-                                <Col span={6}>
-                                    <PallWrop></PallWrop>
-                                    <Button type="primary" style={{width:102}}>正面</Button>
-                                </Col>
-                                <Col span={6}> <PallWrop></PallWrop>
-                                    <Button type="primary" style={{width:102}}>后面</Button></Col>
-                                <Col span={6}> <PallWrop></PallWrop>
-                                    <Button type="primary" style={{width:102}}>左侧面</Button></Col>
-                                <Col span={6}> <PallWrop></PallWrop>
-                                    <Button type="primary" style={{width:102}}>右侧面</Button></Col>
+                                onOk={this.handleOk}
+                            ></AuctionInfo>
 
 
-                            </Row>
                         </TabPane>
                     </Tabs>
 

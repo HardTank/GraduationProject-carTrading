@@ -31,7 +31,14 @@ public class ProcedureInfoController {
 
         return page;
     }
-
+    /**根据carId得到主键*/
+    @RequestMapping(value = "/getId")
+    public ProcedureInfo getList(Integer carId) {
+        // Integer id=configurationInfoService.getId(carId);
+        ProcedureInfo p=procedureInfoService.getId(carId);
+        // c.setId(id.longValue());
+        return p;
+    }
     @RequestMapping("save")
     public ProcedureInfo saveProcedureInfo(ProcedureInfo procedureInfo,
                                            String  commercialDate,

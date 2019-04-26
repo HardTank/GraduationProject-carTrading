@@ -30,6 +30,11 @@ class ConfigurationInfo extends Component {
         this.props.form.validateFields((err,values)=>{
             if(!err){
                 console.info(values);
+                var id = this.props.carId;
+                if (id != null) {
+                    var str = JSON.stringify(values);
+                    sessionStorage.setItem("configurationInfo",str);
+                }
                 this.setState({
                         readOnly: true,
                         save:true},
@@ -48,7 +53,10 @@ class ConfigurationInfo extends Component {
             var carInfo;
             var procedureInfo;
             var configurationInfo;
-
+            this.setState({
+                save:true,
+                readOnly:true,
+            })
             //axios.get('http://localhost:8080/procedureInfo/getList', {
             //        params: {
             //            carId: id,
@@ -111,6 +119,7 @@ class ConfigurationInfo extends Component {
                                     rules: [{
                                         required: true, message: '请输入座椅功能!',
                                     }],
+                                    initialValue:'无',
                                 })(
                                     <Input  disabled={this.state.readOnly}/>
                                 )}
@@ -139,6 +148,7 @@ class ConfigurationInfo extends Component {
                                     rules: [{
                                         required: true, message: '车窗玻璃调节方式!',
                                     }],
+                                    initialValue:'电动',
                                 })(
                                     <Select disabled={this.state.readOnly}
                                         placeholder="请选择"
@@ -158,6 +168,7 @@ class ConfigurationInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择车窗后视镜调节方式!',
                                     }],
+                                    initialValue:'电动',
                                 })(
                                     <Select disabled={this.state.readOnly}
                                         placeholder="请选择"
@@ -177,6 +188,7 @@ class ConfigurationInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择座椅调节方式!',
                                     }],
+                                    initialValue:'电动',
                                 })(
                                     <Select disabled={this.state.readOnly}
                                         placeholder="请选择"
@@ -199,6 +211,7 @@ class ConfigurationInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择!',
                                     }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -215,6 +228,7 @@ class ConfigurationInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择!',
                                     }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -232,6 +246,7 @@ class ConfigurationInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -251,6 +266,7 @@ class ConfigurationInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -268,6 +284,7 @@ class ConfigurationInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -285,6 +302,7 @@ class ConfigurationInfo extends Component {
                                         {
                                             required: true, message: '请选择 !',
                                         }],
+                                    initialValue:'有',
                                 })(
                                     <Select placeholder="请选择" disabled={this.state.readOnly}>
                                         <Option value="无">无</Option>
@@ -304,6 +322,7 @@ class ConfigurationInfo extends Component {
                                     {
                                         required: true, message: '请选择 !',
                                     }],
+                                initialValue:'无',
                             })(
                                 <Select placeholder="请选择"  disabled={this.state.readOnly}>
                                     <Option value="无">无</Option>
@@ -317,13 +336,13 @@ class ConfigurationInfo extends Component {
                     <Form.Item  >
                         <Row>
                             <Col span={4}>
-                                <Button icon="save" type="primary" disabled={this.state.save} htmlType="submit">保存</Button>
+                                <Button icon="save" type="primary"  hidden={this.props.carId!=null} disabled={this.state.save} htmlType="submit">保存</Button>
                             </Col>
                             <Col span={4}>
-                                <Button icon="edit" type="primary" disabled={!this.state.save} onClick={this.editForm}>修改</Button>
+                                <Button icon="edit" type="primary"  hidden={this.props.carId!=null} disabled={!this.state.save} onClick={this.editForm}>修改</Button>
                             </Col>
                             <Col span={4}>
-                                <Button icon="redo" type="primary"   onClick={this.props.emptyForm}>清空</Button>
+                                <Button icon="redo" type="primary"  hidden={this.props.carId!=null}   onClick={this.props.emptyForm}>清空</Button>
                             </Col>
                         </Row>
                     </Form.Item>

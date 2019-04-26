@@ -14,10 +14,46 @@ class Examine extends Component {
         super();
         this.state = {
             result: [],
-            visible:false,
+            visible: false,
+            id: '',
+            device: '',
+            abnormal: '',
+            category: '',
+            pageSize: 4,
+            pageIndex: 0,
         }
     }
 
+    editInfo = (e, record)=> {
+        e.preventDefault();
+        // this.form.setFieldsValue(record)
+        this.setState({
+            visible: true,
+            category: record.category,
+            device: record.device,
+            abnormal: record.abnormal,
+            id: record.id,
+        })
+    }
+    delInfo = (e, record)=> {
+        e.preventDefault();
+        axios.get('http://localhost:8080/deviceInspection/delete', {
+                params: {
+                    id: record.id,
+                }
+            }
+        ).then(
+            r => {
+
+                if (r.status == 200) {
+                    this.setState({
+                        result: r.data,
+                    });
+                    setTimeout(this.form.resetFields, 1000);
+
+                }
+            });
+    }
     columns = [
         {
             title: 'ID',
@@ -27,7 +63,6 @@ class Examine extends Component {
         },
         {
             title: '序号',
-            className: 'hidden',
             render: (text, record, index) => `${index + 1}`
         },
         {
@@ -59,8 +94,21 @@ class Examine extends Component {
             )
 
         },
+        {
+            title: '操作',
+            dataIndex: 'action',
+
+            render: (text, record)=>(
+                <div>
+                    <Button type="primary" onClick={(ev)=>this.editInfo(ev,record)}>修改</Button>
+                    <Button type="primary" onClick={(ev)=>this.delInfo(ev,record)}>删除</Button>
+                </div>
+            )
+
+        },
     ]
-    show = ()=> {
+    show = (page)=> {
+
         axios.get('http://localhost:8080/deviceInspection/getList', {
                 xhrFields: {
                     withCredentials: true
@@ -68,8 +116,8 @@ class Examine extends Component {
                 crossDomain: true,
                 params: {
                     carId: this.props.carId,
-                    pageIndex: 0,
-                    pageSize: 10,
+                    pageIndex: page,
+                    pageSize: 4,
                 }
             }
         ).then(
@@ -80,47 +128,69 @@ class Examine extends Component {
             });
     }
 
-    showModal=(e)=>{
+    showModal = (e)=> {
         e.preventDefault();
         this.setState({
-            visible:true,
+            visible: true,
+            id: 0,
+            category: '',
+            device: '',
+            abnormal: '',
         })
     }
-    handleCancel=()=>{
+    handleCancel = ()=> {
         this.setState({
-            visible:false,
+            visible: false,
         })
     }
     handleOk = (e) => {
         e.preventDefault();
-        this.form.validateFields((err,values) => {
+        this.form.validateFields((err, values) => {
             if (!err) {
-                var userId=sessionStorage.getItem("userId");
-                axios.get('http://localhost:8080/deviceInspection/save', {
-                        xhrFields: {
-                            withCredentials: true
-                        },
-                        crossDomain: true,
-                        params: {
-                            carId:this.props.carId,
-                            device:values.device,
-                            abnormal:values.abnormal,
-                            category:values.category,
-                            adminId:userId,
+                var userId = sessionStorage.getItem("userId");
+                let formData = new FormData();
+                if (this.state.id > 0)
+                    formData.append('id', this.state.id);
+                formData.append('device', values.device);
+                formData.append('abnormal', values.abnormal);
+                formData.append('category', values.category);
+                formData.append('adminId', userId);//adminId
+                formData.append('carId', this.props.carId);
+                axios({
+                    url: 'http://localhost:8080/deviceInspection/save',
+                    method: 'post',
+                    data: formData,
+                    processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+                    contentType: false,   // 告诉axios不要去设置Content-Type请求头
+                }).then((res)=> {
+                    if (res.status == 200) {
+                        console.info(res)
+                        this.setState({
+                            visible: false,
+                            result: res.data,
+                        });
+                        setTimeout(this.form.resetFields, 1000);
 
-                        }
                     }
-                ).then(
-                    r => {
-
-                        if (r.status == 200) {
-                            this.setState({
-                                result: r.data,
-                            });
-                            setTimeout(this.form.resetFields, 1000);
-
-                        }
-                    });
+                })
+                //    axios.get('http://localhost:8080/deviceInspection/save', {
+                //            xhrFields: {
+                //                withCredentials: true
+                //            },
+                //            crossDomain: true,
+                //        data: formData,
+                //        }
+                //    ).then(
+                //        r => {
+                //
+                //            if (r.status == 200) {
+                //                this.setState({
+                //                    result: r.data,
+                //                });
+                //                setTimeout(this.form.resetFields, 1000);
+                //
+                //            }
+                //        });
             }
         })
 
@@ -128,11 +198,12 @@ class Examine extends Component {
     saveFormRef = (form) => {
         this.form = form;
     };
+
     componentDidMount() {
         var userId = sessionStorage.getItem("userId");
         var user = sessionStorage.getItem("user");
         user = JSON.parse(user);
-        this.show();
+        this.show(0);
 
     }
 
@@ -142,7 +213,7 @@ class Examine extends Component {
         return (
             <div>
                 <Button
-                onClick={this.showModal}
+                    onClick={this.showModal}
                 >+</Button>
                 <Table rowKey="id" columns={this.columns} dataSource={this.state.result.content}
                        pagination={false}></Table>
@@ -152,15 +223,18 @@ class Examine extends Component {
                             onChange={(page)=>{this.show(page-1)}
                             }></Pagination>
 
-                    < ExamineForm
-                        ref={this.saveFormRef}
-                        visible={this.state.visible}
-                        onCancel={this.handleCancel}
-                        width="1000px"
-                        onOk={this.handleOk}
-                     >
+                < ExamineForm
+                    ref={this.saveFormRef}
+                    visible={this.state.visible}
+                    onCancel={this.handleCancel}
+                    width="1000px"
+                    onOk={this.handleOk}
+                    category={this.state.category}
+                    device={this.state.device}
+                    abnormal={this.state.abnormal}
+                >
 
-                    </ExamineForm>
+                </ExamineForm>
 
             </div>
 

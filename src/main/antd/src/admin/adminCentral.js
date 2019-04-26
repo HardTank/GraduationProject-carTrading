@@ -29,7 +29,9 @@ class AdminCentral extends Component {
         if (item.key == "review") {
             var user = sessionStorage.getItem("user");
             user = JSON.parse(user);
-
+            this.setState({
+                review:false,
+            })
 
         }
         else if (item.key == "editInfo") {
@@ -83,7 +85,7 @@ class AdminCentral extends Component {
                             <Menu
                                 theme="light"
                                 mode="inline"
-                                defaultSelectedKeys={['baseInfo']}
+                                defaultSelectedKeys={['review']}
                                 inlineCollapsed={true}
                                 onSelect={(item) => {
                                 this.handleOk(item);

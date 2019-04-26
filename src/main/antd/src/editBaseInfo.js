@@ -31,7 +31,6 @@ class EditBaseInfo extends Component {
                         params: {
                             id: userId,
                             name: values.name,
-
                             mail: values.mail,
                             phone: values.phone,
                             cardId: values.cardId,

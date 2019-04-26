@@ -57,4 +57,10 @@ public class ConfigurationInfoService {
         ConfigurationInfo configuration  = configurationInfoRepository.findOne(configurationInfo.getId());
         return configuration ;
     }
+    /**根据carId找到主键*/
+    public ConfigurationInfo getId(Integer carId){
+        ConfigurationInfo c=configurationInfoRepository.findIdByCar(carId);
+        return c;
+    }
+
 }
