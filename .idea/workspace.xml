@@ -1284,7 +1284,7 @@
       <workItem from="1555411126750" duration="38950000" />
       <workItem from="1555809687322" duration="38881000" />
       <workItem from="1556067163492" duration="62333000" />
-      <workItem from="1556256550466" duration="23229000" />
+      <workItem from="1556256550466" duration="23246000" />
     </task>
     <task id="LOCAL-00001" summary="构建初始结构">
       <created>1551410859579</created>
@@ -1418,11 +1418,17 @@
       <option name="project" value="LOCAL" />
       <updated>1556288491681</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="图片上传不刷新实现,但是修改功能缺失,审核部分竞拍信息没有完成">
+      <created>1556288777309</created>
+      <option name="number" value="00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1556288777309</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="600388000" />
+    <option name="totallyTimeSpent" value="600405000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
