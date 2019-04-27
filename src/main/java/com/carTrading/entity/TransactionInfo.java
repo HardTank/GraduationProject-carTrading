@@ -33,12 +33,15 @@ public class TransactionInfo {
     /**
      * 交易用户
      */
-    @Column(name="user_id")
-    private Integer userId;
+    @Column(name="admin_id")
+    private Integer adminId;
     /**
      * 保证金
      */
     private Integer deposit;
+    /**起拍价*/
+    @Column(name="start_price")
+    private Double startPrice;
     /**
      * 拍卖时间
      */

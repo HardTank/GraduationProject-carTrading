@@ -1,8 +1,7 @@
 import React, { Component} from 'react'
 import 'antd/lib/button/style';
-import '../css/App.css';
 import axios from 'axios';
-import { Form, Icon, Input, Button, Checkbox,Modal,Select,Row,Col} from 'antd';
+import { Form, Icon, Input, Button, Checkbox,Modal,Select,Row,Col,DatePicker} from 'antd';
 const { Option } = Select;
 class AuctionInfo extends React.Component {
     constructor() {
@@ -13,8 +12,12 @@ class AuctionInfo extends React.Component {
         }
     }
 
+    resetForm(e){
+        e.preventDefault();
+        this.props.form.resetFields();
+    }
     render() {
-        const { visible, onCancel, onOk,form} = this.props;
+        const {onOk,form,id} = this.props;
         // const { getFieldDecorator } = form;
         const { getFieldDecorator } = form;
         return (
@@ -39,7 +42,7 @@ class AuctionInfo extends React.Component {
                             rules: [{required: true, message: '请输入竞拍时间!'}],
 
                         })(
-                            <Input   />
+                            <DatePicker  style={{width:'100%'}} renderExtraFooter={() => 'extra footer'} showTime />
                         )}
                     </Form.Item>
                     <Form.Item
@@ -53,8 +56,11 @@ class AuctionInfo extends React.Component {
                             <Input />
                         )}
                     </Form.Item>
-                    <Button type="primary" htmlType="submit" className="login-form-button">
-                        确定
+                    <Button type="primary" htmlType="submit"  >
+                        {this.props.id>0?'修改':'确定'}
+                    </Button>
+                    <Button type="primary" style={{marginLeft:100}} onClick={(ev)=>{this.resetForm(ev)}}  >
+                       清空
                     </Button><br/>
                 </Form>
                 </Col>

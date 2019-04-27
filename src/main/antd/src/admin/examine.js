@@ -173,24 +173,7 @@ class Examine extends Component {
 
                     }
                 })
-                //    axios.get('http://localhost:8080/deviceInspection/save', {
-                //            xhrFields: {
-                //                withCredentials: true
-                //            },
-                //            crossDomain: true,
-                //        data: formData,
-                //        }
-                //    ).then(
-                //        r => {
-                //
-                //            if (r.status == 200) {
-                //                this.setState({
-                //                    result: r.data,
-                //                });
-                //                setTimeout(this.form.resetFields, 1000);
-                //
-                //            }
-                //        });
+
             }
         })
 

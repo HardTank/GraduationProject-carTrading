@@ -38,10 +38,10 @@ class SellCar extends Component {
 
     setCarValue(car) {
         console.info("传过来的时间" + car.productDate + typeof (car.productDate))
-        if (car.source == '1')
-            car.source = '是';
-        if (car.source == '0')
-            car.source = '否'
+        //if (car.source == '1')
+        //    car.source = '是';
+        //if (car.source == '0')
+        //    car.source = '否'
         car.productDate = moment(car.productDate, 'YYYY-MM-DD');
         console.info("传过来后的时间" + car.productDate + typeof ( car.productDate));
         this.carInfoForm.setFieldsValue(car);
