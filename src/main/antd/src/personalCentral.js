@@ -123,8 +123,8 @@ class PersonalCentral extends Component {
             axios.get('http://localhost:8080/order/getDeposit', {
                     params: {
                         userId: userId,
-                        pageIndex: 0,
-                        pageSize: 9,
+                        pageIndex:0,
+                        pageSize:9,
                     }
 
 
