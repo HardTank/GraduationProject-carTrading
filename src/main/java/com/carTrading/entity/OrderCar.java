@@ -23,6 +23,9 @@ public class OrderCar {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /**主键*/
     private Long id;
+//    /**拥有者*/
+//    @Column(name="owner_id")
+//    private Integer ownerId;
     /**保证金*/
     private Integer deposit;
     /**竞拍时间*/

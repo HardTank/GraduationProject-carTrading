@@ -129,7 +129,7 @@ class ResultConfirm extends Component {
             r => {
                 var data = r.data;
                 console.info(data)
-                sessionStorage.setItem("deposit", r.data.totalNumber);
+               // sessionStorage.setItem("deposit", r.data.totalNumber);
                 this.setState({
                     result: data,
                 });

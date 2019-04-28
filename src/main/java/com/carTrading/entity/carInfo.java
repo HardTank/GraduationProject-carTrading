@@ -117,5 +117,7 @@ public class CarInfo {
      * 过户次数
      */
     private String transfer;
+    /**备注说明*/
+    private String remark;
 
 }

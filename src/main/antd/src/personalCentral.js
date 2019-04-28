@@ -117,14 +117,34 @@ class PersonalCentral extends Component {
             })
         }
         else if (item.key == "myWallet") {
-            var deposit = sessionStorage.getItem("deposit");
+            //var deposit = sessionStorage.getItem("deposit");
+            var userId = sessionStorage.getItem("userId");
             var wallet = parseFloat(sessionStorage.getItem("wallet"));
-            console.info("保证金" + deposit)
-            this.setState({
-                myWallet: false,
-                deposit: deposit,
-                wallet: wallet,
-            })
+            axios.get('http://localhost:8080/order/getDeposit', {
+                    params: {
+                        userId: userId,
+                        pageIndex: 0,
+                        pageSize: 9,
+                    }
+
+
+                }
+                //axios No 'Access-Control-Allow-Origin' header is present on the requested resource.   安装chrome 插件:Allow-Control-Allow-Origin
+
+            ).then(
+                r => {
+                    if(r.status=200){
+                        console.info("保证金" + r.data)
+                        this.setState({
+                            myWallet: false,
+                            deposit: r.data,
+                            wallet: wallet,
+                        })
+                    }
+                }
+            )
+
+
         }
     }
 //自动渲染页面

@@ -9,6 +9,7 @@ import axios from 'axios'//这是模块的加载机制，直接写依赖库的�
 import qs from 'qs';
 import Title from '../title';
 import Review from './review';
+import Confirm from './confirm'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const {   Sider, Content } = Layout;
 class AdminCentral extends Component {
@@ -34,15 +35,15 @@ class AdminCentral extends Component {
             })
 
         }
-        else if (item.key == "editInfo") {
+        else if (item.key == "confirm") {
             this.setState({
-                editInfo: false,
+                confirm: false,
 
             })
             var user = sessionStorage.getItem("user");
             user = JSON.parse(user);
             user.area = user.province + "/" + user.city + "/" + user.county;
-            this.form.setFieldsValue(user);
+            //this.form.setFieldsValue(user);
         }
 
     }
@@ -110,6 +111,7 @@ class AdminCentral extends Component {
                         </div>
                         <div hidden={this.state.confirm}>
 
+                            <Confirm></Confirm>
                         </div>
 
                     </Content>

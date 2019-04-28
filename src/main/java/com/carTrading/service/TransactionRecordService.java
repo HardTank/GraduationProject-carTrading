@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author tanlixin
@@ -36,5 +37,21 @@ public class TransactionRecordService {
         PageRequest pageRequest = new PageRequest(pageIndex, pageSize, sort);
         page = transactionRecordRepository.findAll(ex, pageRequest);
         return page;
+    }
+    /**
+     * 根据id获取竞拍的信息
+     */
+    public TransactionRecord getTransactionRecord(TransactionRecord transactionRecord) {
+        TransactionRecord t = transactionRecordRepository.findOne(transactionRecord.getId());
+        return t;
+    }
+    /**
+     * 更新数据
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public TransactionRecord save(TransactionRecord transactionRecord) {
+        logger.info("更新二手车信息");
+          transactionRecord = transactionRecordRepository.save(transactionRecord);
+        return transactionRecord;
     }
 }

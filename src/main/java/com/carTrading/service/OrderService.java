@@ -1,6 +1,7 @@
 package com.carTrading.service;
 
 import com.carTrading.entity.*;
+import com.carTrading.repository.ConfirmCarRepository;
 import com.carTrading.repository.MyCarRepository;
 import com.carTrading.repository.OrderRepository;
 import org.slf4j.Logger;
@@ -25,6 +26,8 @@ public class OrderService {
     CarInfoService carInfoService;
     @Autowired
     MyCarRepository myCarRepository;
+    @Autowired
+    ConfirmCarRepository confirmCarRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 动态查询
@@ -56,7 +59,7 @@ public class OrderService {
         List<OrderCar> list = orderRepository.findById(userId, pageIndex, pageSize, state);
         TransactionRecord record = new TransactionRecord();
         record.setUserId(userId);
-        record.setState(0);
+        record.setState(1);
         int totalNumber = (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
@@ -95,6 +98,21 @@ public class OrderService {
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
+    /**
+     * 管理员查找支付成功信息
+     */
+    public Page<ConfirmCar> getSuccess(Integer userId, int pageIndex, int pageSize) {
+        logger.info("查找竞拍成功信息");
+        Page<ConfirmCar> page = null;
+
+        List<ConfirmCar> list = confirmCarRepository.findResult(pageIndex, pageSize);
+        CarInfo car = new CarInfo();
+        car.setOwnerId(userId);
+        car.setState(3);
+        int  totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
+        page = new Page(totalNumber, pageIndex, pageSize, list);
+        return page;
+    }
 
     /**
      * 查找用户自己的汽车信息
@@ -123,5 +141,17 @@ public class OrderService {
         int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
+
+    }
+    /**获取保证金*/
+    public Integer getDeposit(Integer userId){
+        TransactionRecord record = new TransactionRecord();
+        record.setUserId(userId);
+        record.setState(1);
+        int totalNumber = (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
+        record.setState(2);
+        totalNumber +=(int) transactionRecordService.getList(record, 0, 1).getTotalElements();
+
+        return  totalNumber;
     }
 }

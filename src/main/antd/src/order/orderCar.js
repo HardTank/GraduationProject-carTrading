@@ -41,7 +41,8 @@ class OrderCar extends Component {
             r => {
                 var data = r.data;
                 console.info(data)
-                sessionStorage.setItem("deposit", r.data.totalNumber);
+             //   sessionStorage.setItem("deposit", r.data.totalNumber);
+               // alert(r.data.totalNumber)
                 this.setState({
                     result: data,
                 });
@@ -54,7 +55,7 @@ class OrderCar extends Component {
         var userId = sessionStorage.getItem("userId");
         axios.get('http://localhost:8080/order/getAllList', {
                 params: {
-                    userId: 9,
+                    userId: userId,
                     pageIndex: 0,
                     pageSize: 9,
 
@@ -163,13 +164,20 @@ class OrderCar extends Component {
         key: 'type',
         dataIndex: 'type',
 
+    },{
+        title: '说明',
+        key: 'remark',
+        dataIndex: 'remark',
+        render: (text, record)=>(
+            <div dangerouslySetInnerHTML={{ __html: text}}></div>
+        )
     }
         ,{
             title: '状态',
             key: 'state',
             dataIndex: 'state',
             render: (text, record)=>(
-                <span>{text==0}待审核</span>
+                <span>{text==0?'待审核':text==1?'待交易':text==2?'竞拍成功':text==3?'支付成功':'未通过审核'}</span>
             )
         }];
     //自动加载

@@ -1,5 +1,6 @@
 package com.carTrading.controller;
 
+import com.carTrading.entity.ConfirmCar;
 import com.carTrading.entity.MyCar;
 import com.carTrading.entity.OrderCar;
 import com.carTrading.entity.Page;
@@ -48,11 +49,25 @@ public class OrderController {
         Page<OrderCar> page=orderService.getMyList(userId,pageIndex,pageSize);
         return page;
     }
+    /**管理员查找支付成功信息*/
+    @RequestMapping(value = "/getPaySuccess")
+    public Page<ConfirmCar> getPaySuccess(Integer userId, int pageIndex, int pageSize) {
+        // logger.info(orderCar.toString());
+        Page<ConfirmCar> page=orderService.getSuccess(userId,pageIndex,pageSize);
+        return page;
+    }
     /**获取用户的汽车交易成功的信息*/
     @RequestMapping(value = "/getAllList")
     public Page<MyCar> getAllList(Integer userId, int pageIndex, int pageSize) {
         // logger.info(orderCar.toString());
         Page<MyCar> page=orderService.getAllCar(userId,pageIndex,pageSize);
         return page;
+    }
+    /**获取用户的保证金*/
+    @RequestMapping(value = "/getDeposit")
+    public Integer getDepositt(Integer userId ) {
+        // logger.info(orderCar.toString());
+       Integer deposit=orderService.getDeposit(userId);
+        return deposit;
     }
 }

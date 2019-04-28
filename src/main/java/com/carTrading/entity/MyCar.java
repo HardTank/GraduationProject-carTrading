@@ -45,7 +45,8 @@ public class MyCar {
     private String discharge;
     /**类型*/
     private String type;
-
+    /**备注说明*/
+    private  String remark;
     /**交易状态*/
     private Integer state;
 }

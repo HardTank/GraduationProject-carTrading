@@ -57,5 +57,15 @@ public class UserService {
         user = userRepository.findOne(user.getId());
         return user;
     }
+    /**改变用户于额*/
+    @Transactional(rollbackFor = Exception.class)
+    public  User  saveUserWallet(Long userId,Double wallet) {
+        logger.info("更新用户余额");
+        User user = userRepository.findOne(userId);
+        Double w=user.getWallet()+wallet;
+        user.setWallet(w);
+        add(user);
+        return user;
+    }
 
 }

@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public interface MyCarRepository extends JpaRepository<MyCar,Long> {
     /**查询提交的汽车的状态*/
-    @Query(value="select  DISTINCT c.state,c.id,ti.deposit,ti.auction_time,ti.start_price ,c.brand,c.product_date ,c.transmission ,c.discharge,c.type " +
+    @Query(value="select  DISTINCT c.remark,c.state,c.id,ti.deposit,ti.auction_time,ti.start_price ,c.brand,c.product_date ,c.transmission ,c.discharge,c.type " +
             "from   transaction_record as tr  ,car_info as c left JOIN transaction_info as ti  on ti.car_id=c.id  " +
             "where  c.owner_id=:userId limit :pageIndex , :pageSize ",nativeQuery = true)
     List<MyCar> findCar(@Param("userId") Integer userId, @Param("pageIndex")Integer pageIndex, @Param("pageSize")Integer pageSize);

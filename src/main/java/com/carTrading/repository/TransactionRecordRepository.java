@@ -12,4 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TransactionRecordRepository extends JpaRepository<TransactionRecord,Long>
 {
+
 }
