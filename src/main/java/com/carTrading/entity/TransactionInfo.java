@@ -29,7 +29,7 @@ public class TransactionInfo {
      * 二手车id
      */
     @Column(name="car_id")
-    private Integer carId;
+    private Long carId;
     /**
      * 交易用户
      */

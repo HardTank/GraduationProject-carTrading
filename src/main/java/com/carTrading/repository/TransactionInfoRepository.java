@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface TransactionInfoRepository extends JpaRepository<TransactionInfo,Long>{
+
+    public  TransactionInfo findByCarId(Long carId);
 }

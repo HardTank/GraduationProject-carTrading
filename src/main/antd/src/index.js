@@ -12,6 +12,7 @@ import * as serviceWorker from './serviceWorker';
 import {LocaleProvider} from 'antd';
 import { Router, Route ,Switch} from 'react-router';
 import { createHashHistory} from 'history'
+import AuctionCenter from './tradingHall/auctionCenter'
 const hashHistory = createHashHistory();
 ReactDOM.render(
     <LocaleProvider locale={zhCN}>
@@ -23,7 +24,7 @@ ReactDOM.render(
                 <Route path="/tradingHall" component={TradingHall}/>
                 <Route path="/personalCentral" component={PersonalCentral}/>
                 <Route path="/adminCentral" component={AdminCentral}/>
-
+                <Route path="/test" component={AuctionCenter}/>
                 <Route path="/" component={HomePage}/>
             </Switch>
         </Router>

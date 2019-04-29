@@ -15,7 +15,8 @@ class TradingHall extends Component {
             pageIndex: 0,
             pageSize: 10,
             r: '',
-            test: 'xxx'
+            test: 'xxx',
+            status:false
         };
     }
     componentDidMount() {
@@ -24,19 +25,23 @@ class TradingHall extends Component {
             window.location.href = "#/index";
         }
         else{
-          this.showPage(0)
+            var ws = new WebSocket('ws://localhost:8080');
+            alert(ws.readyState)
+          this.showPage(0,userId)
     }
 
     }
-    showPage(page){
-        axios.get('http://localhost:8080/carInfo/getList',{
+    showPage(page,userId){
+        axios.get('http://localhost:8080/tradingInfo/getDetailList',{
             params:{
+                userId:userId,
+                state:1,
                 pageIndex:page,
                 pageSize:this.state.pageSize,
             }}).then( r=>{
             if(r.status==200){
                 this.setState({
-                    result: r.data.content,
+                    result: r.data.items,
                     r: r.data,
                 })
             }
@@ -48,8 +53,19 @@ class TradingHall extends Component {
             test:t,
         })
     }
+    onOk(id){
+      //  alert(id)
+      //  if(id==25)
+      //return false;
+      //  else
+            return false;
+    }
+    ws(){
+        var ws = new WebSocket('ws://localhost:8080');
+        alert(ws.readyState)
+    }
     render() {
-          const{test}=this.state;
+          const{test,status}=this.state;
          // const t=this.test();
         var content=[];
 
@@ -61,7 +77,7 @@ class TradingHall extends Component {
                         <Col span={4}>
                             <img style={{height:120,width:160}} alt="example" src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png" />
                         </Col>
-                        <Col span={12}>
+                        <Col span={10}>
                             <div style={{fontSize:20,fontWeight:'bold', height:10}}>
                                 <div className="carInfo">{item.brand}</div>
                                 <div className="carInfo">{ item.productDate}款</div>
@@ -72,15 +88,18 @@ class TradingHall extends Component {
                             </div><br/>
                             <div style={{marginTop:10}} >{item.emissionStandard}/{item.mileage}</div>
                         </Col>
-                        <Col span={4}>
-                            { test}
+                        <Col span={6}>
+                             竞拍时间:<br/> { item.auctionTime}<br/>
+                             起拍价:<div style={{fontSize:20}}>{ item.startPrice}万元</div>
+
                         </Col>
                         <Col span={4}>
-                            <Button   type={'primary'}>订阅</Button>
+                            <Button   type={'primary'}   onClick={this.test.bind(this,item.id)}>{item.status==1?'退订':'订阅'}</Button>
+                            <Button   type={'primary'}   onClick={this.ws.bind(this,item.id)}>竞拍</Button>
                         </Col>
                     </Row>
                 </Card>)
-            })
+            },this)
 
         return (
            <Title
@@ -91,25 +110,20 @@ class TradingHall extends Component {
                         <div>
                             <div className="title">条件筛选</div>
                             <div className="option">所在地</div>
-                            <div className="content">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
-                            <div className="content">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx</div>
+                            <div className="content" ><div className="box">北京</div><div className="box">天津</div><div className="box">上海</div></div>
                             <div className="option">排放</div>
-                            <div className="content">xx</div>
-                            <div className="option">年限</div>
-                            <div className="content">xx</div>
+                            <div className="content"><div className="box">国六</div><div className="box">国六</div><div className="box">国五</div><div className="box">国四</div><div className="box">国三</div><div className="box" style={{width:100}}>国二及以下</div></div>
                             <div className="option">品牌</div>
-                            <div className="content">xx</div>
-                            <div className="option">所在地</div>
-                            <div className="content">xx</div>
+                            <div className="content"><div className="box">奥迪</div><div className="box">奔驰</div><div className="box">大众</div><div className="box">丰田</div></div>
                             <div className="option">价格区间</div>
-                            <div className="content">排放</div>
+                            <div className="content"><div className="box">5万</div><div className="box" style={{width:100}}>5万-10万</div><div className="box" style={{width:100}}>10万-20万</div><div className="box" style={{width:100}}>20万以上</div></div>
                         </div>
                <div>
 
                    {content}
                </div>
                <Pagination showQuickJumper defaultCurrent={1}
-                           total={this.state.r.totalElements} current={this.state.r.number+1}
+                           total={this.state.r.totalNumber} current={this.state.r.number+1}
                            defaultPageSize={this.state.pageSize}
                            onChange={(page)=>{this.showPage(page-1)}
                             }></Pagination>

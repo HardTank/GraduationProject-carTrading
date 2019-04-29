@@ -54,6 +54,12 @@ public class TransactionInfoController {
         }
         return transactionInfo;
     }
+    //更加carId 获取竞拍信息
+    @RequestMapping(value="/getByCarId")
+    public TransactionInfo get(Integer id){
+        return transactionInfoService.getTransaction(id.longValue());
+
+    }
 //    @InitBinder
 //    public void initBinder(WebDataBinder binder, WebRequest request) {
 //

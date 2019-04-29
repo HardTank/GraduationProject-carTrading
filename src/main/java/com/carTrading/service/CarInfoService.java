@@ -2,6 +2,7 @@ package com.carTrading.service;
 
 import com.carTrading.entity.CarInfo;
 import com.carTrading.repository.CarInfoRepository;
+import com.carTrading.repository.TransactionRecordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class CarInfoService {
     @Autowired
     private CarInfoRepository carInfoRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    TransactionInfoService transactionInfoService;
+    @Autowired
+    TransactionRecordRepository transactionRecordRepository;
 
     /**
      * 动态查询
@@ -58,4 +63,6 @@ public class CarInfoService {
         CarInfo car = carInfoRepository.findOne(carInfo.getId());
         return car;
     }
+
+
 }

@@ -57,4 +57,11 @@ public class TransactionInfoService {
         TransactionInfo t= transactionInfoRepository.findOne(transactionInfo.getId());
         return t;
     }
+    /**
+     * 根据id获取竞拍的信息
+     */
+    public TransactionInfo getTransaction(Long id) {
+        TransactionInfo t= transactionInfoRepository.findByCarId(id);
+        return t;
+    }
 }
