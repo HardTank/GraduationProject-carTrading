@@ -103,6 +103,7 @@ class Review extends Component {
         this.setState({
             visible: false,
             id: '',
+            userVisible:false,
         })
          this.show(0);
     }

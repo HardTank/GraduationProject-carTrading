@@ -6,6 +6,7 @@ import qs from 'qs';
 import io from 'socket.io-client';
 import moment from 'moment';
 import Comment from './comment'
+import DetailCar from './detailCar'
 const { Meta } = Card;
 class DetailInfo extends Component {
     constructor() {
@@ -113,6 +114,7 @@ class DetailInfo extends Component {
                 <Tabs defaultActiveKey="editBaseInfo">
                     <TabPane tab="基本信息" key="baseInfo">
 
+                         <DetailCar ></DetailCar>
                     </TabPane>
                     <TabPane tab="评论" key="comment">
 

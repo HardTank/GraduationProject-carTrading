@@ -10,6 +10,7 @@ import qs from 'qs';
 import Title from './title';
 import EditPwd from './editPwd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import watermark from 'water-mark-oc'
 class BaseInfoForm extends Component {
 
 

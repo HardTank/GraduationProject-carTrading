@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "alimask": "^1.0.3",
     "antd": "^3.13.6",
     "axios": "^0.18.0",
     "braft-editor": "^2.2.9",
@@ -12,7 +13,9 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.5",
-    "socket.io-client": "^2.2.0"
+    "react-watermark-module": "^1.2.0",
+    "socket.io-client": "^2.2.0",
+    "water-mark-oc": "^1.1.0"
   },
   "scripts": {
     "start": "react-scripts start",

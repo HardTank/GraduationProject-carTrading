@@ -78,3 +78,10 @@
     color: #40a9ff;
     cursor:pointer;
 }
+.key{
+
+    color:#40a9ff;
+    font-weight:bold;
+    display: inline-block;
+
+}
