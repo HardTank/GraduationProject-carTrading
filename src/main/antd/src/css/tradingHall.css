@@ -1,4 +1,4 @@
-.option{
+.option {
     width: 78px;
     height: 40px;
     line-height: 44px;
@@ -9,11 +9,12 @@
     border: 1px;
     text-align: center;
 }
-.content{
+
+.content {
     width: 94%;
     height: 40px;
     line-height: 44px;
-margin-bottom: 5px;
+    margin-bottom: 5px;
     margin-left: 78px;
     background: gainsboro;
     color: #666;
@@ -21,16 +22,59 @@ margin-bottom: 5px;
     border: 1px;
     text-align: center;
 }
-.title{
-    width: 100%;
-    height:80px;
-}
-.carInfo{
-    margin-left:5px;
 
-    float:left;
+.title {
+    width: 100%;
+    height: 80px;
 }
-.box{
-    float:left;
-    width:50px;
+
+.carInfo {
+    margin-left: 5px;
+    float: left;
+
+}
+
+.box {
+    float: left;
+    width: 50px;
+}
+
+.divcss5 {
+    margin: 30px 30px;
+    border-style: groove;
+    padding-right: 80px;
+}
+
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 300px;
+    line-height: 160px;
+    background: #364d79;
+    overflow: hidden;
+    width: 300px;
+}
+
+.ant-carousel .slick-slide h3 {
+    color: #fff;
+
+}
+
+.boX {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
+}
+
+.carName {
+    font-size: 20px;
+    font-weight:bold;
+
+    margin-left: 5px;
+    float: left;
+
+}
+.carName :hover {
+    color: #40a9ff;
+    cursor:pointer;
 }

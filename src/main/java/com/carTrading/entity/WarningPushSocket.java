@@ -1,6 +1,7 @@
 package com.carTrading.entity;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,8 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -67,9 +70,15 @@ public class WarningPushSocket {
             logger.info("来终端的警情消息:" + message);
             Map<String, String> map = JSONObject.parseObject(message, HashMap.class);
             System.out.println(map.get("id"));
+            Date currentTime = new Date();
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String time = formatter.format(currentTime);
+            System.out.println("time"+time);
             System.out.println(map.get("message"));
             System.out.println(map.get("text"));
-
+            map.put("time",time);
+            ObjectMapper mapper = new ObjectMapper();
+            message=mapper.writeValueAsString(map);
             sendMsgToAll(message);
         }
 

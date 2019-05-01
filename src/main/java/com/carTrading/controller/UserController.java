@@ -83,4 +83,10 @@ public class UserController {
         logger.info("user信息" + user.toString());
         return user;
     }
+    @RequestMapping(value="/getName")
+    @ResponseBody
+    public User getName(User user){
+        user=userService.getUser(user);
+        return user;
+    }
 }
