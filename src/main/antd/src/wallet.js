@@ -107,12 +107,10 @@ else
         ).then(
             r => {
                 var data = r.data;
-                console.info(data)
 
                 this.setState({
                     result: data,
                 });
-                console.info(r);
             }
         )
     }
@@ -183,12 +181,10 @@ else
         ).then(
             r => {
                 var data = r.data;
-                console.info(data)
 
                 this.setState({
                     result: data,
                 });
-                console.info(r);
             }
 
         )

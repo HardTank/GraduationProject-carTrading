@@ -23,12 +23,9 @@ class BasicDemo extends React.Component {
 
         this.props.form.validateFields((error, values) => {
             if (!error) {
-                //const submitData = {
-                //    title: values.title,
-                //    content:values.content.toHTML()
-                //}
+
                 this.props.onOk(values.content.toHTML())
-               // console.log(submitData)
+
             }
         })
 

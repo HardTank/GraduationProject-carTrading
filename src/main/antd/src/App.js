@@ -97,7 +97,7 @@ class App extends Component {
                 this.setState({
                     result: r.data
                 });
-                console.info(r.data);
+
             }
         ).catch(e => {
             if (e.response) {

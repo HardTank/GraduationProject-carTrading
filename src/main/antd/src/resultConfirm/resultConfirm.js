@@ -128,12 +128,10 @@ class ResultConfirm extends Component {
         ).then(
             r => {
                 var data = r.data;
-                console.info(data)
                // sessionStorage.setItem("deposit", r.data.totalNumber);
                 this.setState({
                     result: data,
                 });
-                console.info(r);
             }
         )
 
@@ -156,12 +154,10 @@ class ResultConfirm extends Component {
         ).then(
             r => {
                 var data = r.data;
-                console.info(data)
 
                 this.setState({
                     myCar: data,
                 });
-                console.info(r);
             }
         )
     }

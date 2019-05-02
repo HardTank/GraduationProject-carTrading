@@ -88,3 +88,9 @@
 .detailInfo{
     margin:20px 80px;
 }
+.price{
+    font-size: 20px;
+    display: inline-block;
+    font-weight: bold;
+    color:red;
+}

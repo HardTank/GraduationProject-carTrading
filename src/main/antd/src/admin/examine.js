@@ -164,7 +164,6 @@ class Examine extends Component {
                     contentType: false,   // 告诉axios不要去设置Content-Type请求头
                 }).then((res)=> {
                     if (res.status == 200) {
-                        console.info(res)
                         this.setState({
                             visible: false,
                             result: res.data,

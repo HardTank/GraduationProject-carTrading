@@ -51,12 +51,10 @@ class Review extends Component {
         ).then(
             r => {
                 var data = r.data;
-                console.info(data)
 
                 this.setState({
                     result: data,
                 });
-                console.info(r);
             }
         )
 
@@ -122,14 +120,7 @@ class Review extends Component {
 
         })
     }
-    //handleOnChange = ({ fileList }) => {
-    //    console.log(fileList)
-    //    return fileList.map(file => ({
-    //        status: file.status,
-    //        uid: file.uid,
-    //        url: file.response?file.response.data.url:file.url,
-    //    }));
-    //};
+
     columns = [{
         title: 'ID',
         dataIndex: 'id',
@@ -246,7 +237,6 @@ class Review extends Component {
         })
     }
     getAuctionP = (id)=> {
-        console.log(id)
 
             axios.get('http://localhost:8080/transactionInfo/getList', {
                     params: {
@@ -260,7 +250,6 @@ class Review extends Component {
                     if (r.status == 200) {
                         if (r.data.content.length > 0) {
                             var tr = r.data.content[0];
-                            console.log('trId'+tr.id)
                             this.setState({
                                 id: tr.id,
                             });
@@ -286,7 +275,6 @@ class Review extends Component {
                             var tr = r.data.content[0];
                             tr.auctionTime = moment(tr.auctionTime, 'YYYY-MM-DD HH:MM:SS');
                             this.form.setFieldsValue(tr);
-                            console.log(tr.id)
                             this.setState({
                                 id: tr.id,
                             });
@@ -329,14 +317,12 @@ class Review extends Component {
         }
     }
        setRemark(remark){
-           console.log('chuan'+remark)
            sessionStorage.setItem('remark',remark);
        }
        setBackReview(e){
            e.preventDefault();
            var remark=sessionStorage.getItem('remark');
            if(remark!=''){
-               console.log('remark:'+remark);
                axios.get('http://localhost:8080/carInfo/save',{
                    params:{
                        id:this.state.carId,

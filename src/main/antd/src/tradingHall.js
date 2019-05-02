@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import './css/tradingHall.css';
-import {Button ,Icon,Row, Col, Tabs,Affix, Layout,Menu,List,Card,Pagination} from 'antd';
+import {Button ,Icon,Row, Col, Tabs,Affix, Layout,Menu,List,Card,Pagination,Modal} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import Title from './title'
+import AuctionCenter from './tradingHall/auctionCenter'
 class TradingHall extends Component {
     constructor() {
         super();
@@ -16,7 +17,8 @@ class TradingHall extends Component {
             pageSize: 10,
             r: '',
             test: 'xxx',
-            status: false
+            status: false,
+            visible:false,
         };
     }
 
@@ -56,16 +58,23 @@ class TradingHall extends Component {
         this.setState({
             test: t,
         })
-        console.log(t)
     }
 
     handleOk(item) {
-        console.log(item.brand)
         sessionStorage.setItem("carInfo",JSON.stringify(item))
         window.open("http://localhost:3000/#/info")
 
     }
-
+    showModal=()=>{
+        this.setState({
+            visible:true,
+        })
+    }
+    cancelModal=()=>{
+        this.setState({
+            visible:false,
+        })
+    }
     render() {
         const {test,status}=this.state;
         // const t=this.test();
@@ -100,10 +109,27 @@ class TradingHall extends Component {
                     </Col>
                     <Col span={4}>
                         <Button type={'primary'}
-                                onClick={this.test.bind(this,item.id)}>{item.status == 1 ? '退订' : '订阅'}</Button>
-                        <Button type={'primary'}>竞拍</Button>
+                                onClick={this.test.bind(this,item.id)}>{item.status == 1 ? '退订' : '订阅'}</Button><br/>
+                        <Button
+                            hidden={item.status != 1}
+                            style={{marginTop:20}}
+                            type={'primary'}
+                            onClick={this.showModal }
+                        >
+                            竞拍
+                        </Button>
                     </Col>
                 </Row>
+                    <Modal
+                        visible={this.state.visible}
+                        onCancel={this.cancelModal}
+                        footer={null}
+                     >
+                         <AuctionCenter
+                         carId={item.id}
+                         startPrice={item.startPrice}
+                         ></AuctionCenter>
+                    </Modal>
             </Card>)
         }, this)
         return (

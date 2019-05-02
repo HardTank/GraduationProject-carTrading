@@ -51,7 +51,7 @@ class CarInfo extends Component {
 
     componentDidMount() {
 
-        console.info("carInfo传过来的id" + this.props.carId)
+
         var id = this.props.carId;
         if (id != null) {
             this.setState({
@@ -112,7 +112,6 @@ class CarInfo extends Component {
         if (car.source == '0')
             car.source = '否'
         car.productDate = moment(car.productDate, 'YYYY-MM-DD');
-        console.info("传过来后的时间" + car.productDate + typeof ( car.productDate));
         this.props.form.setFieldsValue(car);
         //  this.procedureInfoForm.setFieldsValue(procedureInfo);
         //configurationInfo

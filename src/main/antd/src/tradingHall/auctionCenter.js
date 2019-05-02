@@ -13,15 +13,23 @@ class AuctionCenter extends Component {
         super();
         this.state = {
             price: '',
-            message: '<br/>'
+            message: '<br/>',
+            highest: '',
+            bidder: '无',
+            bidderId: '',
+
         }
     }
 
     componentDidMount() {
 
         this.connectWebSocket();
+        this.setState({
+            highest: this.props.startPrice * 10000
+        })
     }
 
+//websocket连接
     connectWebSocket() {
         console.log("开始...");
         //建立webSocket连接
@@ -38,29 +46,71 @@ class AuctionCenter extends Component {
         }
 
         //接收信息
-         websocket.onmessage = (msg)=>{
+        websocket.onmessage = (msg)=> {
             var message = JSON.parse(msg.data);
-            var text=message.time+'<br/>'+message.id+'出价:'+'<em style="color:red;">'+message.message+'元</em>';
-            this.setState({
-                message: this.state.message +text + '<br/>',
-            })
-             var scrollDom = document.getElementById('content');
-             scrollDom.scrollTop = scrollDom.scrollHeight;
+            console.log(message)
+            var userId = sessionStorage.getItem("userId");
+            if (message.carId == this.props.carId) {
+                if (message.price > this.state.highest) {
+                    this.setState({
+                        highest: message.price,
+                        bidder: message.userName,
+                        bidderId: message.id,
+                    })
+                }
+                var price = this.formatCurrency(message.price)
+
+                if (message.userId == userId)
+                    var text = message.time + '<br/><em style="font-weight:bold;">' + '您出价:<div style=" color:red ;font-size:18px;display:inline-block">' + price + '</div>元</em><br/>';
+
+                else
+                    var text = message.time + '<br/>' + message.userName + '出价:<div style="color:red ;font-size:18px;display:inline-block">' + price + '</div>元<br/>';
+                this.setState({
+                    message: this.state.message + text,
+                })
+                var scrollDom = document.getElementById('content');
+                scrollDom.scrollTop = scrollDom.scrollHeight;
+            }
         }
         //websocket.addEventListener('message', (msg)=>this.getMessage(msg)
         //);
 
     }
 
+//价格的格式转换
+    formatCurrency = (num)=> {
+        num = num.toString().replace(/\$|\,/g, '');
+        if (isNaN(num))
+            num = "0";
+        var sign = (num == (num = Math.abs(num)));
+        num = Math.floor(num * 100 + 0.50000000001);
+        var cents = num % 100;
+        num = Math.floor(num / 100).toString();
+        if (cents < 10)
+            cents = "0" + cents;
+        for (var i = 0; i < Math.floor((num.length - (1 + i)) / 3); i++)
+            num = num.substring(0, num.length - (4 * i + 3)) + ',' +
+                num.substring(num.length - (4 * i + 3));
+        return (((sign) ? '' : '-') + num + '.' + cents);
+    }
+//获取消息
     getMessage(msg) {
         var message = JSON.parse(msg.data);
-        var text=message.time+'<br/>'+message.id+'出价:'+message.message;
-        this.setState({
-            message: text + this.state.message +'<br/>',
-        })
-        var scrollDom = document.getElementById('content');
-        alert(scrollDom.value)
-        scrollDom.scrollTop = scrollDom.scrollHeight;
+        console.log(message)
+        var userId = sessionStorage.getItem("userId");
+        console.log(userId)
+        alert(message.userId)
+        if (message.carId == this.props.carId) {
+            if (message.userId == userId)
+                var text = message.time + '<br/><em>' + '您' + '出价:' + message.price + '</em>';
+            else
+                var text = message.time + '<br/>' + message.userName + '出价:' + message.price;
+            this.setState({
+                message: text + this.state.message + '<br/>',
+            })
+            var scrollDom = document.getElementById('content');
+            scrollDom.scrollTop = scrollDom.scrollHeight;
+        }
     }
 
     st() {
@@ -71,14 +121,23 @@ class AuctionCenter extends Component {
     send() {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                var postValue = {};
-                postValue.id = '1';
-                ////postValue.text = '出价';
-                //var myDate = new Date();
-                //
-                //postValue.text =moment().format('YYYY-MM-DD HH:MM:SS ');
-                postValue.message = values.deposit;
-                websocket.send(JSON.stringify(postValue));
+                var userId = sessionStorage.getItem("userId");
+                axios.get('http://localhost:8080/user/getName', {
+                    params: {
+                        id: userId,
+                    }
+                }).then(r=> {
+                    if (r.status == 200) {
+                        var userName = r.data.name;
+                        var postValue = {};
+                        postValue.userId = userId;
+                        postValue.userName = userName;
+                        postValue.carId = this.props.carId;
+                        postValue.price = values.deposit;
+                        websocket.send(JSON.stringify(postValue));
+                    }
+                })
+
             }
         })
     }
@@ -91,18 +150,40 @@ class AuctionCenter extends Component {
 
     }
 
+    //判断出价
+    judgePrice = (rule, value, callback)=> {
+        const form = this.props.form;
+        if (value <= this.state.highest + 1000) {
+
+            callback('最低加价1000元!');
+        } else {
+            callback();
+        }
+    }
+
     render() {
-        const {message}=this.state;
-        const {form} = this.props;
+        const {message,highest,bidder}=this.state;
+        const {form,startPrice} = this.props;
         // const { getFieldDecorator } = form;
         const { getFieldDecorator } = form;
         return (
             <div>
-                <div className="divcss5" style={{padding:50,paddingTop:20,height:200,overflow:'auto',scrollTop:'scrollHeight' }}
-                     dangerouslySetInnerHTML={{__html:message}}  id="content"
-                >
-
+                <div> 起拍价:
+                    <div className="price">{startPrice}</div>
+                    万元
                 </div>
+                <div>最高价:
+                    <div className="price">{this.formatCurrency(highest)}</div>
+                    元 出价人:
+                    <div className="price">{bidder}</div>
+                </div>
+                <Card id="content" style={{paddingLeft:5,height:200,overflow:'auto',scrollTop:'scrollHeight' }}>
+                    <div
+                        dangerouslySetInnerHTML={{__html:message}}
+                    >
+
+                    </div>
+                </Card>
                 <Form>
                     <Form.Item
                         lable="出价"
@@ -110,16 +191,19 @@ class AuctionCenter extends Component {
                         {getFieldDecorator('deposit', {
                             rules: [{
                                 pattern: /^\+?(?!0+(\.00?)?$)\d+(\.\d\d?)?$/, message: '格式错误!',
-                            }, {required: true, message: '请输入出价!'}],
+                            }, {required: true, message: '请输入出价!'},
+                                {
+                                    validator: this.judgePrice,
+                                }],
 
                         })(
-                            <Input/>
+                            <Input placeholder="元"/>
                         )}
 
                     </Form.Item>
-                    <Button type="primary" style={{marginLeft:20}}   onClick={(ev)=>{this.send(ev)}}>Send</Button>
-                    <Button type="primary"   style={{marginLeft:20}} onClick={this.connectWebSocket}>open</Button>
-                    <Button  type="primary"  style={{marginLeft:20}} onClick={this.closeWebSocket}>Close</Button>
+                    <Button type="primary" style={{marginLeft:20}} onClick={(ev)=>{this.send(ev)}}>Send</Button>
+                    <Button type="primary" style={{marginLeft:20}} onClick={this.connectWebSocket}>open</Button>
+                    <Button type="primary" style={{marginLeft:20}} onClick={this.closeWebSocket}>Close</Button>
                 </Form>
             </div>
 
@@ -127,4 +211,4 @@ class AuctionCenter extends Component {
         )
     }
 }
-export default Form.create({})( AuctionCenter);
+export default Form.create({})(AuctionCenter);

@@ -39,7 +39,7 @@ public class TransactionRecord {
     /**
      * 出价
      */
-    private Float price;
+    private Double price;
     /**
      * 创建时间
      */

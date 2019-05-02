@@ -25,7 +25,6 @@ class Comment extends Component {
         var carInfo = sessionStorage.getItem("carInfo")
         var userId = sessionStorage.getItem("userId")
         carInfo = JSON.parse(carInfo);
-        console.log(carInfo.brand)
         this.setState({
             item: carInfo,
             userId: userId,
@@ -56,7 +55,6 @@ class Comment extends Component {
     }
 
     confirm(id) {
-        console.log(id)
         axios.get('http://localhost:8080/comment/delComment', {
             params: {
                 id: id,
@@ -80,11 +78,9 @@ class Comment extends Component {
     }
 
     sendComment=(comment)=> {
-        console.log(comment)
         var carInfo = sessionStorage.getItem("carInfo")
         var userId = sessionStorage.getItem("userId")
         carInfo = JSON.parse(carInfo);
-        console.log(typeof (comment))
         axios.get('http://localhost:8080/user/getName', {
             params:{
                 id:userId,
@@ -92,7 +88,6 @@ class Comment extends Component {
         }).then(r=>{
             if(r.status==200){
                 var userName= r.data.name;
-                console.log(userName)
                 axios.get('http://localhost:8080/comment/save', {
                     params: {
                         carId: carInfo.id,

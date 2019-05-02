@@ -39,10 +39,6 @@ export default class PallWrop extends React.Component {
 
             if (file.status == 'done') {
 
-                console.info("---------------------" + this.props.position);
-                console.log(JSON.stringify(file.response)); // file 是当前正在上传的 单个 img
-                console.info("***************************");
-                console.log(JSON.stringify(fileList)); // fileList 是已上传的全部 img 列表
                 message.info('上传成功!', 1);
                 //this.showImage();
             } else if (file.status == 'error')

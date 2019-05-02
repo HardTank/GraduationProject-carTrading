@@ -23,7 +23,6 @@ class SellCar extends Component {
 
     componentDidMount() {
 
-        console.info("传过来的id" + this.props.carId)
         var id = this.props.carId;
         if (id != null) {
             this.setState({
@@ -43,7 +42,6 @@ class SellCar extends Component {
         //if (car.source == '0')
         //    car.source = '否'
         car.productDate = moment(car.productDate, 'YYYY-MM-DD');
-        console.info("传过来后的时间" + car.productDate + typeof ( car.productDate));
         this.carInfoForm.setFieldsValue(car);
         //  this.procedureInfoForm.setFieldsValue(procedureInfo);
         //configurationInfo
@@ -174,7 +172,6 @@ class SellCar extends Component {
                                     }
                                 ).then(
                                     r => {
-                                        console.info(r)
                                         if (r.status == 200) {
                                             message.config({
                                                 top: 130,
@@ -244,7 +241,6 @@ class SellCar extends Component {
                 this.carInfoForm.validateFields((err, values)=> {
                     if (!err) {
                         var str = JSON.stringify(values);
-                        console.info(str)
                         sessionStorage.setItem("carInfo", str);
                         var userId = sessionStorage.getItem("userId");
                         axios.get('http://localhost:8080/carInfo/save', {
@@ -274,7 +270,6 @@ class SellCar extends Component {
                             }
                         ).then(
                             r => {
-                                console.info(r)
                                 if (r.status == 200) {
                                     //message.config({
                                     //    top: 130,
@@ -285,9 +280,7 @@ class SellCar extends Component {
                                     var carId = r.data.id;
                                     this.configurationInfoForm.validateFields((err, values)=> {
                                         if (!err) {
-                                            console.info(values)
                                             var str = JSON.stringify(values);
-                                            console.info(str)
                                             sessionStorage.setItem("carInfo", str);
                                             var userId = sessionStorage.getItem("userId");
                                             axios.get('http://localhost:8080/configurationInfo/save', {
@@ -310,14 +303,11 @@ class SellCar extends Component {
                                                 }
                                             ).then(
                                                 r => {
-                                                    console.info(r)
                                                     if (r.status == 200) {
 
                                                         this.procedureInfoForm.validateFields((err, values)=> {
                                                             if (!err) {
-                                                                console.info(values)
                                                                 var str = JSON.stringify(values);
-                                                                console.info(str)
                                                                 sessionStorage.setItem("carInfo", str);
                                                                 var userId = sessionStorage.getItem("userId");
                                                                 var address = values.compulsoryInsuranceLocation[0] + values.compulsoryInsuranceLocation[1] + values.compulsoryInsuranceLocation[2];
@@ -341,7 +331,6 @@ class SellCar extends Component {
                                                                     }
                                                                 ).then(
                                                                     r => {
-                                                                        console.info(r)
                                                                         if (r.status == 200) {
                                                                             if (this.upload('left', carId))
                                                                                 if (this.upload('right', carId))

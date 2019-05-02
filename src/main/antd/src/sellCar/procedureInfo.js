@@ -36,9 +36,7 @@ class procedureInfo extends Component {
                     var str = JSON.stringify(values);
                     sessionStorage.setItem("procedureInfo",str);
                 }
-                console.info(values);
                 var str = JSON.stringify(values);
-                console.info(str);
                 this.setState({
                         readOnly: true,
                         save:true},
@@ -61,7 +59,6 @@ class procedureInfo extends Component {
     }
     componentDidMount() {
 
-        console.info("configurationInfo传过来的id" + this.props.carId)
         var id = this.props.carId;
         if (id != null) {
             var procedureInfo;

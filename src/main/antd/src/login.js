@@ -30,7 +30,6 @@ class LoginForm extends  React.Component {
                         this.setState({
                             result: r.data
                         });
-                        console.log(r.data.numberOfElements);
                     }
                 );
             }

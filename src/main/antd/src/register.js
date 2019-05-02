@@ -60,7 +60,6 @@ class Register extends Component {
 
 
     handleSelectChange = (value) => {
-        console.log(value);
         this.props.form.setFieldsValue({
             note: `Hi, ${value === '男' ? '男' : '女'}!`,
         });

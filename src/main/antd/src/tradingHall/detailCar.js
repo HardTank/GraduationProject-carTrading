@@ -84,8 +84,6 @@ class DetailCar extends Component {
     }
 
     getInspection = (page, key)=> {
-        console.log(page)
-        console.log(key)
         var carInfo = sessionStorage.getItem("carInfo")
         carInfo = JSON.parse(carInfo);
         axios.get('http://localhost:8080/deviceInspection/getList', {

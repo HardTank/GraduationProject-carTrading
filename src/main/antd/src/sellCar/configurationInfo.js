@@ -29,7 +29,6 @@ class ConfigurationInfo extends Component {
         e.preventDefault();
         this.props.form.validateFields((err,values)=>{
             if(!err){
-                console.info(values);
                 var id = this.props.carId;
                 if (id != null) {
                     var str = JSON.stringify(values);
@@ -47,7 +46,6 @@ class ConfigurationInfo extends Component {
     }
     componentDidMount() {
 
-        console.info("configurationInfo传过来的id" + this.props.carId)
         var id = this.props.carId;
         if (id != null) {
             var carInfo;

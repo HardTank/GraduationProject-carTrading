@@ -92,7 +92,6 @@ class Title extends Component {
                     }
                 ).then(
                     r => {
-                        console.info(r)
                         if (r.data.numberOfElements == 1) {
                             // localStorage.setItem("token",data.token);
                             // var token=localStorage.getItem("token");

@@ -14,7 +14,6 @@ class Location extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if ('value' in nextProps) {
-            console.log(nextProps.value);
             this.setState({
                 value: nextProps.value,
             });

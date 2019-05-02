@@ -134,7 +134,6 @@ class PersonalCentral extends Component {
             ).then(
                 r => {
                     if(r.status=200){
-                        console.info("保证金" + r.data)
                         this.setState({
                             myWallet: false,
                             deposit: r.data,

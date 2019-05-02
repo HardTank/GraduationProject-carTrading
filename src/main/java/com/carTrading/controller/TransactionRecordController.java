@@ -25,31 +25,21 @@ public class TransactionRecordController {
     //获取需要展示的汽车信息
     @RequestMapping(value = "/getList")
     public Page<TransactionRecord> getList(TransactionRecord car, int pageIndex, int pageSize) {
-        logger.info("路径-------------------------------------");
+        logger.info("查询出价记录");
 
         Page<TransactionRecord> page = transactionRecordService.getList(car, pageIndex, pageSize);
         return page;
     }
-
     //插入更新存储的二手车信息
     @RequestMapping("save")
     public TransactionRecord saveTransactionRecord(TransactionRecord transactionRecord, String productDates) {
-        logger.info("productDate" + productDates);
-
-
-
-
+        logger.info("添加出价记录");
         if (transactionRecord.getId() != null) {
             TransactionRecord transaction = transactionRecordService.getTransactionRecord(transactionRecord);
-            logger.info("更新二手车前" + transaction.toString() + transactionRecord.toString());
-            //处理null值
             UpdateNotNull.copyNonNullProperties(transactionRecord, transaction);
-            logger.info("更新二手车" + transaction.toString() + transactionRecord.toString());
             transactionRecord = transactionRecordService.save(transaction);
         } else {
-            logger.info("添加二手车" + transactionRecord.toString());
             transactionRecord = transactionRecordService.save(transactionRecord);
-
         }
         return transactionRecord;
     }

@@ -22,7 +22,6 @@ class DetailInfo extends Component {
     componentDidMount() {
         var carInfo = sessionStorage.getItem("carInfo")
         carInfo = JSON.parse(carInfo);
-        console.log(carInfo.brand)
         this.setState({
             item: carInfo
         })
