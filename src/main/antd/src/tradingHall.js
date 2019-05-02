@@ -61,8 +61,9 @@ class TradingHall extends Component {
 
     handleOk(item) {
         console.log(item.brand)
-        window.open("http://localhost:3000/#/info")
         sessionStorage.setItem("carInfo",JSON.stringify(item))
+        window.open("http://localhost:3000/#/info")
+
     }
 
     render() {

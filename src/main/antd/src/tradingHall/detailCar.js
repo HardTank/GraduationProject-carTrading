@@ -6,9 +6,8 @@ import qs from 'qs';
 import io from 'socket.io-client';
 import moment from 'moment';
 import Comment from './comment'
-import watermark from 'water-mark-oc'
-import ReactWatermark from 'react-watermark-module'
 
+import watermark from '../admin/waterMark'
 const { Meta } = Card;
 class DetailCar extends Component {
     constructor() {
@@ -26,7 +25,7 @@ class DetailCar extends Component {
         }
     }
 
-    componentDidMount() {
+    componentWillMount() {
 
         var carInfo = sessionStorage.getItem("carInfo")
         var userId = sessionStorage.getItem("userId")

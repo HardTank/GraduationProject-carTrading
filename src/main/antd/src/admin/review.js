@@ -17,6 +17,7 @@ import UploadFile from './uploadFile';
 import AuctionInfo from './auctionInfoForrm';
 import moment from 'moment';
 import BasicDemo from '../editor'
+import ReactWaterMark from 'react-watermark-component';
 const FormItem = Form.Item;
 class Review extends Component {
     constructor() {
@@ -31,6 +32,7 @@ class Review extends Component {
             carID: '',
             list: [],
             id: '',
+            adminEmail:'',
         }
     }
 
@@ -229,6 +231,19 @@ class Review extends Component {
                 userId: userId,
             })
         this.show(0);
+        this.getEmail(userId);
+    }
+    getEmail=(userId)=>{
+        axios.get('http://localhost:8080/user/getName',{
+            params:{
+                id:userId,
+            }
+        }).then(r=>{
+            if(r.status==200)
+            this.setState({
+                adminEmail: r.data.mail,
+            })
+        })
     }
     getAuctionP = (id)=> {
         console.log(id)
@@ -351,7 +366,18 @@ class Review extends Component {
 
        }
     render() {
-
+        const text = this.state.adminEmail==null?'':this.state.adminEmail;
+        const beginAlarm = function() { console.log('start alarm'); };
+        const options = {
+            chunkWidth: 200,
+            chunkHeight: 80,
+            textAlign: 'left',
+            textBaseline: 'bottom',
+            globalAlpha: 0.45,
+            font: '14px Microsoft Yahei',
+            rotateAngle: -0.26,
+            fillStyle: '#666'
+        }
         const TabPane = Tabs.TabPane;
         return (
             <div>
@@ -369,6 +395,12 @@ class Review extends Component {
                     footer={null}
 
                 >
+                    <ReactWaterMark
+                        waterMarkText={text}
+                        openSecurityDefense
+                        securityAlarm={beginAlarm}
+                        options={options}
+                    >
                     <BaseInfoForm
                         name={this.state.name}
                         cardId={this.state.cardId}
@@ -382,7 +414,9 @@ class Review extends Component {
                         province={this.state.province}
                         city={this.state.city}
                         county={this.state.county}
+                        adminEmail={this.state.adminEmail}
                     ></BaseInfoForm>
+                        </ReactWaterMark>
                 </Modal>
                 <Modal
                     visible={this.state.visible}

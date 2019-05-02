@@ -10,17 +10,17 @@ import qs from 'qs';
 import Title from './title';
 import EditPwd from './editPwd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
-import watermark from 'water-mark-oc'
+import ReactWaterMark from 'react-watermark-component';
 class BaseInfoForm extends Component {
 
 
     render() {
 
-
-        const { name } = this.props;
+        const { name,adminEmail } = this.props;
         const { getFieldDecorator} = this.props.form;
 
         return (
+
                         <Form    layout={'inline'} className="userInfo-form" >
                             <Form.Item style={{width:300 }}
                                        label="用户名"
@@ -107,6 +107,7 @@ class BaseInfoForm extends Component {
                                 </Form.Item>
 
                         </Form>
+
         );
     }
 

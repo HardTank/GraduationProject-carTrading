@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 import moment from 'moment';
 import Comment from './comment'
 import DetailCar from './detailCar'
+import ReactWaterMark from 'react-watermark-component';
 const { Meta } = Card;
 class DetailInfo extends Component {
     constructor() {
@@ -14,6 +15,7 @@ class DetailInfo extends Component {
         this.state = {
             item: [],
             fileList:[],
+            position:'left'
         }
     }
 
@@ -41,11 +43,12 @@ class DetailInfo extends Component {
         })
     }
 
-    onChange() {
-        console.log('a')
+    onChange(key) {
+        console.log(key)
     }
 
-    handlePrev = ()=> {
+    handlePrev = (key)=> {
+
         this.refs.img.prev(); //ref = img
     }
     handleNext = ()=> {
@@ -53,32 +56,34 @@ class DetailInfo extends Component {
     }
 
     render() {
-        const {message,item,fileList}=this.state;
+        const {message,item,fileList,position}=this.state;
         const {form} = this.props;
         // const { getFieldDecorator } = form;
         const { getFieldDecorator } = form;
         const TabPane = Tabs.TabPane;
+
         return (
-            <div  >
+
+            <div className="detailInfo" >
+              <Card>
                 <Row>
 
                     <Col span={12}>
-                        <Carousel afterChange={this.onChange} ref='img'>
+                        <Carousel afterChange={this.onChange} ref='img' style={{height:500}}>
                             {   fileList.map(function (item,index) {
                                 var src=require('../image/carImage/'+item.src+'.jpg')
                                 return (
-                                    <div key={index}>
-                                        <Card
-                                            hoverable
+                                    <div key={item.position}  >
 
-                                            cover={<img style={{ width: 520,height:240 }} alt="example" src={src} />}
-                                        >
-                                            <Meta
-                                                style={{zIndex:7}}
-                                                title={item.position=='left'?'左前45°':item.position=='right'?'右后45°':item.position=='trunk'?'后备箱':item.position=='engineCompartment'?'发动机舱':item.position=='dashBoard'?'仪表盘':item.position='console'?'操作台':item.position=='frontSeat'?'前排座椅':'后排座椅'}
+                                        <div style={{background:"url(" + src + ")", zIndex:2,height:300}}>
 
-                                            />
-                                        </Card></div>
+                                        </div>
+                                        <div  style={{marginTop:-120,fontSize:18,fontWeight:'bold',}} >
+                                            {item.position=='left'?'左前45°':item.position=='right'?'右后45°':item.position=='trunk'?'后备箱':item.position=='engineCompartment'?'发动机舱':item.position=='dashBoard'?'仪表盘':item.position='console'?'操作台':item.position=='frontSeat'?'前排座椅':'后排座椅'}
+
+                                        </div>
+                                    </div>
+
                                 )
                             })
                             }
@@ -88,7 +93,7 @@ class DetailInfo extends Component {
                                 <Icon type="left" theme="outlined" style={{ fontSize: '30px',float:'right'}}
                                       onClick={this.handlePrev}/>
                             </Col>
-                            <Col span={8}></Col>
+                            <Col span={8} style={{textAlign:'center'}}></Col>
                             <Col span={8}>
                                 <Icon type="right" theme="outlined" style={{ fontSize: '30px'}}
                                       onClick={this.handleNext}/>
@@ -111,6 +116,7 @@ class DetailInfo extends Component {
                         </div>
                     </Col>
                 </Row>
+                  </Card>
                 <Tabs defaultActiveKey="editBaseInfo">
                     <TabPane tab="基本信息" key="baseInfo">
 

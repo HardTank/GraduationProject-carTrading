@@ -2,7 +2,7 @@ import 'braft-editor/dist/index.css'
 import React from 'react'
 import BraftEditor from 'braft-editor'
 import App from './css/App.css'
-import { Form, Input, Button } from 'antd'
+import { Form, Input, Button,Card } from 'antd'
 const {FormItem}=Form.Item
 class BasicDemo extends React.Component {
 
@@ -40,7 +40,7 @@ class BasicDemo extends React.Component {
         const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator', 'media' ]
 
         return (
-            <div  >
+            <Card >
                 <Form onSubmit={this.handleSubmit} >
 
                     <Form.Item    >
@@ -71,7 +71,7 @@ class BasicDemo extends React.Component {
                         <Button size="large" type="primary" htmlType="submit">提交</Button>
                     </Form.Item>
                 </Form>
-            </div>
+            </Card>
         )
 
     }
