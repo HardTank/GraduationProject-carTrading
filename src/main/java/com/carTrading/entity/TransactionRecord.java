@@ -31,6 +31,9 @@ public class TransactionRecord {
      */
     @Column(name="transaction_info_id")
     private Integer transactionInfoId;
+    /**汽车id*/
+    @Column(name="car_id")
+    private Integer carId;
     /**
      * 用户id
      */

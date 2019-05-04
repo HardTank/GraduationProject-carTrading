@@ -59,7 +59,7 @@ public class OrderService {
         List<OrderCar> list = orderRepository.findById(userId, pageIndex, pageSize, state);
         TransactionRecord record = new TransactionRecord();
         record.setUserId(userId);
-        record.setState(1);
+        record.setState(0);
         int totalNumber = (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;

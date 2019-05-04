@@ -104,6 +104,7 @@ class SellCar extends Component {
                             params: {
                                 id: id,
                                 brand: values.brand,
+                                name:values.name,
                                 color: values.color,
                                 discharge: values.discharge,
                                 drivingMode: values.drivingMode,
@@ -114,7 +115,7 @@ class SellCar extends Component {
                                 mileage: values.mileage,
                                 nature: values.nature,
                                 productDates: values.productDate,
-                                registerPlace: values.registerPlace,
+                                registerPlace: values.registerPlace[0]+[1],
                                 seatNum: values.seatNum,
                                 source: values.source,
                                 state: 0,

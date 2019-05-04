@@ -10,6 +10,7 @@ import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Address from'../address'
 import moment from "moment";
+import City from '../city'
 const { Option } = Select;
 
 const { MonthPicker} = DatePicker;
@@ -123,20 +124,7 @@ class CarInfo extends Component {
             <div className="divcss5">
                 <Form layout="horizontal" style={{marginLeft:100}} onSubmit={this.handleSubmit}>
                     <Row gutter={8}>
-                        <Col span={8}>
-                            <Form.Item
-                                label="VIN码"
-                            >
-                                {getFieldDecorator('vin', {
-                                    rules: [{pattern: /^[0-9A-Za-z]{17}$/, message: '格式错误'},
-                                        {
-                                            required: true, message: '请输入vin码!',
-                                        }],
-                                })(
-                                    <Input disabled={this.state.readOnly}/>
-                                )}
-                            </Form.Item>
-                        </Col>
+
                         <Col span={8}>
                             <Form.Item
                                 label="品牌"
@@ -147,6 +135,18 @@ class CarInfo extends Component {
                                     }]
                                     ,
 
+                                })(
+                                    <Input disabled={this.state.readOnly}/>
+                                )}
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Form.Item
+                                label="名称"
+                            >
+                                {getFieldDecorator('name', {
+                                    rules: [
+                                    ],
                                 })(
                                     <Input disabled={this.state.readOnly}/>
                                 )}
@@ -211,7 +211,7 @@ class CarInfo extends Component {
                                     required: true, message: '请输入注册地!',
                                 }],
                                 })(
-                                    <Input disabled={this.state.readOnly}/>
+                                    <City disabled={this.state.readOnly}/>
                                     )}
                             </Form.Item>
                         </Col>
@@ -422,7 +422,18 @@ class CarInfo extends Component {
                             </Form.Item>
                         </Col>
                     </Row>
-
+                    <Form.Item
+                        label="VIN码"
+                    >
+                        {getFieldDecorator('vin', {
+                            rules: [{pattern: /^[0-9A-Za-z]{17}$/, message: '格式错误'},
+                                {
+                                    required: true, message: '请输入vin码!',
+                                }],
+                        })(
+                            <Input disabled={this.state.readOnly}/>
+                        )}
+                    </Form.Item>
 
                     <Form.Item  >
                         <Row>

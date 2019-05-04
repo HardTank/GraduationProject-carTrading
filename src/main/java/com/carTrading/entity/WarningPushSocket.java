@@ -1,12 +1,12 @@
 package com.carTrading.entity;
 
 import com.alibaba.fastjson.JSONObject;
-import com.carTrading.service.TransactionRecordService;
+import com.carTrading.controller.TransactionRecordController;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
@@ -25,6 +25,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 @ServerEndpoint(value = "/client/{userId}")
 @Component
+@Service
 public class WarningPushSocket {
 
     private static Logger logger = LogManager.getLogger(WarningPushSocket.class.getName());
@@ -37,8 +38,8 @@ public class WarningPushSocket {
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
-    @Autowired
-    TransactionRecordService transactionRecordService;
+
+    TransactionRecordController transactionRecordService=new TransactionRecordController();
 
     /**
      * 连接建立成功调用的方法
@@ -87,8 +88,11 @@ public class WarningPushSocket {
         t.setState(1);
         t.setCreateTime(currentTime);
         t.setPrice(Double.valueOf(map.get("price")));
-        t.setTransactionInfoId(26);
-        transactionRecordService.save(t);
+//        System.out.println(map.get("carId"));
+     //   System.out.println(carId);
+         t.setCarId( Integer.parseInt(map.get("carId")));
+        System.out.println(t.toString());
+      //  transactionRecordService.saveTransactionRecord(t);
         ObjectMapper mapper = new ObjectMapper();
 
         message = mapper.writeValueAsString(map);

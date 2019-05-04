@@ -8,6 +8,7 @@ import moment from 'moment';
 import Comment from './comment'
 import DetailCar from './detailCar'
 import ReactWaterMark from 'react-watermark-component';
+import CountDown from './countDown';
 const { Meta } = Card;
 class DetailInfo extends Component {
     constructor() {
@@ -18,7 +19,13 @@ class DetailInfo extends Component {
             position:'left'
         }
     }
-
+    componentWillMount() {
+        var carInfo = sessionStorage.getItem("carInfo")
+        carInfo = JSON.parse(carInfo);
+        this.setState({
+            item: carInfo
+        })
+    }
     componentDidMount() {
         var carInfo = sessionStorage.getItem("carInfo")
         carInfo = JSON.parse(carInfo);
@@ -72,7 +79,7 @@ class DetailInfo extends Component {
                             {   fileList.map(function (item,index) {
                                 var src=require('../image/carImage/'+item.src+'.jpg')
                                 return (
-                                    <div key={item.position}  >
+                                    <div key={item.position} >
 
                                         <div style={{background:"url(" + src + ")", zIndex:2,height:300}}>
 
@@ -108,8 +115,13 @@ class DetailInfo extends Component {
                                 { item.type}</div>
                         </div>
                         <br/>
-                        <div style={{marginTop:10,marginLeft:10}}>{item.emissionStandard}/{item.mileage}
-                        <br/>竞拍时间:<div style={{fontSize:30,color:'orange'}}>{ item.auctionTime}</div>
+                        <div style={{marginTop:10,marginLeft:10}}>{item.emissionStandard}{item.mileage}
+                        <br/>竞拍时间:{ item.auctionTime}<div style={{fontSize:30,color:'orange'}}>
+                                <CountDown
+                                    endTime={item.auctionTime}
+                                >
+
+                            </CountDown></div>
                         起拍价:
                         <div style={{fontSize:30,color:'orange'}}>{ item.startPrice}万元</div>
                         </div>

@@ -32,7 +32,7 @@ public class UploadImageService {
      * 动态查询
      */
     public Page<UploadImage> getList(UploadImage uploadImage, int pageIndex, int pageSize) {
-        logger.info("查找二手车信息");
+        logger.info("查找二手车信息"+uploadImage.toString());
         Page<UploadImage> page = null;
         ExampleMatcher matcher = ExampleMatcher.matching() //构建对象
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) //改变默认字符串匹配方式：模糊查询

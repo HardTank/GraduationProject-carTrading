@@ -9,6 +9,10 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * @author tanlixin
  * @description
@@ -19,6 +23,7 @@ public class TransactionRecordService {
     @Autowired
     private TransactionRecordRepository transactionRecordRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     /**
      * 动态查询
      */
@@ -32,12 +37,13 @@ public class TransactionRecordService {
         /**创建实例*/
         Example<TransactionRecord> ex = Example.of(record, matcher);
         /**排序查询*/
-        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        Sort sort = new Sort(Sort.Direction.DESC, "price");
         /**分页查询*/
         PageRequest pageRequest = new PageRequest(pageIndex, pageSize, sort);
         page = transactionRecordRepository.findAll(ex, pageRequest);
         return page;
     }
+
     /**
      * 根据id获取竞拍的信息
      */
@@ -45,13 +51,25 @@ public class TransactionRecordService {
         TransactionRecord t = transactionRecordRepository.findOne(transactionRecord.getId());
         return t;
     }
+
     /**
      * 更新数据
      */
     @Transactional(rollbackFor = Exception.class)
-    public TransactionRecord save(TransactionRecord transactionRecord) {
-        logger.info("更新二手车信息");
-          transactionRecord = transactionRecordRepository.save(transactionRecord);
-        return transactionRecord;
+    public TransactionRecord save(TransactionRecord t,String time) throws ParseException {
+
+        logger.info("更新竞拍息" + t.toString());
+        if(time!=null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = formatter.parse(time);
+            t.setCreateTime(date);
+        }
+        else{
+            t.setCreateTime(new Date());
+        }
+        Page<TransactionRecord> page=getList(t,0,1);
+        if(page.getContent().size()==0)
+         t = transactionRecordRepository.save(t);
+        return t;
     }
 }

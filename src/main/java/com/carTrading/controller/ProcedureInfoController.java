@@ -1,5 +1,6 @@
 package com.carTrading.controller;
 
+import com.carTrading.entity.Location;
 import com.carTrading.entity.ProcedureInfo;
 import com.carTrading.service.ProcedureInfoService;
 import com.carTrading.tool.UpdateNotNull;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author tanlixin
@@ -75,5 +77,11 @@ public class ProcedureInfoController {
         }
 
         return procedureInfo;
+    }
+    /**获取所在地列表*/
+    @RequestMapping("location")
+    public List<Location> getLocation() {
+        List<Location> p=procedureInfoService.getLocation();
+        return p;
     }
 }

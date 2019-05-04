@@ -1,6 +1,8 @@
 package com.carTrading.service;
 
+import com.carTrading.entity.Location;
 import com.carTrading.entity.ProcedureInfo;
+import com.carTrading.repository.LocationRepository;
 import com.carTrading.repository.ProcedureInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * @author tanlixin
@@ -19,6 +23,8 @@ public class ProcedureInfoService {
     @Autowired
     private ProcedureInfoRepository procedureInfoRepository;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private LocationRepository locationReposity;
 
     /**
      * 动态查询
@@ -54,12 +60,23 @@ public class ProcedureInfoService {
      * 根据id获取汽车的信息
      */
     public ProcedureInfo getProcedure(ProcedureInfo procedureInfo) {
-        ProcedureInfo procedure =procedureInfoRepository.findOne(procedureInfo.getId());
+        ProcedureInfo procedure = procedureInfoRepository.findOne(procedureInfo.getId());
         return procedure;
     }
-    /**根据carId找到主键*/
-    public  ProcedureInfo getId(Integer carId){
-        ProcedureInfo p=procedureInfoRepository.findIdByCar(carId);
+
+    /**
+     * 根据carId找到主键
+     */
+    public ProcedureInfo getId(Integer carId) {
+        ProcedureInfo p = procedureInfoRepository.findIdByCar(carId);
+        return p;
+    }
+
+    /**
+     * 获取所在地列表
+     */
+    public List<Location> getLocation() {
+        List<Location> p = locationReposity.findLocation();
         return p;
     }
 }

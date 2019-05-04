@@ -119,5 +119,6 @@ public class CarInfo {
     private String transfer;
     /**备注说明*/
     private String remark;
-
+    /**名称*/
+    private  String name;
 }

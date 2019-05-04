@@ -5,6 +5,7 @@ import axios from 'axios';//这是模块的加载机制，直接写依赖库的�
 import qs from 'qs';
 import io from 'socket.io-client';
 import moment from 'moment'
+import CountDown from './countDown'
 var websocket;
 const { TextArea } = Input;
 //const socket = io.connect('ws://127.0.0.1:8080/client/ID=1');
@@ -17,15 +18,56 @@ class AuctionCenter extends Component {
             highest: '',
             bidder: '无',
             bidderId: '',
+            end:false,
 
         }
     }
-
     componentDidMount() {
-
         this.connectWebSocket();
-        this.setState({
-            highest: this.props.startPrice * 10000
+        this.getHighestPrice();
+    }
+
+    //获取最高价
+    getHighestPrice() {
+        axios.get('http://localhost:8080/transactionRecord/getList', {
+            params: {
+                carId: this.props.carId,
+                state: 1,
+                pageIndex: 0,
+                pageSize: 1,
+            }
+        }).then(r=> {
+            if (r.status == 200) {
+                var record = r.data.content
+                if (record.length!=0) {
+                    axios.get('http://localhost:8080/user/getName', {
+                        params: {
+                            id: record[0].userId,
+                        }
+                    }).then(r=> {
+                        if (r.status == 200) {
+                            var userId = sessionStorage.getItem("userId")
+                            console.log(userId)
+                            console.log(r.data.userId)
+                            if (userId == r.data.id)
+                                var userName = r.data.name + '(您)';
+                            else
+                                var userName = r.data.name;
+                            this.setState({
+                                highest: record[0].price,
+                                bidder: userName,
+                            })
+                        }
+                    })
+
+                }
+                else {
+                    this.setState({
+                        highest: this.props.startPrice * 10000,
+                    })
+
+                }
+            }
         })
     }
 
@@ -52,23 +94,32 @@ class AuctionCenter extends Component {
             var userId = sessionStorage.getItem("userId");
             if (message.carId == this.props.carId) {
                 if (message.price > this.state.highest) {
+
                     this.setState({
                         highest: message.price,
                         bidder: message.userName,
                         bidderId: message.id,
                     })
                 }
+                this.saveRecord(message.userId, message.price, message.time);
                 var price = this.formatCurrency(message.price)
 
-                if (message.userId == userId)
+                if (message.userId == userId) {
+                    this.setState({
+
+                        bidder: message.userName + '(您)',
+
+                    })
                     var text = message.time + '<br/><em style="font-weight:bold;">' + '您出价:<div style=" color:red ;font-size:18px;display:inline-block">' + price + '</div>元</em><br/>';
 
+                }
+
                 else
-                    var text = message.time + '<br/>' + message.userName + '出价:<div style="color:red ;font-size:18px;display:inline-block">' + price + '</div>元<br/>';
+                    var text = message.time + '<br/><em style="color:orange;">' + message.userName + '</em> 出价:<div style="color:red ;font-size:18px;display:inline-block">' + price + '</div>元<br/>';
                 this.setState({
                     message: this.state.message + text,
                 })
-                var scrollDom = document.getElementById('content');
+                var scrollDom = document.getElementById(this.props.carId);
                 scrollDom.scrollTop = scrollDom.scrollHeight;
             }
         }
@@ -93,25 +144,6 @@ class AuctionCenter extends Component {
                 num.substring(num.length - (4 * i + 3));
         return (((sign) ? '' : '-') + num + '.' + cents);
     }
-//获取消息
-    getMessage(msg) {
-        var message = JSON.parse(msg.data);
-        console.log(message)
-        var userId = sessionStorage.getItem("userId");
-        console.log(userId)
-        alert(message.userId)
-        if (message.carId == this.props.carId) {
-            if (message.userId == userId)
-                var text = message.time + '<br/><em>' + '您' + '出价:' + message.price + '</em>';
-            else
-                var text = message.time + '<br/>' + message.userName + '出价:' + message.price;
-            this.setState({
-                message: text + this.state.message + '<br/>',
-            })
-            var scrollDom = document.getElementById('content');
-            scrollDom.scrollTop = scrollDom.scrollHeight;
-        }
-    }
 
     st() {
         alert(122);
@@ -132,8 +164,9 @@ class AuctionCenter extends Component {
                         var postValue = {};
                         postValue.userId = userId;
                         postValue.userName = userName;
-                        postValue.carId = this.props.carId;
-                        postValue.price = values.deposit;
+                        postValue.carId = JSON.stringify(this.props.carId);
+                        postValue.price = values.price;
+                        this.props.form.resetFields();
                         websocket.send(JSON.stringify(postValue));
                     }
                 })
@@ -153,14 +186,50 @@ class AuctionCenter extends Component {
     //判断出价
     judgePrice = (rule, value, callback)=> {
         const form = this.props.form;
-        if (value <= this.state.highest + 1000) {
+        console.log(this.state.highest + 1000)
+        console.log(value)
+        if (value <= (parseFloat(this.state.highest) + 1000)) {
 
             callback('最低加价1000元!');
         } else {
             callback();
         }
     }
+    //存储交易记录
+    saveRecord = (userId, price, time)=> {
+        console.log(time)
+        axios.get('http://localhost:8080/transactionRecord/save', {
+            params: {
+                carId: this.props.carId,
+                userId: userId,
+                price: price,
+                time: time,
+                state: 1,
 
+            }
+        })
+    }
+    //快速加价
+    add=(e,money)=>{
+        e.preventDefault();
+        var userId = sessionStorage.getItem("userId");
+        axios.get('http://localhost:8080/user/getName', {
+            params: {
+                id: userId,
+            }
+        }).then(r=> {
+            if (r.status == 200) {
+                var userName = r.data.name;
+                var postValue = {};
+                postValue.userId = userId;
+                postValue.userName = userName;
+                postValue.carId = JSON.stringify(this.props.carId);
+                postValue.price =JSON.stringify(parseFloat(this.state.highest)+money);
+                this.props.form.resetFields();
+                websocket.send(JSON.stringify(postValue));
+            }
+        })
+    }
     render() {
         const {message,highest,bidder}=this.state;
         const {form,startPrice} = this.props;
@@ -171,13 +240,15 @@ class AuctionCenter extends Component {
                 <div> 起拍价:
                     <div className="price">{startPrice}</div>
                     万元
+                    剩余时间:<div className="price"> <CountDown endTime={this.props.endTime}
+                                                            auction={true}></CountDown></div>
                 </div>
                 <div>最高价:
                     <div className="price">{this.formatCurrency(highest)}</div>
                     元 出价人:
                     <div className="price">{bidder}</div>
                 </div>
-                <Card id="content" style={{paddingLeft:5,height:200,overflow:'auto',scrollTop:'scrollHeight' }}>
+                <Card id={this.props.carId} style={{paddingLeft:5,height:200,overflow:'auto',scrollTop:'scrollHeight' }}>
                     <div
                         dangerouslySetInnerHTML={{__html:message}}
                     >
@@ -186,9 +257,9 @@ class AuctionCenter extends Component {
                 </Card>
                 <Form>
                     <Form.Item
-                        lable="出价"
+                        label="出价"
                     >
-                        {getFieldDecorator('deposit', {
+                        {getFieldDecorator('price', {
                             rules: [{
                                 pattern: /^\+?(?!0+(\.00?)?$)\d+(\.\d\d?)?$/, message: '格式错误!',
                             }, {required: true, message: '请输入出价!'},
@@ -197,13 +268,13 @@ class AuctionCenter extends Component {
                                 }],
 
                         })(
-                            <Input placeholder="元"/>
+                            <Input placeholder="请输入您的出价,单位:元"/>
                         )}
 
                     </Form.Item>
-                    <Button type="primary" style={{marginLeft:20}} onClick={(ev)=>{this.send(ev)}}>Send</Button>
-                    <Button type="primary" style={{marginLeft:20}} onClick={this.connectWebSocket}>open</Button>
-                    <Button type="primary" style={{marginLeft:20}} onClick={this.closeWebSocket}>Close</Button>
+                    <Button type="primary" style={{marginLeft:20}} onClick={(ev)=>{this.send(ev)}}>提交</Button>
+                    <Button type="primary" style={{marginLeft:20}} onClick={(ev)=>{this.add(ev,1000)}}>+1,000元</Button>
+                    <Button type="primary" style={{marginLeft:20}} onClick={(ev)=>{this.add(ev,10000)}}>+10,000元</Button>
                 </Form>
             </div>
 

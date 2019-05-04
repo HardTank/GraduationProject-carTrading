@@ -16,11 +16,11 @@ public interface TransactionRecordRepository extends JpaRepository<TransactionRe
     /**
      * 查询订阅人数
      */
-    @Query(value = "select  count(*) as count from transaction_record as t where t.transaction_info_id=:trId and state=0", nativeQuery = true)
-      Integer getNum(@Param("trId") Long trId);
+    @Query(value = "select  count(*) as count from transaction_record as t where t.car_id=:carId and state=0", nativeQuery = true)
+      Integer getNum(@Param("carId") Long carId);
     /**
      * 查询订阅状态
      */
-    @Query(value = "select  count(*) as count from transaction_record as t where t.transaction_info_id=:trId and t.user_id=:userId and state=0", nativeQuery = true)
-     Integer getStatus(@Param("userId")Long userId,@Param("trId") Long trId);
+    @Query(value = "select  count(*) as count from transaction_record as t where t.car_id=:carId and t.user_id=:userId and state=0", nativeQuery = true)
+     Integer getStatus(@Param("userId")Long userId,@Param("carId") Long carId);
 }
