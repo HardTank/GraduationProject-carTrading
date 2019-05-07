@@ -1,9 +1,6 @@
 package com.carTrading.controller;
 
-import com.carTrading.entity.ConfirmCar;
-import com.carTrading.entity.MyCar;
-import com.carTrading.entity.OrderCar;
-import com.carTrading.entity.Page;
+import com.carTrading.entity.*;
 import com.carTrading.service.OrderService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,16 +27,16 @@ public class OrderController {
 //    }
     /**获取用户订阅的汽车的信息*/
     @RequestMapping(value = "/getList")
-    public Page<OrderCar> getList(Integer userId, int pageIndex, int pageSize,int state) {
+    public Page<MyOrder> getList(Integer userId, int pageIndex, int pageSize,int state) {
        // logger.info(orderCar.toString());
-        Page<OrderCar> page=orderService.getList(userId,pageIndex,pageSize,state);
+        Page<MyOrder> page=orderService.getList(userId,pageIndex,pageSize,state);
         return page;
     }
     /**获取用户订阅的汽车的信息*/
     @RequestMapping(value = "/getListResult")
-    public Page<OrderCar> getListResult(Integer userId, int pageIndex, int pageSize) {
+    public Page<MyCar> getListResult(Integer userId, int pageIndex, int pageSize) {
         // logger.info(orderCar.toString());
-        Page<OrderCar> page=orderService.getListResult(userId,pageIndex,pageSize);
+        Page<MyCar> page=orderService.getListResult(userId,pageIndex,pageSize);
         return page;
     }
     /**获取用户的汽车交易的信息*/

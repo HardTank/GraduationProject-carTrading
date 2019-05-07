@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import tradingHall from '../css/tradingHall.css'
-import {Button ,Icon,Row, Col, Tabs,Input,Divider,Span,Table,Modal,Pagination,Card,Form} from 'antd';
+import {message,Button ,Icon,Row, Col, Tabs,Input,Divider,Span,Table,Modal,Pagination,Card,Form} from 'antd';
 import axios from 'axios';//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import io from 'socket.io-client';
@@ -29,20 +29,18 @@ class AuctionCenter extends Component {
 
     //获取最高价
     getHighestPrice() {
-        axios.get('http://localhost:8080/transactionRecord/getList', {
+        axios.get('http://localhost:8080/transactionRecord/getHigh', {
             params: {
                 carId: this.props.carId,
-                state: 1,
-                pageIndex: 0,
-                pageSize: 1,
             }
         }).then(r=> {
             if (r.status == 200) {
-                var record = r.data.content
-                if (record.length!=0) {
+                var record = r.data
+                console.log('data'+record)
+                if (record!='') {
                     axios.get('http://localhost:8080/user/getName', {
                         params: {
-                            id: record[0].userId,
+                            id: record.userId,
                         }
                     }).then(r=> {
                         if (r.status == 200) {
@@ -54,7 +52,7 @@ class AuctionCenter extends Component {
                             else
                                 var userName = r.data.name;
                             this.setState({
-                                highest: record[0].price,
+                                highest: record.price,
                                 bidder: userName,
                             })
                         }
@@ -153,23 +151,34 @@ class AuctionCenter extends Component {
     send() {
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                var userId = sessionStorage.getItem("userId");
-                axios.get('http://localhost:8080/user/getName', {
-                    params: {
-                        id: userId,
-                    }
-                }).then(r=> {
-                    if (r.status == 200) {
-                        var userName = r.data.name;
-                        var postValue = {};
-                        postValue.userId = userId;
-                        postValue.userName = userName;
-                        postValue.carId = JSON.stringify(this.props.carId);
-                        postValue.price = values.price;
-                        this.props.form.resetFields();
-                        websocket.send(JSON.stringify(postValue));
-                    }
-                })
+                if(this.judgeOutTime(this.props.endTime,new Date())){
+                    message.config({
+                        top: 130,
+                        duration: 2,
+                        maxCount: 3,
+                    });
+                    message.info('竞拍已结束', 1);
+                }
+                else{
+                    var userId = sessionStorage.getItem("userId");
+                    axios.get('http://localhost:8080/user/getName', {
+                        params: {
+                            id: userId,
+                        }
+                    }).then(r=> {
+                        if (r.status == 200) {
+                            var userName = r.data.name;
+                            var postValue = {};
+                            postValue.userId = userId;
+                            postValue.userName = userName;
+                            postValue.carId = JSON.stringify(this.props.carId);
+                            postValue.price = values.price;
+                            this.props.form.resetFields();
+                            websocket.send(JSON.stringify(postValue));
+                        }
+                    })
+                }
+
 
             }
         })
@@ -212,23 +221,76 @@ class AuctionCenter extends Component {
     //快速加价
     add=(e,money)=>{
         e.preventDefault();
-        var userId = sessionStorage.getItem("userId");
-        axios.get('http://localhost:8080/user/getName', {
-            params: {
-                id: userId,
-            }
-        }).then(r=> {
-            if (r.status == 200) {
-                var userName = r.data.name;
-                var postValue = {};
-                postValue.userId = userId;
-                postValue.userName = userName;
-                postValue.carId = JSON.stringify(this.props.carId);
-                postValue.price =JSON.stringify(parseFloat(this.state.highest)+money);
-                this.props.form.resetFields();
-                websocket.send(JSON.stringify(postValue));
-            }
-        })
+        if(this.judgeOutTime(this.props.endTime,new Date())){
+            message.config({
+                top: 130,
+                duration: 2,
+                maxCount: 3,
+            });
+            message.info('竞拍已结束', 1);
+        }
+        else{
+            var userId = sessionStorage.getItem("userId");
+
+            axios.get('http://localhost:8080/user/getName', {
+                params: {
+                    id: userId,
+                }
+            }).then(r=> {
+                if (r.status == 200) {
+                    var userName = r.data.name;
+                    var postValue = {};
+                    postValue.userId = userId;
+                    postValue.userName = userName;
+                    postValue.carId = JSON.stringify(this.props.carId);
+                    postValue.price =JSON.stringify(parseFloat(this.state.highest)+money);
+                    this.props.form.resetFields();
+                    websocket.send(JSON.stringify(postValue));
+                }
+            })
+        }
+
+    }
+    //判断是否在竞拍时间之前
+    judgeBeforeTime(startTime,endTime){
+        var start=new Date(startTime);
+        var end=new Date(endTime)
+        console.log(start.getTime())
+        console.log(end.getTime())
+        if(start.getTime()>end.getTime()){
+            return true;
+        }
+
+        else{
+            return false;
+        }
+    }
+    //判断是否正在竞拍
+    judgeInTime(startTime,endTime){
+        var start=new Date(startTime);
+        var end=new Date(endTime)
+        console.log(start.getTime())
+        console.log(end.getTime())
+        if(start.getTime()<end.getTime()&&start.getTime()+600000>end.getTime()){
+            return true;
+        }
+
+        else{
+            return false;
+        }
+    }
+    //是否过期
+    judgeOutTime(startTime,endTime){
+        var start=new Date(startTime);
+        var end=new Date(endTime)
+        console.log(start.getTime())
+        console.log(end.getTime())
+        if(start.getTime()+600000<end.getTime()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
     render() {
         const {message,highest,bidder}=this.state;
@@ -240,8 +302,15 @@ class AuctionCenter extends Component {
                 <div> 起拍价:
                     <div className="price">{startPrice}</div>
                     万元
-                    剩余时间:<div className="price"> <CountDown endTime={this.props.endTime}
-                                                            auction={true}></CountDown></div>
+                    剩余时间:<div className="price">
+                        {this.judgeBeforeTime(this.props.endTime,new Date())?<CountDown
+                            endTime={this.props.endTime}
+                        >
+                        </CountDown>:this.judgeInTime(this.props.endTime,new Date())?<CountDown
+                            endTime={this.props.endTime}
+                            auction={true}
+                        >
+                        </CountDown>:'竞拍已结束'}</div>
                 </div>
                 <div>最高价:
                     <div className="price">{this.formatCurrency(highest)}</div>

@@ -10,6 +10,8 @@ import qs from 'qs';
 import Title from '../title';
 import Review from './review';
 import Confirm from './confirm'
+import AllUser from './allUserManage'
+import AllCar from './allCarManage'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const {   Sider, Content } = Layout;
 class AdminCentral extends Component {
@@ -18,6 +20,8 @@ class AdminCentral extends Component {
         this.state = {
             review: false,
             confirm: true,
+            allCar:true,
+            allUser:true,
         }
     }
 
@@ -26,6 +30,8 @@ class AdminCentral extends Component {
         this.setState({
             review: true,
             confirm: true,
+            allCar:true,
+            allUser:true,
         })
         if (item.key == "review") {
             var user = sessionStorage.getItem("user");
@@ -44,6 +50,16 @@ class AdminCentral extends Component {
             user = JSON.parse(user);
             user.area = user.province + "/" + user.city + "/" + user.county;
             //this.form.setFieldsValue(user);
+        } else if (item.key == "allCar") {
+            this.setState({
+                allCar: false,
+
+            })
+        }else if (item.key == "allUser") {
+            this.setState({
+                allUser: false,
+
+            })
         }
 
     }
@@ -98,7 +114,12 @@ class AdminCentral extends Component {
                                     <Menu.Item key="confirm">
                                         <span>成交确认</span>
                                     </Menu.Item>
-
+                                    <Menu.Item key="allCar">
+                                        <span>车辆管理</span>
+                                    </Menu.Item>
+                                    <Menu.Item key="allUser">
+                                        <span>用户管理</span>
+                                    </Menu.Item>
                               </Menu.ItemGroup>
 
                             </Menu>
@@ -113,7 +134,13 @@ class AdminCentral extends Component {
 
                             <Confirm></Confirm>
                         </div>
+                        <div hidden={this.state.allCar}>
+                            <AllCar></AllCar>
+                        </div>
+                        <div hidden={this.state.allUser}>
 
+                            <AllUser></AllUser>
+                        </div>
                     </Content>
                 </Layout>
             </Title>

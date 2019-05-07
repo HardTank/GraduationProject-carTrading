@@ -29,8 +29,8 @@ public class TransactionRecord {
     /**
      * 交易信息
      */
-    @Column(name="transaction_info_id")
-    private Integer transactionInfoId;
+//    @Column(name="transaction_info_id")
+//    private Integer transactionInfoId;
     /**汽车id*/
     @Column(name="car_id")
     private Integer carId;

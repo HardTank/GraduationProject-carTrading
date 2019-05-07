@@ -27,7 +27,8 @@ class Wallet extends Component {
             result: {},
             pageIndex: 0,
             pageSize: 4,
-            pay: ''
+            pay: '',
+             deposit:0,
         }
 
 
@@ -246,10 +247,26 @@ else
                 userId: userId,
             })
         this.show(0);
+        this.getOrderNum(userId);
 
     }
     url='https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png';
-
+     getOrderNum(userId){
+    axios.get('http://localhost:8080/transactionRecord/getList',{
+        params:{
+            userId:userId,
+            state:0,
+            pageIndex:0,
+            pageSize:1,
+        }
+    }).then(r=>{
+        if(r.status==200){
+            this.setState({
+                deposit: r.data.totalElements,
+            })
+        }
+    })
+}
     render() {
         const TabPane = Tabs.TabPane;
         const { getFieldDecorator } = this.props.form;
@@ -258,13 +275,13 @@ else
             <div >
                 <Row style={{height:60}}>
                     <Col span={4} style={{height:60}}>
-                        <div className="walletPrice">总额:{(typeof(this.state.wallet)=='string'?wallet:this.state.wallet)+parseFloat(this.props.deposit)*1000}</div>
+                        <div className="walletPrice">总额:{(typeof(this.state.wallet)=='string'?wallet:this.state.wallet)+parseFloat(this.state.deposit)*1000}</div>
                     </Col>
                     <Col span={4} style={{height:60}}>
                         <div className="walletPrice">余额:{typeof(this.state.wallet)=='string'?wallet:this.state.wallet}元</div>
                     </Col>
                     <Col span={4} style={{height:60}}>
-                        <div className="walletPrice">保证金:{parseFloat(this.props.deposit)*1000}元</div>
+                        <div className="walletPrice">保证金:{parseFloat(this.state.deposit)*1000}元</div>
                     </Col>
                 </Row>
                 <Row style={{height:40}}><Col span={3} style={{height:40}}>

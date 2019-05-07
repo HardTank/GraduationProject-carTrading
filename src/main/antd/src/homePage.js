@@ -17,10 +17,7 @@ class HomePage extends Component {
         return (
             <Title
                 target="index"
-
             >
-
-
             </Title>
 
 

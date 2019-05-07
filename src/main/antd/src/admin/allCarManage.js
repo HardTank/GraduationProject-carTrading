@@ -9,7 +9,7 @@ import axios from 'axios'//这是模块的加载机制，直接写依赖库的�
 import qs from 'qs';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const { Meta } = Card;
-class Confirm extends Component {
+class AllCar extends Component {
 
     state = {
         wallet: '1',
@@ -31,7 +31,7 @@ class Confirm extends Component {
             }
         }).then(r=> {
             if (r.status == 200) {
-                   name=r.data.name
+                name=r.data.name
 
             }
         })
@@ -74,27 +74,27 @@ class Confirm extends Component {
                 }
             ).then(
 
-                            r => {
+                r => {
 
-                                if(r.status==200){
-                                    //this.changeWallet(record.id,userId,wallet)
-                                    this.show(0);
-                                    this.changeWallet(record.ownerId,record.price*0.8,5)
-                                  //  this.changeWallet(record.userId,record.deposit,3)
-                                    this.changeUserWallet(record.ownerId,record.price*0.8)
-                                   // this.changeUserWallet(record.userId,record.deposit)
+                    if(r.status==200){
+                        //this.changeWallet(record.id,userId,wallet)
+                        this.show(0);
+                        this.changeWallet(record.ownerId,record.price*0.8,5)
+                        //  this.changeWallet(record.userId,record.deposit,3)
+                        this.changeUserWallet(record.ownerId,record.price*0.8)
+                        // this.changeUserWallet(record.userId,record.deposit)
 
-                                    message.config({
-                                        top: 130,
-                                        duration: 2,
-                                        maxCount: 3,
-                                    });
-                                    message.info('操作成功', 1);
-                                }
-                            }
+                        message.config({
+                            top: 130,
+                            duration: 2,
+                            maxCount: 3,
+                        });
+                        message.info('操作成功', 1);
+                    }
+                }
 
 
-                        )
+            )
 
 
 
@@ -263,12 +263,12 @@ class Confirm extends Component {
             <div >
 
 
-                        <Table rowKey="id" columns={this.columns} dataSource={this.state.result.items}
-                               pagination={false}></Table>
-                        <Pagination showQuickJumper defaultCurrent={1}
-                                    total={this.state.result.totalNumber} current={this.state.result.currentIndex+1}
-                                    defaultPageSize={this.state.pageSize}
-                                    onChange={(page)=>{this.show(page-1)}
+                <Table rowKey="id" columns={this.columns} dataSource={this.state.result.items}
+                       pagination={false}></Table>
+                <Pagination showQuickJumper defaultCurrent={1}
+                            total={this.state.result.totalNumber} current={this.state.result.currentIndex+1}
+                            defaultPageSize={this.state.pageSize}
+                            onChange={(page)=>{this.show(page-1)}
                             }></Pagination>
 
             </div>
@@ -279,4 +279,4 @@ class Confirm extends Component {
 
     }
 }
-export default Form.create({})(Confirm);
+export default Form.create({})(AllCar);

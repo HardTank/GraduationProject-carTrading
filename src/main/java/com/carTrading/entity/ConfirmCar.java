@@ -89,5 +89,9 @@ public class ConfirmCar {
      * 交易状态
      */
     private Integer state;
-
+    @Column(name="emission_standard")
+    private  String emissionStandard;
+    private  String mileage;
+    //名称
+    private String name;
 }

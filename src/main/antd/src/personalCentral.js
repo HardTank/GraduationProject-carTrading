@@ -17,6 +17,7 @@ import AddCar from './sellCar/addCar'
 import OrderCar from './order/orderCar'
 import ResultConfirm from  './resultConfirm/resultConfirm'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
+import MyCar from './order/myCar'
 const {   Sider, Content } = Layout;
 class PersonalCentral extends Component {
     constructor() {
@@ -28,6 +29,7 @@ class PersonalCentral extends Component {
             order: true,
             sellCar: true,
             myWallet: true,
+            myCar:true,
             name: '',
             pwd: '',
             mail: '',
@@ -41,6 +43,7 @@ class PersonalCentral extends Component {
             bankCardNum: '',
             openBank: '',
             deposit: 0,
+            role:0,
         }
     }
 
@@ -67,6 +70,7 @@ class PersonalCentral extends Component {
             order: true,
             sellCar: true,
             myWallet: true,
+            myCar:true,
         })
         if (item.key == "baseInfo") {
             var user = sessionStorage.getItem("user");
@@ -109,6 +113,11 @@ class PersonalCentral extends Component {
         else if (item.key == "order") {
             this.setState({
                 order: false,
+            })
+        }
+        else if (item.key == "myCar") {
+            this.setState({
+                myCar: false,
             })
         }
         else if (item.key == "sellCar") {
@@ -194,6 +203,7 @@ class PersonalCentral extends Component {
                                 city: user.city,
                                 county: user.county,
                                 wallet: user.wallet,
+                                role:user.role,
                             })
                     }
                     ;
@@ -229,12 +239,15 @@ class PersonalCentral extends Component {
                                 onSelect={(item) => {
                                 this.handleOk(item);
                             }}>
-                                <Menu.ItemGroup key="tradingCenter" title="交易中心">
+                                <Menu.ItemGroup key="tradingCenter" title="交易中心" hidden={this.state.role==1}>
                                     <Menu.Item key="confirm">
                                         <span>成交确认</span>
                                     </Menu.Item>
                                     <Menu.Item key="order">
                                         <span>订单车辆</span>
+                                    </Menu.Item>
+                                    <Menu.Item key="myCar">
+                                        <span>我的车辆</span>
                                     </Menu.Item>
                                     <Menu.Item key="sellCar">
                                         <span>我要卖车</span>
@@ -263,6 +276,9 @@ class PersonalCentral extends Component {
                         </div>
                         <div hidden={this.state.order}>
                             <OrderCar></OrderCar>
+                        </div>
+                        <div hidden={this.state.myCar}>
+                            <MyCar></MyCar>
                         </div>
                         <div hidden={this.state.sellCar}>
 

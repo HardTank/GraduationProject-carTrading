@@ -7,7 +7,8 @@ export default class CountDown extends Component {
             day: 0,
             hour: 0,
             minute: 0,
-            second: 0
+            second: 0,
+            overdue: false,
         }
     }
 
@@ -32,9 +33,9 @@ export default class CountDown extends Component {
         // alert()
         let sys_second;
         if (this.props.auction)
-             sys_second  = (end_time - moment().subtract(10, 'minutes'));
+            sys_second = (end_time - moment().subtract(10, 'minutes'));
         else
-              sys_second = (end_time - new Date().getTime());
+            sys_second = (end_time - new Date().getTime());
         this.timer = setInterval(() => {
             //防止倒计时出现负数
             if (sys_second > 1000) {
@@ -43,6 +44,11 @@ export default class CountDown extends Component {
                 let hour = Math.floor((sys_second / 1000 / 3600) % 24);
                 let minute = Math.floor((sys_second / 1000 / 60) % 60);
                 let second = Math.floor(sys_second / 1000 % 60);
+                if(day==0&&hour==0&&minute==0&&second==0){
+                    this.setState({
+                        overdue:true,
+                    })
+                }
                 this.setState({
                     day: day,
                     hour: hour < 10 ? "0" + hour : hour,
@@ -58,9 +64,15 @@ export default class CountDown extends Component {
     }
 
     render() {
+
         return (
-            <span
-                style={{color:'orange'}}>{this.state.day}天 {this.state.hour}:{this.state.minute}:{this.state.second}</span>
+            <div>
+            <span hidden={this.state.overdue}
+                  style={{color:'orange'}}>{this.state.day}天 {this.state.hour}:{this.state.minute}:{this.state.second}</span>
+<span hidden={!this.state.overdue}
+      style={{color:'orange'}}>竞拍已经结束</span>
+
+            </div>
         )
     }
 }

@@ -85,6 +85,7 @@ class TradingHall extends Component {
                 state: 1,
                 pageIndex: page,
                 pageSize: this.state.pageSize,
+                delete:0,
             }
         }).then(r=> {
             if (r.status == 200) {

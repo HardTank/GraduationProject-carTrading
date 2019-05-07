@@ -1,14 +1,14 @@
 package com.carTrading.service;
 
 import com.carTrading.entity.*;
-import com.carTrading.repository.ConfirmCarRepository;
-import com.carTrading.repository.MyCarRepository;
-import com.carTrading.repository.OrderRepository;
+import com.carTrading.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,7 +27,13 @@ public class OrderService {
     @Autowired
     MyCarRepository myCarRepository;
     @Autowired
+    MyOrderRepository myOrderRepository;
+    @Autowired
     ConfirmCarRepository confirmCarRepository;
+    @Autowired
+   CarInfoRepository carInfoRepository ;
+    @Autowired
+    TransactionInfoService transactionInfoService;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     /**
      * 动态查询
@@ -52,11 +58,12 @@ public class OrderService {
     /**
      * 查找用户订阅的汽车信息
      */
-    public Page<OrderCar> getList(Integer userId, int pageIndex, int pageSize, int state) {
+    public Page<MyOrder> getList(Integer userId, int pageIndex, int pageSize, int state) {
         logger.info("查找订阅信息");
-        Page<OrderCar> page = null;
+        Page<MyOrder> page = null;
 
-        List<OrderCar> list = orderRepository.findById(userId, pageIndex, pageSize, state);
+        List<MyOrder> list = myOrderRepository.findById(userId, pageIndex, pageSize, state);
+
         TransactionRecord record = new TransactionRecord();
         record.setUserId(userId);
         record.setState(0);
@@ -68,18 +75,39 @@ public class OrderService {
     /**
      * 查找用户订阅的汽车竞拍成功信息
      */
-    public Page<OrderCar> getListResult(Integer userId, int pageIndex, int pageSize) {
+    public Page<MyCar> getListResult(Integer userId, int pageIndex, int pageSize) {
         logger.info("查找竞拍成功信息");
-        Page<OrderCar> page = null;
+        Page<MyCar> page = null;
+        List<MyCar> myList=new ArrayList<MyCar>();
+        List<MyCar> list = myCarRepository.findCarResult( );
 
-        List<OrderCar> list = orderRepository.findByIdResult(userId, pageIndex, pageSize);
+        for (int i = 0; i < list.size(); i++) {
+            Date date = new Date();
+            if (list.get(i).getAuctionTime().getTime() + 600000 < date.getTime()) {
+                TransactionRecord t = transactionRecordService.getHigh(list.get(i).getId().intValue());
+
+                Double price =null;
+                if (t != null) {
+                    //判断出最高价的人是不是本人
+                    if (t.getUserId()== userId){
+                        price = t.getPrice();
+                        list.get(i).setPrice(price);
+                        myList.add( list.get(i));
+                    }
+
+                }
+            }
+        }
         CarInfo car = new CarInfo();
         car.setOwnerId(userId);
-        car.setState(2);
-        int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
-        car.setState(3);
-        totalNumber += (int) carInfoService.getList(car, 0, 1).getTotalElements();
-        page = new Page(totalNumber, pageIndex, pageSize, list);
+        //分页操作
+        int totalNumber = myList.size();
+        int n=pageSize;
+        pageSize=pageIndex*n+n;
+        if(pageSize>totalNumber)
+            pageSize=totalNumber;
+        List<MyCar> lists=myList.subList(pageIndex*n,pageSize);
+        page = new Page(totalNumber, pageIndex, n,lists);
         return page;
     }
 
@@ -98,6 +126,7 @@ public class OrderService {
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
+
     /**
      * 管理员查找支付成功信息
      */
@@ -109,7 +138,7 @@ public class OrderService {
         CarInfo car = new CarInfo();
         car.setOwnerId(userId);
         car.setState(3);
-        int  totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
+        int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
@@ -122,20 +151,34 @@ public class OrderService {
         Page<MyCar> page = null;
 
         List<MyCar> list = myCarRepository.findCar(userId, pageIndex, pageSize);
+        for (int i = 0; i < list.size(); i++) {
+            Date date = new Date();
+            if(list.get(i).getAuctionTime()!=null)
+            if (list.get(i).getAuctionTime().getTime() + 600000 < date.getTime()) {
+                TransactionRecord t = transactionRecordService.getHigh(list.get(i).getId().intValue());
+                Double price = null;
+                if (t != null) {
+                    price = t.getPrice();
+                }
+                list.get(i).setPrice(price);
+            }
+        }
         CarInfo car = new CarInfo();
         car.setOwnerId(userId);
+        car.setDeleted(0);
         int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
+
     /**
      * 查找等待审核的汽车信息
      */
-    public Page<OrderCar> getAllReview( int pageIndex, int pageSize, int state) {
+    public Page<OrderCar> getAllReview(int pageIndex, int pageSize, int state) {
         logger.info("查找订阅信息");
         Page<OrderCar> page = null;
 
-        List<OrderCar> list = orderRepository.findAllReview( pageIndex, pageSize, state);
+        List<OrderCar> list = orderRepository.findAllReview(pageIndex, pageSize, state);
         CarInfo car = new CarInfo();
         car.setState(state);
         int totalNumber = (int) carInfoService.getList(car, 0, 1).getTotalElements();
@@ -143,15 +186,18 @@ public class OrderService {
         return page;
 
     }
-    /**获取保证金*/
-    public Integer getDeposit(Integer userId){
+
+    /**
+     * 获取保证金
+     */
+    public Integer getDeposit(Integer userId) {
         TransactionRecord record = new TransactionRecord();
         record.setUserId(userId);
         record.setState(1);
         int totalNumber = (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
         record.setState(2);
-        totalNumber +=(int) transactionRecordService.getList(record, 0, 1).getTotalElements();
+        totalNumber += (int) transactionRecordService.getList(record, 0, 1).getTotalElements();
 
-        return  totalNumber;
+        return totalNumber;
     }
 }

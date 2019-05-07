@@ -67,4 +67,21 @@ public class CarInfoController {
         }
         return carInfo;
     }
+    //删除汽车信息
+    @RequestMapping(value = "/delCar")
+    public Page<CarInfo> delCar(CarInfo car) {
+        logger.info("删除汽车信息");
+        car.setDeleted(1);
+        saveCarInfo(car,null);
+        Page<CarInfo> page = carInfoService.getList(car, 0, 10);
+        return page;
+    }
+    //根据id汽车信息
+    @RequestMapping(value = "/getCar")
+    public  CarInfo getCar(CarInfo car) {
+        logger.info("获取汽车信息");
+        car.setDeleted(0);
+         CarInfo c = carInfoService.getCar(car);
+        return c;
+    }
 }

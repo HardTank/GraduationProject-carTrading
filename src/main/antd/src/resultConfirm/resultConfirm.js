@@ -33,7 +33,7 @@ class ResultConfirm extends Component {
            });
            message.info('已支付', 1);
        }
-      else  if(record.price*10000>wallet){
+      else  if(record.price >wallet){
            message.config({
                top: 130,
                duration: 2,
@@ -41,14 +41,14 @@ class ResultConfirm extends Component {
            });
            message.info('余额不足,请充值', 1);
        }else{
-           wallet=wallet-record.price*10000;
+           wallet=wallet-record.price ;
            //更新余额
            sessionStorage.setItem("wallet",wallet);
            var userId = sessionStorage.getItem("userId");
            axios.get('http://localhost:8080/wallet/save', {
                    params: {
                        userId: userId,
-                       amount: record.price*10000,
+                       amount: record.price ,
                        type: 4,
                    }
                }
@@ -136,31 +136,7 @@ class ResultConfirm extends Component {
         )
 
     }
-   // 展示我的汽车的数据
-    showMyCar = (page)=> {
-        var userId = sessionStorage.getItem("userId");
-        axios.get('http://localhost:8080/order/getMyList', {
-                params: {
-                    userId: userId,
-                    pageIndex: page,
-                    pageSize: this.state.pageSize,
 
-                }
-
-
-            }
-            //axios No 'Access-Control-Allow-Origin' header is present on the requested resource.   安装chrome 插件:Allow-Control-Allow-Origin
-
-        ).then(
-            r => {
-                var data = r.data;
-
-                this.setState({
-                    myCar: data,
-                });
-            }
-        )
-    }
 
     //竞拍的汽车的table展示列
     columns = [{
@@ -176,42 +152,28 @@ class ResultConfirm extends Component {
         title: '品牌',
         dataIndex: 'brand',
         key: 'brand',
+        width: 100,
     }, {
-        title: '款式',
-        dataIndex: 'productDate',
-        key: 'productDate',
+        title: '名称',
+        dataIndex: 'name',
+        key: 'name',
     }, {
-        title: '变速器',
-        key: 'transmission',
-        dataIndex: 'transmission',
-
-    }, {
-        title: '排放',
-        key: 'discharge',
-        dataIndex: 'discharge',
-
-    }, {
-        title: '型号',
-        key: 'type',
-        dataIndex: 'type',
-
-    }, {
-        title: '保证金',
-        key: 'deposit',
-        dataIndex: 'deposit',
-        render: (text, record)=>(
-            <span>{text}元</span>
+        title: '起拍价',
+        key: 'startPrice',
+        dataIndex: 'startPrice',
+        render: (index, record)=>(
+            <span>{index == null ? '暂无' : index}万元</span>
         )
 
     }, {
         title: '成交价',
         key: 'price',
         dataIndex: 'price',
-        render: (text, record)=>(
-            <span>{text}万元</span>
+        render: (index, record)=>(
+            <span>{index == null ? '暂无' : index}元</span>
         )
-    }
-        , {
+
+    }, {
             title: '状态',
             key: 'state',
             dataIndex: 'state',
@@ -224,67 +186,18 @@ class ResultConfirm extends Component {
             render: (text, record) => (
                 <div>
 
-                    <a className="render_a" onClick={() => this.payMoney(record)}>付款</a>
+                    <Button type="primary" onClick={() => this.payMoney(record)}>付款</Button>
+                    <Button type={'primary'} style={{ marginLeft:10}} onClick={(ev)=>{this.handleOk(ev,record)} }
+                    >详情</Button>
                 </div>
             )
         }];
-    //我的汽车数据列表
-    carColumns = [{
-        title: 'ID',
-        dataIndex: 'id',
-        key: 'id',
-        className: 'hidden',
-    }, {
-        title: '序号',
-        width: 80,
-        render: (text, record, index) => `${index + 1}`
-    }, {
-        title: '品牌',
-        dataIndex: 'brand',
-        key: 'brand',
-    }, {
-        title: '款式',
-        dataIndex: 'productDate',
-        key: 'productDate',
-    }, {
-        title: '变速器',
-        key: 'transmission',
-        dataIndex: 'transmission',
+    handleOk(e, item) {
+        e.preventDefault();
+        sessionStorage.setItem("carInfo", JSON.stringify(item))
+        window.open("http://localhost:3000/#/info")
 
-    }, {
-        title: '排放',
-        key: 'discharge',
-        dataIndex: 'discharge',
-
-    }, {
-        title: '型号',
-        key: 'type',
-        dataIndex: 'type',
-
-    }, {
-        title: '保证金',
-        key: 'deposit',
-        dataIndex: 'deposit',
-        render: (text, record)=>(
-            <span>{text}元</span>
-        )
-
-    }, {
-        title: '成交价',
-        key: 'price',
-        dataIndex: 'price',
-        render: (text, record)=>(
-            <span>{text}万元</span>
-        )
     }
-        , {
-            title: '状态',
-            key: 'state',
-            dataIndex: 'state',
-            render: (text, record)=>(
-                <span>{text !=5 ? '转帐中' : '已到账'}</span>
-            )
-        }];
     //自动加载信息
     componentDidMount() {
 
@@ -297,17 +210,16 @@ class ResultConfirm extends Component {
                 userId: userId,
             })
         this.show(0);
-        this.showMyCar(0);
+
 
 
     }
 
     render() {
-        const TabPane = Tabs.TabPane;
+
         return (
             <div >
-                <Tabs defaultActiveKey="editBaseInfo">
-                    <TabPane tab="竞拍车辆" key="editBaseInfo">
+
                         <Alert
                             message="提示"
                             description="自竞拍成功当日开始,三个工作日内没有付款,保证金将不予退还!"
@@ -321,23 +233,8 @@ class ResultConfirm extends Component {
                                     defaultPageSize={this.state.pageSize}
                                     onChange={(page)=>{this.show(page-1)}
                             }></Pagination>
-                    </TabPane>
-                    <TabPane tab="我的汽车" key="editPwd">
-                        <Alert
-                            message="提示"
-                            description="自竞拍成功当日开始,七个工作日您的卖车费用将到账!"
-                            type="warning"
-                            showIcon
-                        ></Alert>
-                        <Table rowKey="id" columns={this.carColumns} dataSource={this.state.myCar.items}
-                               pagination={false}></Table>
-                        <Pagination showQuickJumper defaultCurrent={1}
-                                    total={this.state.myCar.totalNumber} current={this.state.myCar.currentIndex+1}
-                                    defaultPageSize={this.state.pageSize}
-                                    onChange={(page)=>{this.showMyCar(page-1)}
-                            }></Pagination>
-                    </TabPane>
-                </Tabs>
+
+
 
             </div>
 

@@ -94,28 +94,30 @@ class SellCar extends Component {
     /**提交信息*/
     handleSubmit = (e)=> {
         e.preventDefault();
-        if (this.state.saveCarInfo && this.state.saveConfigurationInfo && this.state.saveProcedureInfo && this.test('left') && this.test('console') && this.test('right') && this.test('trunk') && this.test('engineCompartment') && this.test('dashBoard') && this.test('frontSeat') && this.test('backSeat')) {
-            var id = this.props.carId;
-            if (id != null) {
-                var carInfo = sessionStorage.getItem("carInfo");
-                if (carInfo != null && carInfo != "null") {
-                    var values = JSON.parse(carInfo);
+        if ( this.state.saveCarInfo && this.state.saveConfigurationInfo && this.state.saveProcedureInfo && this.test('left') &&this.test('console') && this.test('right') && this.test('trunk') && this.test('engineCompartment') && this.test('dashBoard') && this.test('frontSeat') && this.test('backSeat')) {
+
+
+            this.carInfoForm.validateFields((err, values)=> {
+                if (!err) {
+                    var str = JSON.stringify(values);
+                    sessionStorage.setItem("carInfo", str);
+                    var userId = sessionStorage.getItem("userId");
+
                     axios.get('http://localhost:8080/carInfo/save', {
                             params: {
-                                id: id,
                                 brand: values.brand,
-                                name:values.name,
                                 color: values.color,
                                 discharge: values.discharge,
                                 drivingMode: values.drivingMode,
                                 emissionStandard: values.emissionStandard,
                                 energy: values.energy,
                                 engineId: values.engineId,
-                                // initialDate: values.initialDate,
+
                                 mileage: values.mileage,
                                 nature: values.nature,
+                                ownerId: userId,
                                 productDates: values.productDate,
-                                registerPlace: values.registerPlace[0]+[1],
+                                registerPlace:values.registerPlace[0]+values.registerPlace[1],
                                 seatNum: values.seatNum,
                                 source: values.source,
                                 state: 0,
@@ -124,244 +126,98 @@ class SellCar extends Component {
                                 transmission: values.transmission,
                                 tyre: values.tyre,
                                 vin: values.vin,
+                                name:values.name,
+                                deleted:0,
                             }
                         }
                     ).then(
                         r => {
                             if (r.status == 200) {
-                                message.config({
-                                    top: 130,
-                                    duration: 2,
-                                    maxCount: 3,
-                                });
-                                message.info('数据保存成功', 1);
-
-                            }
-                        });
-
-                }
-                var configurationInfo = sessionStorage.getItem("configurationInfo");
-                if (configurationInfo != null && configurationInfo != "null") {
-                    var values = JSON.parse(configurationInfo);
-                    axios.get('http://localhost:8080/configurationInfo/getId', {
-                            params: {
-                                carId: id
-                            }
-                        }
-                    ).then(
-                        r => {
-                            if (r.status == 200) {
-
-                                axios.get('http://localhost:8080/configurationInfo/save', {
-                                        params: {
-                                            id: r.data.id,
-                                            cruiseControl: values.cruiseControl,
-                                            gasbag: values.gasbag,
-                                            hub: values.hub,
-                                            navigation: values.navigation,
-                                            radar: values.radar,
-                                            rearviewMirror: values.rearviewMirror,
-                                            reversingImage: values.reversingImage,
-                                            seat: values.seat,
-                                            seatControl: values.seatControl,
-                                            seatMaterial: values.seatMaterial,
-                                            skylight: values.skylight,
-                                            window: values.window,
-                                            carId: id,
-                                            abs: values.abs,
-                                        }
-                                    }
-                                ).then(
-                                    r => {
-                                        if (r.status == 200) {
-                                            message.config({
-                                                top: 130,
-                                                duration: 2,
-                                                maxCount: 3,
-                                            });
-                                            message.info('数据保存成功', 1);
-                                        }
-                                    });
-                            }
-                        });
-                }
-                var procedureInfo = sessionStorage.getItem("procedureInfo");
-                if (procedureInfo != null && procedureInfo != "null") {
-                    var values = JSON.parse(procedureInfo);
-                    if (typeof(values.compulsoryInsuranceLocation) == "string")
-                        var address = values.compulsoryInsuranceLocation;
-                    else
-                        var address = values.compulsoryInsuranceLocation[0] + values.compulsoryInsuranceLocation[1] + values.compulsoryInsuranceLocation[2];
-
-                    axios.get('http://localhost:8080/procedureInfo/getId', {
-                            params: {
-                                carId: id
-                            }
-                        }
-                    ).then(
-                        r => {
-                            if (r.status == 200) {
-
-                                axios.get('http://localhost:8080/procedureInfo/save', {
-                                        params: {
-                                            id: r.data.id,
-                                            invoice: values.invoice,
-                                            license: values.license,
-                                            nameplate: values.nameplate,
-                                            plateLocation: values.plateLocation,
-                                            purchaseTaxCertificate: values.purchaseTaxCertificate,
-                                            registration: values.registration,
-                                            spareKey: values.spareKey,
-                                            vehicleTax: values.vehicleTax,
-                                            violationRecord: values.violationRecord,
-                                            commercialDate: values.commercialInsuranceValidityDate,
-                                            compulsoryInsuranceLocation: address,
-                                            compulsoryDate: values.compulsoryInsuranceValidityDate,
-                                            yearlyDate: values.yearlyInspectionValidityDate,
-
-                                        }
-                                    }
-                                ).then(
-                                    r => {
-                                        console.info(r)
-                                        if (r.status == 200) {
-                                            message.config({
-                                                top: 130,
-                                                duration: 2,
-                                                maxCount: 3,
-                                            });
-                                            message.info('数据保存成功', 1);
-                                        }
-                                    });
-                            }
-                        });
-                }
-
-            }
-            else {
-                this.carInfoForm.validateFields((err, values)=> {
-                    if (!err) {
-                        var str = JSON.stringify(values);
-                        sessionStorage.setItem("carInfo", str);
-                        var userId = sessionStorage.getItem("userId");
-                        axios.get('http://localhost:8080/carInfo/save', {
-                                params: {
-                                    brand: values.brand,
-                                    color: values.color,
-                                    discharge: values.discharge,
-                                    drivingMode: values.drivingMode,
-                                    emissionStandard: values.emissionStandard,
-                                    energy: values.energy,
-                                    engineId: values.engineId,
-                                    // initialDate: values.initialDate,
-                                    mileage: values.mileage,
-                                    nature: values.nature,
-                                    ownerId: userId,
-                                    productDates: values.productDate,
-                                    registerPlace: values.registerPlace,
-                                    seatNum: values.seatNum,
-                                    source: values.source,
-                                    state: 0,
-                                    type: values.type,
-                                    transfer: values.transfer,
-                                    transmission: values.transmission,
-                                    tyre: values.tyre,
-                                    vin: values.vin,
-                                }
-                            }
-                        ).then(
-                            r => {
-                                if (r.status == 200) {
-                                    //message.config({
-                                    //    top: 130,
-                                    //    duration: 2,
-                                    //    maxCount: 3,
-                                    //});
-                                    //message.info('数据保存成功', 1);
-                                    var carId = r.data.id;
-                                    this.configurationInfoForm.validateFields((err, values)=> {
-                                        if (!err) {
-                                            var str = JSON.stringify(values);
-                                            sessionStorage.setItem("carInfo", str);
-                                            var userId = sessionStorage.getItem("userId");
-                                            axios.get('http://localhost:8080/configurationInfo/save', {
-                                                    params: {
-                                                        cruiseControl: values.cruiseControl,
-                                                        gasbag: values.gasbag,
-                                                        hub: values.hub,
-                                                        navigation: values.navigation,
-                                                        radar: values.radar,
-                                                        rearviewMirror: values.rearviewMirror,
-                                                        reversingImage: values.reversingImage,
-                                                        seat: values.seat,
-                                                        seatControl: values.seatControl,
-                                                        seatMaterial: values.seatMaterial,
-                                                        skylight: values.skylight,
-                                                        window: values.window,
-                                                        carId: carId,
-                                                        abs: values.abs,
-                                                    }
+                                var carId = r.data.id;
+                                this.configurationInfoForm.validateFields((err, values)=> {
+                                    if (!err) {
+                                        var str = JSON.stringify(values);
+                                        sessionStorage.setItem("carInfo", str);
+                                        var userId = sessionStorage.getItem("userId");
+                                        axios.get('http://localhost:8080/configurationInfo/save', {
+                                                params: {
+                                                    cruiseControl: values.cruiseControl,
+                                                    gasbag: values.gasbag,
+                                                    hub: values.hub,
+                                                    navigation: values.navigation,
+                                                    radar: values.radar,
+                                                    rearviewMirror: values.rearviewMirror,
+                                                    reversingImage: values.reversingImage,
+                                                    seat: values.seat,
+                                                    seatControl: values.seatControl,
+                                                    seatMaterial: values.seatMaterial,
+                                                    skylight: values.skylight,
+                                                    window: values.window,
+                                                    carId: carId,
+                                                    abs: values.abs,
                                                 }
-                                            ).then(
-                                                r => {
-                                                    if (r.status == 200) {
+                                            }
+                                        ).then(
+                                            r => {
+                                                if (r.status == 200) {
 
-                                                        this.procedureInfoForm.validateFields((err, values)=> {
-                                                            if (!err) {
-                                                                var str = JSON.stringify(values);
-                                                                sessionStorage.setItem("carInfo", str);
-                                                                var userId = sessionStorage.getItem("userId");
-                                                                var address = values.compulsoryInsuranceLocation[0] + values.compulsoryInsuranceLocation[1] + values.compulsoryInsuranceLocation[2];
-                                                                axios.get('http://localhost:8080/procedureInfo/save', {
-                                                                        params: {
-                                                                            carId: carId,
-                                                                            invoice: values.invoice,
-                                                                            license: values.license,
-                                                                            nameplate: values.nameplate,
-                                                                            plateLocation: values.plateLocation,
-                                                                            purchaseTaxCertificate: values.purchaseTaxCertificate,
-                                                                            registration: values.registration,
-                                                                            spareKey: values.spareKey,
-                                                                            vehicleTax: values.vehicleTax,
-                                                                            violationRecord: values.violationRecord,
-                                                                            commercialDate: values.commercialInsuranceValidityDate,
-                                                                            compulsoryInsuranceLocation: address,
-                                                                            compulsoryDate: values.compulsoryInsuranceValidityDate,
-                                                                            yearlyDate: values.yearlyInspectionValidityDate,
-                                                                        }
+                                                    this.procedureInfoForm.validateFields((err, values)=> {
+                                                        if (!err) {
+                                                            var str = JSON.stringify(values);
+                                                            sessionStorage.setItem("carInfo", str);
+                                                            var userId = sessionStorage.getItem("userId");
+                                                            var address = values.compulsoryInsuranceLocation[0] + values.compulsoryInsuranceLocation[1] + values.compulsoryInsuranceLocation[2];
+                                                            axios.get('http://localhost:8080/procedureInfo/save', {
+                                                                    params: {
+                                                                        carId: carId,
+                                                                        invoice: values.invoice,
+                                                                        license: values.license,
+                                                                        nameplate: values.nameplate,
+                                                                        plateLocation: values.plateLocation[1],
+                                                                        purchaseTaxCertificate: values.purchaseTaxCertificate,
+                                                                        registration: values.registration,
+                                                                        spareKey: values.spareKey,
+                                                                        vehicleTax: values.vehicleTax,
+                                                                        violationRecord: values.violationRecord,
+                                                                        commercialDate: values.commercialInsuranceValidityDate,
+                                                                        compulsoryInsuranceLocation: address,
+                                                                        compulsoryDate: values.compulsoryInsuranceValidityDate,
+                                                                        yearlyDate: values.yearlyInspectionValidityDate,
                                                                     }
-                                                                ).then(
-                                                                    r => {
-                                                                        if (r.status == 200) {
-                                                                            if (this.upload('left', carId))
-                                                                                if (this.upload('right', carId))
-                                                                                    if (this.upload('trunk', carId))
-                                                                                        if (this.upload('engineCompartment', carId))
-                                                                                            if (this.upload('dashBoard', carId))
-                                                                                                if (this.upload('console', carId))
-                                                                                                    if (this.upload('frontSeat', carId))
-                                                                                                        if (this.upload('backSeat', carId))
-                                                                                                            message.config({
-                                                                                                                top: 130,
-                                                                                                                duration: 2,
-                                                                                                                maxCount: 3,
-                                                                                                            });
-                                                                            message.info('数据保存成功', 1);
+                                                                }
+                                                            ).then(
+                                                                r => {
+                                                                    if (r.status == 200) {
+                                                                        if( this.upload(e, 'left', carId))
+                                                                           /* if (this.upload(e,'right', carId))
+                                                                                if (this.upload(e,'trunk', carId))
+                                                                                    if (this.upload(e,'engineCompartment', carId))
+                                                                                        if (this.upload(e,'dashBoard', carId))
+                                                                                            if (this.upload(e,'console', carId))
+                                                                                                if (this.upload(e,'frontSeat', carId))
+                                                                                                    if (this.upload(e,'backSeat', carId)) */{
+                                                                                                        message.config({
+                                                                                                            top: 130,
+                                                                                                            duration: 2,
+                                                                                                            maxCount: 3,
+                                                                                                        });
+                                                                                                        message.info('数据保存成功', 1);
+                                                                                                    }
 
-                                                                        }
-                                                                    });
-                                                            }
-                                                        })
-                                                    }
-                                                });
-                                        }
-                                    })
-                                }
-                            });
-                    }
-                })
-            }
-        } else {
+                                                                    }
+                                                                });
+                                                        }
+                                                    })
+                                                }
+                                            });
+                                    }
+                                })
+                            }
+                        });
+                }
+            })
+
+        }else {
             if (!this.state.saveCarInfo) {
                 message.config({
                     top: 130,
@@ -420,7 +276,7 @@ class SellCar extends Component {
     view = (e, id)=> {
         // var id=this.props.position
         e.preventDefault();
-        alert(id)
+
         var file = document.getElementById(id).files[0];
         if (window.FileReader) {
             var fr = new FileReader();
@@ -430,11 +286,196 @@ class SellCar extends Component {
             fr.readAsDataURL(file);
         }
     }
-    upload = (position, carId)=> {
+    //上传左前方图片
+    upload = (e,position, carId)=> {
+    e.preventDefault();
+
+    var upload = false;
+    let formData = new FormData();
+    var file = document.getElementById(position).files[0];
+    formData.append('pic', file);
+    formData.append('position', position);
+    formData.append('carId', carId);
+    axios({
+        url: 'http://localhost:8080/upload/image',
+        method: 'post',
+        data: formData,
+        processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+        contentType: false,   // 告诉axios不要去设置Content-Type请求头
+    }).then((res)=> {
+        console.info(res.status)
+        console.info(typeof(res.status))
+        if (res.status == 200) {
+           this.uploadRight('right',carId)
+        }
+
+    })
+
+    return true;
+}
+    uploadRight = (position, carId)=> {
+
         var upload = false;
         let formData = new FormData();
         var file = document.getElementById(position).files[0];
-        // var url=window.URL.createObjectURL(file);
+        formData.append('pic', file);
+        formData.append('position', position);
+        formData.append('carId', carId);
+        axios({
+            url: 'http://localhost:8080/upload/image',
+            method: 'post',
+            data: formData,
+            processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+            contentType: false,   // 告诉axios不要去设置Content-Type请求头
+        }).then((res)=> {
+            console.info(res.status)
+            console.info(typeof(res.status))
+            if (res.status == 200) {
+               this.uploadTrunk('trunk',carId)
+            }
+
+
+        })
+
+        return true;
+    }
+    uploadTrunk = ( position, carId)=> {
+
+
+        var upload = false;
+        let formData = new FormData();
+        var file = document.getElementById(position).files[0];
+        formData.append('pic', file);
+        formData.append('position', position);
+        formData.append('carId', carId);
+        axios({
+            url: 'http://localhost:8080/upload/image',
+            method: 'post',
+            data: formData,
+            processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+            contentType: false,   // 告诉axios不要去设置Content-Type请求头
+        }).then((res)=> {
+            console.info(res.status)
+            console.info(typeof(res.status))
+            if (res.status == 200) {
+                this.uploadEngineCompartment('engineCompartment',carId)
+            }
+
+
+        })
+
+        return true;
+    }
+    uploadEngineCompartment = ( position, carId)=> {
+
+
+        var upload = false;
+        let formData = new FormData();
+        var file = document.getElementById(position).files[0];
+        formData.append('pic', file);
+        formData.append('position', position);
+        formData.append('carId', carId);
+        axios({
+            url: 'http://localhost:8080/upload/image',
+            method: 'post',
+            data: formData,
+            processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+            contentType: false,   // 告诉axios不要去设置Content-Type请求头
+        }).then((res)=> {
+            console.info(res.status)
+            console.info(typeof(res.status))
+            if (res.status == 200) {
+               this.uploadDashBoard('dashBoard',carId)
+            }
+
+
+        })
+
+        return true;
+    }
+    uploadDashBoard = ( position, carId)=> {
+
+
+        var upload = false;
+        let formData = new FormData();
+        var file = document.getElementById(position).files[0];
+        formData.append('pic', file);
+        formData.append('position', position);
+        formData.append('carId', carId);
+        axios({
+            url: 'http://localhost:8080/upload/image',
+            method: 'post',
+            data: formData,
+            processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+            contentType: false,   // 告诉axios不要去设置Content-Type请求头
+        }).then((res)=> {
+            console.info(res.status)
+            console.info(typeof(res.status))
+            if (res.status == 200) {
+               this.uploadConsole('console',carId)
+            }
+
+
+        })
+
+        return true;
+    }
+    uploadConsole = ( position, carId)=> {
+
+
+    var upload = false;
+    let formData = new FormData();
+    var file = document.getElementById(position).files[0];
+    formData.append('pic', file);
+    formData.append('position', position);
+    formData.append('carId', carId);
+    axios({
+        url: 'http://localhost:8080/upload/image',
+        method: 'post',
+        data: formData,
+        processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+        contentType: false,   // 告诉axios不要去设置Content-Type请求头
+    }).then((res)=> {
+        console.info(res.status)
+        console.info(typeof(res.status))
+        if (res.status == 200) {
+           this.uploadFrontSeat('frontSeat',carId)
+        }
+
+
+    })
+
+    return true;
+}
+    uploadFrontSeat = ( position, carId)=> {
+        var upload = false;
+        let formData = new FormData();
+        var file = document.getElementById(position).files[0];
+        formData.append('pic', file);
+        formData.append('position', position);
+        formData.append('carId', carId);
+        axios({
+            url: 'http://localhost:8080/upload/image',
+            method: 'post',
+            data: formData,
+            processData: false,// 告诉axios不要去处理发送的数据(重要参数)
+            contentType: false,   // 告诉axios不要去设置Content-Type请求头
+        }).then((res)=> {
+            console.info(res.status)
+            console.info(typeof(res.status))
+            if (res.status == 200) {
+                this.uploadBackSeat('backSeat',carId)
+            }
+
+
+        })
+
+        return true;
+    }
+    uploadBackSeat = ( position, carId)=> {
+        var upload = false;
+        let formData = new FormData();
+        var file = document.getElementById(position).files[0];
         formData.append('pic', file);
         formData.append('position', position);
         formData.append('carId', carId);
@@ -457,11 +498,10 @@ class SellCar extends Component {
 
         return true;
     }
-
     test = (position)=> {
-
-
-        if (document.getElementById(position).files.length == 0)
+      //  alert(document.getElementById(position).files)
+       //  console.log(document.getElementById(position))
+        if (document.getElementById(position)== null||document.getElementById(position).files.length == 0)
             return false;
         else {
             return true;

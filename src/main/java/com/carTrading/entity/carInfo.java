@@ -121,4 +121,6 @@ public class CarInfo {
     private String remark;
     /**名称*/
     private  String name;
+    /**删除状态*/
+    private Integer deleted;
 }

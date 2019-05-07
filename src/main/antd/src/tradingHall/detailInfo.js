@@ -15,10 +15,11 @@ class DetailInfo extends Component {
         super();
         this.state = {
             item: [],
-            fileList:[],
-            position:'left'
+            fileList: [],
+            position: 'left'
         }
     }
+
     componentWillMount() {
         var carInfo = sessionStorage.getItem("carInfo")
         carInfo = JSON.parse(carInfo);
@@ -26,23 +27,25 @@ class DetailInfo extends Component {
             item: carInfo
         })
     }
+
     componentDidMount() {
         var carInfo = sessionStorage.getItem("carInfo")
         carInfo = JSON.parse(carInfo);
+        console.log(carInfo)
         this.setState({
             item: carInfo
         })
-        axios.get('http://localhost:8080/upload/getList',{
-            params:{
-                carId:carInfo.id,
-                pageIndex:0,
-                pageSize:8,
+        axios.get('http://localhost:8080/upload/getList', {
+            params: {
+                carId: carInfo.id,
+                pageIndex: 0,
+                pageSize: 8,
             }
-        }).then(r=>{
-            if(r.status==200){
+        }).then(r=> {
+            if (r.status == 200) {
                 console.log(r)
                 this.setState({
-                    fileList:r.data.content,
+                    fileList: r.data.content,
                 })
 
             }
@@ -60,7 +63,47 @@ class DetailInfo extends Component {
     handleNext = ()=> {
         this.refs.img.next();
     }
+    //判断是否在竞拍时间之前
+    judgeBeforeTime(startTime,endTime){
+        var start=new Date(startTime);
+        var end=new Date(endTime)
+        console.log(start.getTime())
+        console.log(end.getTime())
+        if(start.getTime()>end.getTime()){
+            return true;
+        }
 
+        else{
+            return false;
+        }
+    }
+    //判断是否正在竞拍
+    judgeInTime(startTime,endTime){
+        var start=new Date(startTime);
+        var end=new Date(endTime)
+        console.log(start.getTime())
+        console.log(end.getTime())
+        if(start.getTime()<end.getTime()&&start.getTime()+600000>end.getTime()){
+            return true;
+        }
+
+        else{
+            return false;
+        }
+    }
+    //是否过期
+    judgeOutTime(startTime,endTime){
+        var start=new Date(startTime);
+        var end=new Date(endTime)
+        console.log(start.getTime())
+        console.log(end.getTime())
+        if(start.getTime()+600000<end.getTime()){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
     render() {
         const {message,item,fileList,position}=this.state;
         const {form} = this.props;
@@ -70,68 +113,75 @@ class DetailInfo extends Component {
 
         return (
 
-            <div className="detailInfo" >
-              <Card>
-                <Row>
+            <div className="detailInfo">
+                <Card>
+                    <Row>
 
-                    <Col span={12}>
-                        <Carousel afterChange={this.onChange} ref='img' style={{height:500}}>
-                            {   fileList.map(function (item,index) {
-                                var src=require('../image/carImage/'+item.src+'.jpg')
-                                return (
-                                    <div key={item.position} >
+                        <Col span={12}>
+                            <Carousel afterChange={this.onChange} ref='img' style={{height:500}}>
+                                {   fileList.map(function (item, index) {
+                                    var src = require('../image/carImage/' + item.src + '.jpg')
+                                    return (
+                                        <div key={item.position}>
 
-                                        <div style={{background:"url(" + src + ")", zIndex:2,height:300}}>
+                                            <div style={{background:"url(" + src + ")",backgroundSize:' cover',
+backgroundPosition: 'center',zIndex:2,height:300}}>
 
+                                            </div>
+                                            <div style={{marginTop:-120,fontSize:18,fontWeight:'bold',}}>
+                                                {item.position == 'left' ? '左前45°' : item.position == 'right' ? '右后45°' : item.position == 'trunk' ? '后备箱' : item.position == 'engineCompartment' ? '发动机舱' : item.position == 'dashBoard' ? '仪表盘' : item.position == 'console' ? '操作台' : item.position == 'frontSeat' ? '前排座椅' : '后排座椅'}
+
+                                            </div>
                                         </div>
-                                        <div  style={{marginTop:-120,fontSize:18,fontWeight:'bold',}} >
-                                            {item.position=='left'?'左前45°':item.position=='right'?'右后45°':item.position=='trunk'?'后备箱':item.position=='engineCompartment'?'发动机舱':item.position=='dashBoard'?'仪表盘':item.position='console'?'操作台':item.position=='frontSeat'?'前排座椅':'后排座椅'}
 
-                                        </div>
-                                    </div>
+                                    )
+                                })
+                                }
+                            </Carousel>
+                            <Row >
+                                <Col span={8}>
+                                    <Icon type="left" theme="outlined" style={{ fontSize: '30px',float:'right'}}
+                                          onClick={this.handlePrev}/>
+                                </Col>
+                                <Col span={8} style={{textAlign:'center'}}></Col>
+                                <Col span={8}>
+                                    <Icon type="right" theme="outlined" style={{ fontSize: '30px'}}
+                                          onClick={this.handleNext}/>
+                                </Col>
+                            </Row>
+                        </Col>
+                        <Col span={8}>
+                            <div className="carName">
+                                <div className="carInfo">{item.brand}{item.name}
+                                    { item.productDate}款
+                                    {item.discharge}
+                                    {item.transmission}
+                                    { item.type}</div>
+                            </div>
+                            <br/>
+                            <div
+                                style={{marginTop:10,marginLeft:10}}>{item.location} {item.emissionStandard} {item.mileage}
+                                <br/>竞拍时间:{ item.auctionTime}
+                                <div style={{fontSize:30,color:'orange'}}>
 
-                                )
-                            })
-                            }
-                        </Carousel>
-                        <Row >
-                            <Col span={8}>
-                                <Icon type="left" theme="outlined" style={{ fontSize: '30px',float:'right'}}
-                                      onClick={this.handlePrev}/>
-                            </Col>
-                            <Col span={8} style={{textAlign:'center'}}></Col>
-                            <Col span={8}>
-                                <Icon type="right" theme="outlined" style={{ fontSize: '30px'}}
-                                      onClick={this.handleNext}/>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col span={8}>
-                        <div className="carName">
-                            <div className="carInfo">{item.brand}
-                                { item.productDate}款
-                                {item.discharge}
-                                {item.transmission}
-                                { item.type}</div>
-                        </div>
-                        <br/>
-                        <div style={{marginTop:10,marginLeft:10}}>{item.emissionStandard}{item.mileage}
-                        <br/>竞拍时间:{ item.auctionTime}<div style={{fontSize:30,color:'orange'}}>
-                                <CountDown
-                                    endTime={item.auctionTime}
-                                >
+                                    {item.auctionTime == null ? '暂无' :this.judgeBeforeTime(item.auctionTime,new Date())?<CountDown
+                                        endTime={item.auctionTime}
+                                    >
+                                    </CountDown>:this.judgeInTime(item.auctionTime,new Date())?'竞拍中':'竞拍已结束'
 
-                            </CountDown></div>
-                        起拍价:
-                        <div style={{fontSize:30,color:'orange'}}>{ item.startPrice}万元</div>
-                        </div>
-                    </Col>
-                </Row>
-                  </Card>
+                                    }
+                                </div>
+                                起拍价:
+                                <div
+                                    style={{fontSize:30,color:'orange'}}>{ item.startPrice == null ? '暂无' : item.startPrice + '万元'}</div>
+                            </div>
+                        </Col>
+                    </Row>
+                </Card>
                 <Tabs defaultActiveKey="editBaseInfo">
                     <TabPane tab="基本信息" key="baseInfo">
 
-                         <DetailCar ></DetailCar>
+                        <DetailCar ></DetailCar>
                     </TabPane>
                     <TabPane tab="评论" key="comment">
 

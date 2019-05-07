@@ -1,6 +1,7 @@
 package com.carTrading.service;
 
 import com.carTrading.entity.TransactionRecord;
+import com.carTrading.entity.Wallet;
 import com.carTrading.repository.TransactionRecordRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +23,10 @@ import java.util.Date;
 public class TransactionRecordService {
     @Autowired
     private TransactionRecordRepository transactionRecordRepository;
+    @Autowired
+    WalletService walletService;
+    @Autowired
+    UserService userService;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
@@ -71,5 +76,23 @@ public class TransactionRecordService {
         if(page.getContent().size()==0)
          t = transactionRecordRepository.save(t);
         return t;
+    }
+    /**获得最高出价信息*/
+    public  TransactionRecord getHigh(Integer carId){
+        TransactionRecord  t=transactionRecordRepository.getHigh(carId);
+                return t;
+    }
+    /**退订/退保证金操作*/
+    public boolean delRecord(TransactionRecord t,Double wallet){
+       // t=transactionRecordRepository.
+        t=getList(t,0,1).getContent().get(0);
+        transactionRecordRepository.delete(t.getId());
+        Wallet w=new Wallet();
+        w.setUserId(t.getUserId());
+        w.setType(3);
+        w.setAmount(wallet);
+        walletService.add(w);
+        userService.saveUserWallet(t.getUserId().longValue(),wallet);
+        return true;
     }
 }

@@ -63,6 +63,11 @@ public class CarInfoService {
         CarInfo car = carInfoRepository.findOne(carInfo.getId());
         return car;
     }
+    /**删除车辆*/
+    public void  delCar(CarInfo car){
+        car.setDeleted(1);
+        save(car);
 
+    }
 
 }

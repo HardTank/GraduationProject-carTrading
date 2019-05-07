@@ -65,7 +65,7 @@ class BasicDemo extends React.Component {
                     </Form.Item>
                     <Form.Item  >
                         <hr/>
-                        <Button size="large" type="primary" htmlType="submit">提交</Button>
+                        <Button size="large" type="primary" htmlType="submit">保存</Button>
                     </Form.Item>
                 </Form>
             </Card>

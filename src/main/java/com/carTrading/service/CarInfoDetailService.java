@@ -38,8 +38,10 @@ public class CarInfoDetailService {
      * 获取汽车的完整信息
      */
     public com.carTrading.entity.Page<TradingInfo> getTradingInfo(CarInfo car, Integer userId, int pageIndex, int pageSize) {
+         car.setDeleted(0);
         org.springframework.data.domain.Page<CarInfo> page = carInfoService.getList(car, pageIndex, pageSize);
         logger.info("查询完整的交易信息");
+
         List<CarInfo> clist = page.getContent();
         TradingInfo t;
         CarInfo c;
@@ -51,8 +53,10 @@ public class CarInfoDetailService {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:MM:SS");
             t = new TradingInfo();
             c = clist.get(i);
-
+            System.out.println(c.toString());
             ti = transactionInfoService.getTransaction(c.getId());
+            System.out.println(ti.toString());
+            ti.getAuctionTime();
             if (date.before(ti.getAuctionTime())) {
                 p=procedureInfoService.getId(c.getId().intValue());
                 t.setLocation(p.getPlateLocation());

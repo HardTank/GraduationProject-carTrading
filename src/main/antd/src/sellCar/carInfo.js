@@ -35,6 +35,8 @@ class CarInfo extends Component {
             if (!err) {
                 var id = this.props.carId;
                 if (id != null) {
+                    values.registerPlace=values.registerPlace[0]+values.registerPlace[1];
+                   alert( values.registerPlace)
                     var str = JSON.stringify(values);
                     sessionStorage.setItem("carInfo", str);
                 }
@@ -175,6 +177,7 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请输入颜色!',
                                     }],
+                                    initialValue:'黑色',
                                 })(
                                     <Input disabled={this.state.readOnly}/>
                                 )}
@@ -343,6 +346,7 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择变速器类型!',
                                     }],
+                                    initialValue:'AT',
                                 })(
                                     <Select
                                         placeholder="请选择" disabled={this.state.readOnly}
@@ -365,6 +369,7 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请选择排放标准!',
                                     }],
+                                    initialValue:'国四',
                                 })(
                                     <Select
                                         placeholder="请选择" disabled={this.state.readOnly}
@@ -374,8 +379,8 @@ class CarInfo extends Component {
                                         <Option value="国五">国五</Option>
                                         <Option value="国四">国四</Option>
                                         <Option value="国三">国三</Option>
-                                        <Option value="国二及以下">国二及以下</Option>
-                                        <Option value="新能源">新能源</Option>
+                                        <Option value="国一">国一</Option>
+
                                     </Select>
                                 )}
                             </Form.Item>
@@ -390,6 +395,7 @@ class CarInfo extends Component {
                                     rules: [{
                                         required: true, message: '请输入能源类型!',
                                     }],
+                                    initialValue:'燃油',
                                 })(
                                     <Input disabled={this.state.readOnly}/>
                                 )}
@@ -416,6 +422,7 @@ class CarInfo extends Component {
                                     rules: [{pattern: /^[0-9]*$/, message: '格式错误'}, {
                                         required: true, message: '请输入过户次数!',
                                     }],
+                                    initialValue:'0',
                                 })(
                                     <Input disabled={this.state.readOnly}/>
                                 )}

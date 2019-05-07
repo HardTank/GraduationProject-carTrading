@@ -21,6 +21,7 @@ class Title extends Component {
         index: 'select',
         target: 'index',
         registerVisible: false,
+        role:'0',
 
     };
 //显示登陆组件
@@ -64,7 +65,7 @@ class Title extends Component {
         var userId = sessionStorage.setItem("userId", 0);
         window.location.href = "#/index"
         this.setState({
-
+            role:0,
             login: false,
 
         });
@@ -110,6 +111,7 @@ class Title extends Component {
                                 name: r.data.content[0].name,
                                 login: true,
                                 loginVisible: false,
+                                role: r.data.content[0].role,
                             });
 
 
@@ -207,7 +209,7 @@ class Title extends Component {
                             name: r.data.name,
                             login: true,
                             loginVisible: false,
-
+                            role:r.data.role
                         });
                     }
                     ;
@@ -246,6 +248,7 @@ class Title extends Component {
 
                                 <Row >
                                     <Col span={4}>
+
                                         <div className={target=="index"?"select":""}
                                              onClick={(ev) => {this.judgeLogin(ev,"index")}}>首页
                                         </div>
@@ -261,9 +264,9 @@ class Title extends Component {
                                         </div>
                                     </Col>
                                     <Col span={4}>
-                                        <div className={target=="adminCentral"?"select":""}
+                                        <div className={target=="adminCentral"?"select":""} hidden={this.state.role==0||this.state.role==null}
                                              onClick={(ev) => {this.judgeLogin(ev,"adminCentral")}}>管理中心
-                                        </div>
+                                            </div>
                                     </Col>
                                     <Col span={8}>
                                         <Row className="login">

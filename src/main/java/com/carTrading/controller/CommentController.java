@@ -29,7 +29,6 @@ public class CommentController {
     public Page<Comment> getList(Comment c, int pageIndex, int pageSize) {
         logger.info("评论信息");
         Page<Comment> page = commentService.getList(c , pageIndex, pageSize);
-        System.out.println("最新一条评论信息"+page.getContent().get(0).toString());
         return page;
     }
 

@@ -41,7 +41,7 @@ public class UploadImageService {
         /**创建实例*/
         Example<UploadImage> ex = Example.of(uploadImage, matcher);
         /**排序查询*/
-        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
         /**分页查询*/
         PageRequest pageRequest = new PageRequest(pageIndex, pageSize, sort);
         page = uploadImageRepository.findAll(ex, pageRequest);

@@ -11,14 +11,14 @@ import java.util.Date;
 /**
  * @author tanlixin
  * @description
- * @since 2019-04-16
+ * @since 2019-05-06
  */
 @Entity
 @Data
 @Table(name="order_car")
 @NoArgsConstructor
 @AllArgsConstructor
-public class MyCar {
+public class MyOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     /**主键*/
@@ -51,8 +51,8 @@ public class MyCar {
     private Integer state;
     /**汽车名称*/
     private String name;
-    /**成交价*/
-    private  Double price;
+//    /**成交价*/
+//    private  Double price;
     /**
      * 排放标准
      */
@@ -65,6 +65,6 @@ public class MyCar {
     /**
      * 所在地
      */
-   // @Column(name="plate_location")
+    // @Column(name="plate_location")
     private String location;
 }

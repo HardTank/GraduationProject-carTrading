@@ -11,6 +11,7 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import Location from'./Location'
 import Address from '../address'
 import moment from "moment";
+import City from '../city'
 const { Option } = Select;
 const { MonthPicker} = DatePicker;
 class procedureInfo extends Component {
@@ -33,6 +34,7 @@ class procedureInfo extends Component {
             if(!err){
                 var id = this.props.carId;
                 if (id != null) {
+                   values.plateLocation=values.plateLocation[1];
                     var str = JSON.stringify(values);
                     sessionStorage.setItem("procedureInfo",str);
                 }
@@ -110,12 +112,9 @@ class procedureInfo extends Component {
                                 {getFieldDecorator('plateLocation', {
                                     rules: [{
                                         required: true, message: '请选择车牌所在地!',
-                                    },{
-                                        pattern:/^[京津沪渝冀豫云辽黑湘皖鲁新苏浙赣鄂桂甘晋蒙陕吉闽贵粤青藏川宁琼使领A-Z]{1}[A-Z]{1}$/,
-                                        message:'格式错误'
                                     }],
                                 })(
-                                    <Input disabled={this.state.readOnly} placeholder="例 京P" />
+                                    <City/>
                                 )}
                             </Form.Item>
                         </Col>

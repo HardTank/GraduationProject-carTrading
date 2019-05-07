@@ -41,6 +41,7 @@ class Review extends Component {
         axios.get('http://localhost:8080/carInfo/getList', {
                 params: {
                     state: 0,
+                    deleted:0,
                     pageIndex: page,
                     pageSize: this.state.pageSize,
 
@@ -135,6 +136,10 @@ class Review extends Component {
         dataIndex: 'brand',
         key: 'brand',
     }, {
+        title: '名称',
+        dataIndex: 'name',
+        key: 'name',
+    }, {
         title: '款式',
         dataIndex: 'productDate',
         key: 'productDate',
@@ -164,11 +169,20 @@ class Review extends Component {
         dataIndex: 'action',
         render: (text, record) => (
             <div>
-                <Button onClick={(ev)=>this.showOwnerInfo(ev,record.ownerId)}>车主信息</Button>
-                <Button disabled={false} onClick={(ev)=>this.showModal(ev,record)}>审核</Button>
+                <Button type="primary" onClick={(ev)=>this.showOwnerInfo(ev,record.ownerId)}>车主信息</Button>
+                <Button type={'primary'} style={{ marginLeft:10}} onClick={(ev)=>{this.showDetail(ev,record)} }
+                >车辆详情</Button>
+                <Button  type="primary"  style={{ marginLeft:10}} disabled={false} onClick={(ev)=>this.showModal(ev,record)}>审核</Button>
+
             </div>
         )
     }];
+    showDetail=(e, item)=> {
+        e.preventDefault();
+        sessionStorage.setItem("carInfo", JSON.stringify(item))
+        window.open("http://localhost:3000/#/info")
+
+    }
     handleOk = (e) => {
         e.preventDefault();
         this.form.validateFields((err, values) => {
@@ -318,11 +332,18 @@ class Review extends Component {
     }
        setRemark(remark){
            sessionStorage.setItem('remark',remark);
+           message.config({
+               top: 130,
+               duration: 2,
+               maxCount: 3,
+           });
+           message.info('保存成功!', 1);
        }
        setBackReview(e){
            e.preventDefault();
            var remark=sessionStorage.getItem('remark');
-           if(remark!=''){
+           console.log(remark)
+           if(remark!=''&&remark!='null'){
                axios.get('http://localhost:8080/carInfo/save',{
                    params:{
                        id:this.state.carId,
@@ -413,13 +434,9 @@ class Review extends Component {
                 >
                     <Button type="primary" onClick={(ev)=>{this.setReview(ev)}}>通过</Button>
                     <Button type="primary" style={{marginLeft:50}} onClick={(ev)=>{this.setBackReview(ev)}}>不通过</Button>
-                    <Tabs defaultActiveKey="editBaseInfo" onChange={this.getAuction}>
-                        <TabPane tab="汽车信息" key="editBaseInfo">
-                            <SellCar
-                                carId={this.state.carId}
-                            ></SellCar>
-                        </TabPane>
-                        <TabPane tab="汽车检查" key="editPwd">
+                    <Tabs defaultActiveKey="reviewCar" onChange={this.getAuction}>
+
+                        <TabPane tab="汽车检查" key="reviewCar">
 
                             <Examine
                                 carId={this.state.carId}
