@@ -170,7 +170,30 @@ public class OrderService {
         page = new Page(totalNumber, pageIndex, pageSize, list);
         return page;
     }
+    /**
+     * 查找所有的汽车信息
+     */
+    public Page<MyCar> getAllCarManage( int pageIndex, int pageSize) {
+        logger.info("查找订阅信息");
+        Page<MyCar> page = null;
+        List<MyCar> list = myCarRepository.findAllCar(pageIndex, pageSize);
+        for (int i = 0; i < list.size(); i++) {
+            Date date = new Date();
+            if(list.get(i).getAuctionTime()!=null)
+                if (list.get(i).getAuctionTime().getTime() + 600000 < date.getTime()) {
+                    TransactionRecord t = transactionRecordService.getHigh(list.get(i).getId().intValue());
+                    Double price = null;
+                    if (t != null) {
+                        price = t.getPrice();
+                    }
+                    list.get(i).setPrice(price);
+                }
+        }
 
+        int totalNumber = list.size();
+        page = new Page(totalNumber, pageIndex, pageSize, list);
+        return page;
+    }
     /**
      * 查找等待审核的汽车信息
      */

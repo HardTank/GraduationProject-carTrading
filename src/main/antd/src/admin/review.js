@@ -302,11 +302,13 @@ class Review extends Component {
     setReview(e) {
         e.preventDefault();
         console.log('id' + this.state.id)
+        var remark=sessionStorage.getItem('remark');
         if (this.state.id > 0) {
             axios.get('http://localhost:8080/carInfo/save', {
                 params: {
                     id: this.state.carId,
                     state: 1,
+                    remark:remark,
                 }
             }).then(
                 r=> {

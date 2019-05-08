@@ -228,8 +228,7 @@ class DetailCar extends Component {
                             <div className="key">倒车雷达:</div>
                             {configurationInfo.radar}</Col>
                         <Col span={6}>
-                            <div className="key">空调:</div>
-                            {configurationInfo.color}</Col>
+                            </Col>
                     </Row>
                     <Row>
                         <Col span={6}>
@@ -239,10 +238,10 @@ class DetailCar extends Component {
                             <div className="key">天窗:</div>
                             {configurationInfo.skylight}</Col>
                         <Col span={6}>
-                            <div className="key">影音设备:</div>
+
                         </Col>
                         <Col span={6}>
-                            <div className="key">转向助力:</div>
+
                         </Col>
                     </Row>
 
@@ -288,7 +287,7 @@ class DetailCar extends Component {
                             <div className="key">违章记录:</div>
                             {procedureInfo.violationRecord}</Col>
                         <Col span={6}>
-                            <div className="key">天窗:</div>
+
                         </Col>
                     </Row>
                 </Card>

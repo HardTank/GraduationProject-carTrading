@@ -42,5 +42,11 @@ public interface MyCarRepository extends JpaRepository<MyCar,Long> {
             "on  ti.car_id=c.id LEFT JOIN transaction_record as tr on tr.car_id=c.id and tr.state=2 " +
             "where p.car_id=c.id and c.deleted=0 and  c.state=3 order by ti.auction_time   ",nativeQuery = true)
     List<MyCar> findCarPayEnd(  );
+    /**查询提交的汽车的状态*/
+    @Query(value="select c.emission_standard,c.mileage,  c.product_date,c.transmission,c.discharge,c.type, c.id,c.brand,c.name,c.state ,ti.auction_time,ti.deposit,ti.start_price,tr.price,c.remark,p.plate_location as location " +
+            " from  procedure_info as p, car_info as c LEFT JOIN  transaction_info as ti  " +
+            "on  ti.car_id=c.id LEFT JOIN transaction_record as tr on tr.car_id=c.id and tr.state=2 " +
+            "where p.car_id=c.id and c.deleted=0    order by ti.auction_time ,c.id limit :pageIndex , :pageSize  ",nativeQuery = true)
+    List<MyCar> findAllCar(  @Param("pageIndex")Integer pageIndex, @Param("pageSize")Integer pageSize);
 
 }

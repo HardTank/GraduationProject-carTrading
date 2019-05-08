@@ -67,4 +67,10 @@ public class OrderController {
        Integer deposit=orderService.getDeposit(userId);
         return deposit;
     }
+    /**获取所有的汽车信息*/
+    @RequestMapping(value="/getAllCar")
+    public Page<MyCar> getAllCarManage(int pageIndex, int pageSize){
+        Page<MyCar> page=orderService.getAllCarManage(pageIndex,pageSize);
+        return page;
+    }
 }
