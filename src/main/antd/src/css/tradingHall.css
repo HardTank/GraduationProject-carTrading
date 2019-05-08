@@ -107,6 +107,14 @@
     padding:0px 10px;
     font-weight: bold;
 }
-.ant-card-wider-padding .ant-card-body {
+.ant-card-head :hover {
+    color: #40a9ff;
+    cursor:pointer;
+}
+.catalog .ant-card-wider-padding .ant-card-body {
     padding: 5px 32px;
+}
+.catalog .ant-card-body :hover {
+    color: #40a9ff;
+    cursor:pointer;
 }

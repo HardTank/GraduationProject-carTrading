@@ -34,7 +34,7 @@ class BasicDemo extends React.Component {
     render () {
 
         const { getFieldDecorator } = this.props.form
-        const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator', 'media' ]
+        const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator' ]
 
         return (
             <Card >

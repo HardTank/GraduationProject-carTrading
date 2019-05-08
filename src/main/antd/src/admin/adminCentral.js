@@ -12,6 +12,7 @@ import Review from './review';
 import Confirm from './confirm'
 import AllUser from './allUserManage'
 import AllCar from './allCarManage'
+import AllNotice from './noticeManage'
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 const {   Sider, Content } = Layout;
 class AdminCentral extends Component {
@@ -22,6 +23,7 @@ class AdminCentral extends Component {
             confirm: true,
             allCar:true,
             allUser:true,
+            allNotice:true,
         }
     }
 
@@ -32,6 +34,7 @@ class AdminCentral extends Component {
             confirm: true,
             allCar:true,
             allUser:true,
+            allNotice:true,
         })
         if (item.key == "review") {
             var user = sessionStorage.getItem("user");
@@ -58,6 +61,12 @@ class AdminCentral extends Component {
         }else if (item.key == "allUser") {
             this.setState({
                 allUser: false,
+
+            })
+        }
+        else if (item.key == "allNotice") {
+            this.setState({
+                allNotice: false,
 
             })
         }
@@ -120,6 +129,9 @@ class AdminCentral extends Component {
                                     <Menu.Item key="allUser">
                                         <span>用户管理</span>
                                     </Menu.Item>
+                                    <Menu.Item key="allNotice">
+                                        <span>公告管理</span>
+                                    </Menu.Item>
                               </Menu.ItemGroup>
 
                             </Menu>
@@ -140,6 +152,10 @@ class AdminCentral extends Component {
                         <div hidden={this.state.allUser}>
 
                             <AllUser></AllUser>
+                        </div>
+                        <div hidden={this.state.allNotice}>
+
+                            <AllNotice></AllNotice>
                         </div>
                     </Content>
                 </Layout>

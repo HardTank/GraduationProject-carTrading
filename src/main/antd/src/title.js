@@ -283,7 +283,7 @@ class Title extends Component {
                             </div>
                         </Header>
                     </Affix>
-                    <Content >
+                    <Content style={{minHeight:480}}>
                         {this.props.children}
                     </Content>
                     <Footer></Footer>

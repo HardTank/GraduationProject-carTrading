@@ -9,6 +9,7 @@ import Comment from './comment'
 import DetailCar from './detailCar'
 import ReactWaterMark from 'react-watermark-component';
 import CountDown from './countDown';
+import Title from '../title'
 const { Meta } = Card;
 class DetailInfo extends Component {
     constructor() {
@@ -112,7 +113,7 @@ class DetailInfo extends Component {
         const TabPane = Tabs.TabPane;
 
         return (
-
+          <Title target="tradingHall">
             <div className="detailInfo">
                 <Card>
                     <Row>
@@ -189,7 +190,7 @@ backgroundPosition: 'center',zIndex:2,height:300}}>
                     </TabPane>
                 </Tabs>
             </div>
-
+</Title>
 
         )
     }

@@ -15,6 +15,7 @@ import { createHashHistory} from 'history'
 import AuctionCenter from './tradingHall/auctionCenter'
 import DetailInfo from './tradingHall/detailInfo'
 import CountDown from './tradingHall/countDown'
+import NoticeDetailInfo from './homePage/noticeDetailInfo'
 const hashHistory = createHashHistory();
 ReactDOM.render(
     <LocaleProvider locale={zhCN}>
@@ -28,6 +29,7 @@ ReactDOM.render(
                 <Route path="/adminCentral" component={AdminCentral}/>
                 <Route path="/test" component={AuctionCenter}/>
                 <Route path="/info" component={DetailInfo}/>
+                <Route path="/noticeInfo" component={NoticeDetailInfo}/>
                 <Route path="/countDown" component={CountDown}/>
                 <Route path="/" component={HomePage}/>
             </Switch>
