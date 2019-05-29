@@ -123,24 +123,26 @@ class NoticeManage extends Component {
         title: 'ID',
         dataIndex: 'id',
         key: 'id',
+        width:20,
         className: "hidden",
 
     }, {
         title: '序号',
-        width: 80,
+        width:220,
         render: (text, record, index) => `${index + 1}`
     }, {
         title: '标题',
         dataIndex: 'title',
         key: 'title',
+        width:320,
         ...this.getColumnSearchProps('title')
     }, {
         title: '正文内容',
         dataIndex: 'content',
         key: 'content',
-        ...this.getColumnSearchProps('content'),
+
         render: (text)=>(
-            <div dangerouslySetInnerHTML={{ __html: text.substring(0,50).replace(/<p>/,"").replace(/<\/p>/,"")+'......'}}></div>
+            <div dangerouslySetInnerHTML={{ __html: text.substring(0,200).replace(/<p>/,"").replace(/<\/p>/,"")+'......'}}></div>
         )
     }, {
         title: '创建时间',
@@ -228,6 +230,7 @@ class NoticeManage extends Component {
                             visible: false,
 
                         });
+
                         setTimeout(this.form.resetFields, 1000);
                         message.config({
                             top: 130,
@@ -235,6 +238,7 @@ class NoticeManage extends Component {
                             maxCount: 3,
                         });
                         message.info('添加成功', 1);
+                        this.show(0)
                     }
                 })
 
@@ -250,13 +254,14 @@ class NoticeManage extends Component {
             }
         }).then(r=>{
             if(r.status==200){
-                this.show(0)
+
                 message.config({
                     top: 130,
                     duration: 2,
                     maxCount: 3,
                 });
                 message.info('删除成功', 1);
+                this.show(0)
             }
         })
 
@@ -276,6 +281,12 @@ class NoticeManage extends Component {
     }
     render() {
         const TabPane = Tabs.TabPane;
+        const paginationProps = {
+            showSizeChanger:false,
+            showQuickJumper: false,
+            pageSize: 5,
+
+        };
         return (
             <div >
 
@@ -288,15 +299,12 @@ class NoticeManage extends Component {
 
 
 
+                <Button onClick={(ev)=>this.showModal(ev)} type="primary" style={{ marginBottom: 16 }}>
+                   添加公告
+                </Button>
 
-                <Button onClick={(ev)=>this.showModal(ev)}>+</Button>
                 <Table rowKey="id" columns={this.columns} dataSource={this.state.result.content}
-                       pagination={false}></Table>
-                <Pagination showQuickJumper defaultCurrent={1}
-                            total={this.state.result.totalElements} current={this.state.result.number+1}
-                            defaultPageSize={this.state.pageSize}
-                            onChange={(page)=>{this.show(page-1)}
-                            }></Pagination>
+                       pagination={paginationProps }></Table>
 
             </div>
 

@@ -321,17 +321,19 @@ class AllCar extends Component {
                     </div>
                 )
             },];
+        const paginationProps = {
+            showSizeChanger:false,
+            showQuickJumper: false,
+            pageSize: 6,
+
+        };
         return (
             <div >
 
 
                 <Table rowKey="id" columns={carColumns} dataSource={this.state.allCar.items}
-                       pagination={false}></Table>
-                <Pagination showQuickJumper defaultCurrent={1}
-                            total={this.state.allCar.totalNumber} current={this.state.allCar.currentIndex+1}
-                            defaultPageSize={10}
-                            onChange={(page)=>{this.showAllCar(page-1)}
-                            }></Pagination>
+                       pagination={paginationProps }></Table>
+
                 <Modal
                  visible={this.state.visible}
                  onCancel={this.cancelModal}

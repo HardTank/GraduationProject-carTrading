@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import './css/App.css';
 import './css/title.css';
 import Login  from './login';
-import {Select,Affix,Tag,Row, Col, Layout,Menu,Button,Form, Icon, Input,Checkbox,Modal, message} from 'antd';
+import {Spin,Select,Affix,Tag,Row, Col, Layout,Menu,Button,Form, Icon, Input,Checkbox,Modal, message} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import TradingHall from './tradingHall';
 import Register from './register';
 import App from './App';
-
+import GetPwd from './getPwd';
 class Title extends Component {
     state = {
         size: 'large',
@@ -22,7 +22,8 @@ class Title extends Component {
         target: 'index',
         registerVisible: false,
         role:'0',
-
+        forget:false,
+        spinning:false,
     };
 //显示登陆组件
     showModal = (target)=> {
@@ -72,7 +73,7 @@ class Title extends Component {
     }
    // 隐藏插件
     handleCancel = ()=> {
-        this.setState({loginVisible: false, registerVisible: false});
+        this.setState({loginVisible: false, registerVisible: false,forget:false});
     }
     //用户的登陆数据进行判断
     handleOk = (e) => {
@@ -226,8 +227,48 @@ class Title extends Component {
         confirmDirty: false,
         autoCompleteResult: [],
     };
-
-
+    setModal=(e)=>{
+        e.preventDefault();
+        this.setState({
+            forget:true,
+            loginVisible:false,
+        })
+    }
+    getPwd=(values)=>{
+        this.setState({
+            spinning:true,
+        })
+        console.log(values.mail)
+        axios.get('http://localhost:8080/user/getPwd',{
+            params:{
+                name:values.name,
+                mail:values.mail,
+            }
+        }).then(r=>{
+            if(r.status==200){
+                console.log(r.data)
+                if(r.data!=false){
+                    this.setState({
+                        spinning:false,
+                    })
+                    message.config({
+                        top: 130,
+                        duration: 2,
+                        maxCount: 3,
+                    });
+                    message.info('密码已经发送到您的邮箱!', 1);
+                }
+               else{
+                    message.config({
+                        top: 130,
+                        duration: 2,
+                        maxCount: 3,
+                    });
+                    message.info('用户名或邮箱错误!', 1);
+                }
+            }
+        })
+    }
     render() {
 
         const {
@@ -298,12 +339,12 @@ class Title extends Component {
                     width='350px'
                 >
                     <Form onSubmit={this.handleOk} className="login-form">
-                        <Form.Item>
+                        <Form.Item >
                             {getFieldDecorator('name', {
                                 rules: [{required: true, message: '请输入用户名!'}],
                             })(
-                                <Input prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
-                                       placeholder="用户名/邮箱/手机号码"/>
+                                <Input hidden={this.state.forget} prefix={<Icon hidden={this.state.forget} type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+                                       placeholder="用户名"/>
                             )}
                         </Form.Item>
                         <Form.Item>
@@ -321,7 +362,7 @@ class Title extends Component {
                             })(
                                 <Checkbox>记住我</Checkbox>
                             )}
-                            <a className="login-form-forgot" href="">忘记密码</a><br/>
+                            <a className="login-form-forgot" onClick={(ev)=>{this.setModal(ev)}}>忘记密码</a><br/>
                             <Button type="primary" htmlType="submit" className="login-form-button">
                                 登陆
                             </Button><br/>
@@ -329,15 +370,20 @@ class Title extends Component {
                         </Form.Item>
                     </Form>
                 </Modal>
+
+                <GetPwd
+                    spinning={false}
+                    onCancel={this.handleCancel}
+                    visible={this.state.forget}
+                    onOk={this.getPwd}
+                ></GetPwd>
+
                 <Register
                     ref={this.saveFormRef}
                     onCancel={this.handleCancel}
                     visible={this.state.registerVisible}
                     onOk={this.handleSubmit}
-
                 >
-
-
                 </Register>
             </div>
 

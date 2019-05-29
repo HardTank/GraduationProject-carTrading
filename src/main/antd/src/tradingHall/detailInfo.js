@@ -129,7 +129,7 @@ class DetailInfo extends Component {
 backgroundPosition: 'center',zIndex:2,height:300}}>
 
                                             </div>
-                                            <div style={{marginTop:-120,fontSize:18,fontWeight:'bold',}}>
+                                            <div style={{marginTop:-120,fontSize:18,fontWeight:'bold',color:'orange'}}>
                                                 {item.position == 'left' ? '左前45°' : item.position == 'right' ? '右后45°' : item.position == 'trunk' ? '后备箱' : item.position == 'engineCompartment' ? '发动机舱' : item.position == 'dashBoard' ? '仪表盘' : item.position == 'console' ? '操作台' : item.position == 'frontSeat' ? '前排座椅' : '后排座椅'}
 
                                             </div>

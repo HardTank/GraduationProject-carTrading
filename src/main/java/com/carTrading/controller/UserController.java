@@ -2,6 +2,7 @@ package com.carTrading.controller;
 
 import com.carTrading.entity.User;
 import com.carTrading.service.UserService;
+import com.carTrading.tool.SendMail;
 import com.carTrading.tool.UpdateNotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,5 +89,23 @@ public class UserController {
     public User getName(User user){
         user=userService.getUser(user);
         return user;
+    }
+    /**找回密码*/
+    @RequestMapping(value="/getPwd")
+    @ResponseBody
+    public  String getPwd(User user) throws Exception {
+        Page<User> page=userService.getList(user,0,1);
+        if(page.getContent().size()!=0){
+            SendMail sendMail=new SendMail();
+            String mail=page.getContent().get(0).getMail();
+            String code=sendMail.getVerificationCode();
+            String pwd=page.getContent().get(0).getPwd();
+            sendMail.sendMsg(mail,pwd);
+            return "true";
+        }
+        else {
+            return "false";
+        }
+
     }
 }

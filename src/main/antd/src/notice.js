@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './css/tradingHall.css';
-import {message,Button ,Icon,Row, Col, Tabs,Affix, Layout,Menu,List,Card,Pagination,Modal,Popconfirm,Empty} from 'antd';
+import {Input,message,Button ,Icon,Row, Col, Tabs,Affix, Layout,Menu,List,Card,Pagination,Modal,Popconfirm,Empty} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import Title from './title'
@@ -16,10 +16,11 @@ class Notice extends Component {
             name: '',
             visible: false,
             pageIndex: 0,
-            pageSize: 10,
+            pageSize: 5,
             content:[],
             noticeId:'',
             notice:'',
+            title:'',
 
 
 
@@ -27,22 +28,14 @@ class Notice extends Component {
     }
 
     componentDidMount() {
-        var userId = sessionStorage.getItem("userId");
-        if (userId == null || userId == 0) {
-            window.location.href = "#/index";
-        }
-        else {
-
+            sessionStorage.setItem('keyWord',"")
             this.showPage(0)
-        }
-
     }
-
 
     showPage(page) {
         axios.get('http://localhost:8080/notice/getList', {
             params: {
-
+                title:sessionStorage.getItem('keyWord'),
                 pageIndex: page,
                 pageSize: this.state.pageSize,
                 deleted:0,
@@ -98,7 +91,17 @@ handleOk=(noticeId)=>{
             visible:false,
         })
     }
+    setTitle(value){
+        this.setState({
+            title : value.target.value,
+        })
 
+    }
+    searchTitle=(e)=>{
+        e.preventDefault();
+        sessionStorage.setItem('keyWord',this.state.title)
+        this.showPage(0);
+    }
     render() {
         const { }=this.state;
         var content = [];
@@ -110,11 +113,19 @@ handleOk=(noticeId)=>{
                     onClick={this.handleOk.bind(this,item.id)}
             >
 
-                <div dangerouslySetInnerHTML={{ __html:item.content.substring(0,150).replace(/<p>/,"").replace(/<\/p>/,"")+'......'}}></div>
+                <div style={{minHeight:50}} dangerouslySetInnerHTML={{ __html:item.content.substring(0,200)+'......'}}></div>
             </Card></div>)
         }, this)
         return (
-            <div style={{marginLeft:50,marginRight:50}}>
+            <Card style={{marginLeft:50,marginRight:50}}>
+                <Row  >
+                    <Col span={16}></Col>
+                    <Col span={6}>
+                <Input onChange={(value)=>{this.setTitle(value)}} defaultValue={sessionStorage.getItem('keyWord')} style={{marginBottom:30}} Icon="search"/>
+                    </Col>
+                    <Col span={2}>
+                <Button style={{width:'100%'}}type="primary" onClick={(ev)=>{this.searchTitle(ev)}}> 搜索</Button></Col>
+                    </Row>
                 {content.length==0?<Empty style={{minHeight:470}}/>:content}
                 <Pagination showQuickJumper defaultCurrent={1}
                             total={this.state.result.totalElements} current={this.state.result.number+1}
@@ -122,7 +133,7 @@ handleOk=(noticeId)=>{
                             onChange={(page)=>{this.showPage(page-1)}
                             }></Pagination>
 
-            </div>
+            </Card>
 
 
 

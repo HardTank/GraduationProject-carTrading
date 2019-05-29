@@ -21,5 +21,11 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     /***/
-    private String name;
+    public String name;
+
+    public static void main(String[] args) {
+        Admin a=new Admin();
+        a.name="xx";
+        System.out.println(a.toString());
+    }
 }

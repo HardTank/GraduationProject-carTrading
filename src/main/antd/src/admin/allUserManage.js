@@ -149,7 +149,7 @@ class AllUser extends Component {
         title: '住址',
         dataIndex: 'address',
         key: 'address',
-        ...this.getColumnSearchProps('address'),
+
 
         render:(text,record)=>(
             <span>{record.province}{record.city}{record.county}{text}</span>
@@ -203,20 +203,19 @@ class AllUser extends Component {
 
     }
     render() {
+        const paginationProps = {
+            showSizeChanger:false,
+            showQuickJumper: false,
+            pageSize: 10,
+
+        };
         const TabPane = Tabs.TabPane;
         return (
             <div >
 
-                 <Input  onChange={(value)=>{this.setName(value)}} placeholder='请输入姓名' style={{width:200}}/>
-
-                <Button icon="search" onClick={(ev)=>this.show(0)}></Button>
                 <Table rowKey="id" columns={this.columns} dataSource={this.state.result.content}
-                       pagination={false}></Table>
-                <Pagination showQuickJumper defaultCurrent={1}
-                            total={this.state.result.totalElements} current={this.state.result.number+1}
-                            defaultPageSize={this.state.pageSize}
-                            onChange={(page)=>{this.show(page-1)}
-                            }></Pagination>
+                       pagination={paginationProps}></Table>
+
 
             </div>
 

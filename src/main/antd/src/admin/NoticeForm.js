@@ -36,13 +36,14 @@ class NoticeForm extends React.Component {
     render () {
         const {visible,onCancel,onOk}=this.props
         const { getFieldDecorator } = this.props.form
-        const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator' ]
+        const controls = ['bold', 'italic', 'underline', 'text-color', 'separator', 'link', 'separator', 'media' ]
 
         return (
             <Modal
                 visible={visible}
                 onCancel={onCancel}
                 footer={null}
+                destroyOnClose={true}
             >
             <div className="demo-container">
                 <Form onSubmit={this.handleSubmit}>
