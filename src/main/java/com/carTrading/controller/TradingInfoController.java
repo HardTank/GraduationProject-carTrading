@@ -26,8 +26,8 @@ public class TradingInfoController {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     //获取详细的汽车交易信息
     @RequestMapping(value = "/getDetailList")
-    public com.carTrading.entity.Page<TradingInfo> getDetailList(CarInfo car, int userId , int pageIndex, int pageSize) {
-        com.carTrading.entity.Page<TradingInfo> page = carInfoDetailService.getTradingInfo(car,userId, pageIndex, pageSize);
+    public com.carTrading.entity.Page<TradingInfo> getDetailList(CarInfo car, int userId , int pageIndex, int pageSize,String location,Double startPrice,Double endPrice) {
+        com.carTrading.entity.Page<TradingInfo> page = carInfoDetailService.getTradingInfo(car,userId, pageIndex, pageSize,location,startPrice, endPrice);
         return page;
     }
     /**获取厂商列表*/

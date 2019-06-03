@@ -16,7 +16,7 @@ class TradingHall extends Component {
             visible: false,
             pageIndex: 0,
             pageSize: 10,
-            r: '',
+            req: '',
             test: 'xxx',
             status: false,
             visible: false,
@@ -28,8 +28,8 @@ class TradingHall extends Component {
             location: '',
             allLocation: true,
             locationState:'all',
-            startPrice:'',
-            endPrice:'',
+            startPrice:0,
+            endPrice:0,
             allPrice:true,
             priceState:'all',
             emissionStandard:'',
@@ -51,7 +51,7 @@ class TradingHall extends Component {
 
             this.getCity();
             this.getBrand();
-            this.showPage(0, userId)
+            this.showPage(0)
         }
 
     }
@@ -78,7 +78,9 @@ class TradingHall extends Component {
         })
     }
 
-    showPage(page, userId) {
+    showPage(page) {
+        console.log(page)
+        var userId = sessionStorage.getItem('userId')
         axios.get('http://localhost:8080/tradingInfo/getDetailList', {
             params: {
                 userId: userId,
@@ -86,12 +88,19 @@ class TradingHall extends Component {
                 pageIndex: page,
                 pageSize: this.state.pageSize,
                 delete:0,
+                brand:this.state.brand,
+                emissionStandard:this.state. emissionStandard,
+                location:this.state.location,
+                endPrice:this.state.endPrice,
+                startPrice:this.state.startPrice,
             }
         }).then(r=> {
             if (r.status == 200) {
+                console.log(r.data)
                 this.setState({
+
                     result: r.data.items,
-                    r: r.data,
+                    req: r.data,
                 })
             }
         })
@@ -114,36 +123,49 @@ class TradingHall extends Component {
         })
     }
     //订阅汽车
-    orderCar(carId, status, deposit) {
-        var userId = sessionStorage.getItem("userId")
-        if (status == 0) {
+    orderCar(carId, status, deposit,auctionTime) {
+        if(new Date(auctionTime).getTime()<new Date().getTime()){
+            message.config({
+                top: 130,
+                duration: 2,
+                maxCount: 3,
+            });
+            message.info('已失效!', 1);
 
-            var userId = sessionStorage.getItem('userId')
-            axios.get('http://localhost:8080/user/getName', {
-                params: {
-                    id: userId,
-                }
-            }).then(r=> {
-                    if (r.status == 200) {
-                        if (deposit > r.data.wallet) {
-                            message.config({
-                                top: 130,
-                                duration: 2,
-                                maxCount: 3,
-                            });
-                            message.info('余额不足,请到个人中心里充值!', 1);
-                        }
-                        else {
-                            this.saveUserWallet(deposit, carId)
+        }
+        else{
+            var userId = sessionStorage.getItem("userId")
+            if (status == 0) {
+
+                var userId = sessionStorage.getItem('userId')
+                axios.get('http://localhost:8080/user/getName', {
+                    params: {
+                        id: userId,
+                    }
+                }).then(r=> {
+                        if (r.status == 200) {
+                            if (deposit > r.data.wallet) {
+                                message.config({
+                                    top: 130,
+                                    duration: 2,
+                                    maxCount: 3,
+                                });
+                                message.info('余额不足,请到个人中心里充值!', 1);
+                            }
+                            else {
+                                this.saveUserWallet(deposit, carId)
+                            }
+
                         }
 
                     }
+                )
 
-                }
-            )
-
-            // this.changeWallet(carId,userId,deposit)
+                // this.changeWallet(carId,userId,deposit)
+            }
         }
+
+
     }
 
 //更新用户余额
@@ -201,7 +223,7 @@ class TradingHall extends Component {
                         maxCount: 3,
                     });
                     message.info('订阅成功,请去个人中心查看', 1);
-                    this.showPage(0, userId)
+                    this.showPage(0)
                 }
 
             }
@@ -214,13 +236,14 @@ class TradingHall extends Component {
             this.setState({
                 allBrand: true,
                 brandState:'all',
-            })
+                brand:'',
+            },()=>{this.showPage(0)})
         else
         this.setState({
             allBrand: false,
             brand: brand,
             brandState:brand,
-        })
+        },()=>{this.showPage(0)})
     }
 
 
@@ -231,13 +254,14 @@ class TradingHall extends Component {
             this.setState({
                 allLocation: true,
                 locationState:'all',
-            })
+                location: '',
+            },()=>{this.showPage(0)})
         else
             this.setState({
                 allLocation: false,
                 location: location,
                 locationState:location,
-            })
+            },()=>{this.showPage(0)})
     }
 //emissionStandard 排放标准筛选条件
     updateEmissionStandard=(e,emissionStandard)=> {
@@ -247,30 +271,33 @@ class TradingHall extends Component {
             this.setState({
                 allEmissionStandard: true,
                 emissionStandardState:'all',
-            })
+                emissionStandard:'',
+            },()=>{this.showPage(0)})
         else
             this.setState({
                 allEmissionStandard: false,
                 emissionStandard: emissionStandard,
                 emissionStandardState:emissionStandard,
-            })
+            },()=>{this.showPage(0)})
     }
 //价格筛选条件
     updatePrice=(e,startPrice,endPrice)=>{
         e.preventDefault();
-
+        console.log(startPrice,endPrice)
         if (startPrice =='all')
             this.setState({
                 allPrice: true,
-                priceState:'all'
-            })
+                priceState:'all',
+                startPrice:0,
+                endPrice:0,
+            },()=>{this.showPage(0)})
         else
             this.setState({
                 allPrice: false,
                 startPrice: startPrice,
                 endPrice:endPrice,
                 priceState:endPrice,
-            })
+            },()=>{this.showPage(0)})
     }
     judgePrice(price){
 
@@ -302,11 +329,13 @@ class TradingHall extends Component {
             if (this.state.allBrand || item.brand == this.state.brand)
                 if (this.state.allLocation || item.location == this.state.location)
                     if (this.state.allEmissionStandard || item.emissionStandard == this.state.emissionStandard)
-                        if (this.state.allPrice|| 3>this.state.startPrice&&3<=this.state.endPrice){
+                        if (this.state.allPrice|| item.startPrice>this.state.startPrice&&item.startPrice<=this.state.endPrice){
+                            count++;
                             return content.push(<Card className="app-item" key={index}
                             >
                                 <Row>
                                     <Col span={4}>
+
                                         <img style={{height:120,width:160}} alt="example"
                                              src={src}/>
                                     </Col>
@@ -344,14 +373,14 @@ class TradingHall extends Component {
                                     </Col>
                                     <Col span={4}>
                                         <Popconfirm title="需要加保证金,当竞拍结束后退还,确定继续吗"
-                                                    onConfirm={this.orderCar.bind(this,item.id,item.status,item.deposit)}
+                                                    onConfirm={this.orderCar.bind(this,item.id,item.status,item.deposit,item.auctionTime)}
                                                     okText="确定" cancelText="取消">
-                                            <Button type={'primary'}
-                                            >{item.status == 1 ? '退订' : '订阅'}({item.count})</Button><br/>
+                                            <Button type={'primary'} disabled={item.status == 1||sessionStorage.getItem('role')==1}
+                                            >{item.status == 1 ? '已订阅' : '订阅'}({item.count})</Button><br/>
 
                                         </Popconfirm>
                                         <Button
-                                            hidden={item.status != 1}
+                                            hidden={true}
                                             style={{marginTop:20}}
                                             type={'primary'}
                                             onClick={this.showModal }
@@ -443,7 +472,7 @@ class TradingHall extends Component {
                     {content.length==0?<Empty/>:content}
                 </div>
                 <Pagination showQuickJumper defaultCurrent={1}
-                            total={this.state.r.totalNumber} current={this.state.r.preIndex+1}
+                            total={this.state.req.totalNumber} current={this.state.req.nextIndex}
                             defaultPageSize={this.state.pageSize}
                             onChange={(page)=>{this.showPage(page-1)}
                             }></Pagination>

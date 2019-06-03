@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import tradingHall from '../css/tradingHall.css'
-import {Button ,Icon,Row, Col,Input,Modal,Pagination,Card,Form,Carousel,Tabs,Popconfirm, message} from 'antd';
+import {Empty,Button ,Icon,Row, Col,Input,Modal,Pagination,Card,Form,Carousel,Tabs,Popconfirm, message} from 'antd';
 import axios from 'axios';//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
 import qs from 'qs';
 import io from 'socket.io-client';
@@ -137,7 +137,10 @@ class Comment extends Component {
         }, this)
         return (
             <div  >
-                {content}
+                <div>
+
+                    {content.length==0?<Empty/>:content}
+                </div>
                 <Pagination showQuickJumper defaultCurrent={1}
                             total={this.state.r.totalElements} current={this.state.r.number+1}
                             defaultPageSize={this.state.pageSize}

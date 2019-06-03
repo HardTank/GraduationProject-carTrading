@@ -112,7 +112,7 @@ class Review extends Component {
     showModal = (e, record)=> {
         e.preventDefault();
         this.getAuctionP(record.id);
-        console.info('carID'+record.id);
+
         sessionStorage.setItem('remark',record.remark);
         this.setState({
             visible: true,
@@ -187,11 +187,13 @@ class Review extends Component {
         e.preventDefault();
         this.form.validateFields((err, values) => {
             if (!err) {
+                values.auctionTime = new Date(values.auctionTime);
+                console.log(values)
+                console.info('carID'+this.state.carId);
                 var userId = sessionStorage.getItem("userId");
                 let formData = new FormData();
                 if (this.state.id > 0)
                     formData.append('id', this.state.id);
-                values.auctionTime = new Date(values.auctionTime.format('YYYY-MM-DD HH:MM:SS'));
                 formData.append('deposit', values.deposit);
                 formData.append('time', values.auctionTime);
                 formData.append('startPrice', values.startPrice);
@@ -313,6 +315,7 @@ class Review extends Component {
             }).then(
                 r=> {
                     if(r.status==200) {
+                        this.handleCancel();
                         message.config({
                             top: 130,
                             duration: 2,

@@ -164,16 +164,38 @@ class AllUser extends Component {
     } , {
             title: '操作',
             dataIndex: 'action',
-             className:"hidden",
+
             render: (text, record) => (
                 <div>
-                    <Button type={'primary'}  onClick={(ev)=>{this.showDetail(ev,record)} }
-                    >车辆详情</Button>
-                    <Button type={'primary'} style={{ marginLeft:10}} onClick={() => this.payMoney(record)}>转帐</Button>
+                    <Button hidden={sessionStorage.getItem('userId')==record.id} type={'primary'}  onClick={(ev)=>{this.setRole(ev,record)} }
+                    >{record.role==0?'设为管理员':'撤销管理员'}</Button>
+
                 </div>
             )
         }];
+    setRole=(e,record)=>{
+        var role=0;
+        if(record.role==0)
+            role++;
 
+        e.preventDefault();
+        axios.get('http://localhost:8080/user/save',{
+            params:{
+                id:record.id,
+                role:role,
+            }
+        }).then(r=>{
+            if(r.status==200){
+                message.config({
+                    top: 130,
+                    duration: 2,
+                    maxCount: 3,
+                });
+                message.info('操作成功!', 1);
+                this.show(0)
+            }
+        })
+    }
     //自动加载信息
     componentDidMount() {
 

@@ -10,6 +10,8 @@ import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * @author tanlixin
  * @description
@@ -45,7 +47,25 @@ public class CarInfoService {
         page = carInfoRepository.findAll(ex, pageRequest);
         return page;
     }
+    /**
+     * 动态查询不分页
+     */
+    public List<CarInfo> getList(CarInfo car) {
+        logger.info("查找二手车信息");
+        Page<CarInfo> page = null;
+        ExampleMatcher matcher = ExampleMatcher.matching() //构建对象
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) //改变默认字符串匹配方式：模糊查询
+                .withIgnoreCase(true); //改变默认大小写忽略方式：忽略大小写
 
+        /**创建实例*/
+        Example<CarInfo> ex = Example.of(car, matcher);
+        /**排序查询*/
+        Sort sort = new Sort(Sort.Direction.ASC, "id");
+        /**分页查询*/
+      //  PageRequest pageRequest = new PageRequest(pageIndex, pageSize, sort);
+        List<CarInfo>list =carInfoRepository.findAll(ex);
+        return list;
+    }
     /**
      * 更新数据
      */

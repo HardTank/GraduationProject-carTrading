@@ -107,7 +107,8 @@ handleOk=(noticeId)=>{
         var content = [];
         this.state.content.map(function (item, index) { // map 返回的是一个新数组
 
-            return content.push(<div className="catalog"><Card className="app-item" key={index}
+            return content.push(<div className="catalog"><Card className="app-item"
+                    key={item.id}
                     title={item.title}
                     style={{marginBottom:10}}
                     onClick={this.handleOk.bind(this,item.id)}
@@ -121,7 +122,7 @@ handleOk=(noticeId)=>{
                 <Row  >
                     <Col span={16}></Col>
                     <Col span={6}>
-                <Input onChange={(value)=>{this.setTitle(value)}} defaultValue={sessionStorage.getItem('keyWord')} style={{marginBottom:30}} Icon="search"/>
+                <Input onChange={(value)=>{this.setTitle(value)}} defaultValue={''} style={{marginBottom:30}} icon="search"/>
                     </Col>
                     <Col span={2}>
                 <Button style={{width:'100%'}}type="primary" onClick={(ev)=>{this.searchTitle(ev)}}> 搜索</Button></Col>
