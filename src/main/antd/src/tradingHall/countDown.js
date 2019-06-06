@@ -70,7 +70,7 @@ export default class CountDown extends Component {
             <span hidden={this.state.overdue}
                   style={{color:'orange'}}>{this.state.day}天 {this.state.hour}:{this.state.minute}:{this.state.second}</span>
 <span hidden={!this.state.overdue}
-      style={{color:'orange'}}>竞拍已经结束</span>
+      style={{color:'orange'}}>竞拍已经开始</span>
 
             </div>
         )

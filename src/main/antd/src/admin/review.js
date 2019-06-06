@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import '../css/App.css';
 import '../css/personal.css';
 import {
-    message,Table,Pagination,Form, Upload, Button, Icon,Modal,Tabs,Row,Col,Tag,remark
+    Empty,message,Table,Pagination,Form, Upload, Button, Icon,Modal,Tabs,Row,Col,Tag,remark
 } from 'antd';
 import {LocaleProvider} from 'antd';
 import axios from 'axios'//这是模块的加载机制，直接写依赖库的名字，会到node_modules下去查找，因此不需要你指明前面的相对路径
@@ -447,6 +447,23 @@ class Review extends Component {
                                 carId={this.state.carId}
 
                             ></Examine>
+
+
+                        </TabPane>
+                        <TabPane tab="维保查询" key="maintenance">
+
+                            <Empty
+
+                            ></Empty>
+
+
+                        </TabPane>
+                        <TabPane tab="违章查询" key="violationOfRegulations">
+
+                            <Empty
+
+
+                            ></Empty>
 
 
                         </TabPane>

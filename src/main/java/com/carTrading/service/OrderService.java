@@ -35,25 +35,7 @@ public class OrderService {
     @Autowired
     TransactionInfoService transactionInfoService;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    /**
-     * 动态查询
-     */
-//    public Page<OrderCar> getPage(OrderCar orderCar, int pageIndex, int pageSize) {
-//        logger.info("查找订阅信息");
-//        Page<OrderCar> page = null;
-//        ExampleMatcher matcher = ExampleMatcher.matching() //构建对象
-//                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING) //改变默认字符串匹配方式：模糊查询
-//                .withIgnoreCase(true); //改变默认大小写忽略方式：忽略大小写
-//
-//        /**创建实例*/
-//        Example<OrderCar> ex = Example.of(orderCar, matcher);
-//        /**排序查询*/
-//        Sort sort = new Sort(Sort.Direction.ASC, "id");
-//        /**分页查询*/
-//        PageRequest pageRequest = new PageRequest(pageIndex, pageSize, sort);
-//        page = orderRepository.findAll(ex, pageRequest);
-//        return page;
-//    }
+
 
     /**
      * 查找用户订阅的汽车信息

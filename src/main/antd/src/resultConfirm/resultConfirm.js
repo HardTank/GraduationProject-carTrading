@@ -220,12 +220,7 @@ class ResultConfirm extends Component {
         return (
             <div >
 
-                        <Alert
-                            message="提示"
-                            description="自竞拍成功当日开始,三个工作日内没有付款,保证金将不予退还!"
-                            type="warning"
-                            showIcon
-                        ></Alert>
+
                         <Table rowKey="id" columns={this.columns} dataSource={this.state.result.items}
                                pagination={false}></Table>
                         <Pagination showQuickJumper defaultCurrent={1}

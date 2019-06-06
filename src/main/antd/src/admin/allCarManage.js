@@ -77,17 +77,7 @@ class AllCar extends Component {
             }
         )
     }
-    //showModal = ()=> {
-    //    this.setState({
-    //        visible: true,
-    //    })
-    //}
-    //cancelModal = ()=> {
-    //    this.setState({
-    //        visible: false,
-    //    })
-    //}
-    //table筛选条件
+   //内部数据查找
     getColumnSearchProps = (dataIndex) => ({
         filterDropdown: ({
             setSelectedKeys, selectedKeys, confirm, clearFilters,
