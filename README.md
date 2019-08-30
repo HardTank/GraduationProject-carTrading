@@ -2,7 +2,7 @@
 Front and rear separation design  
 Used car auction system
 Front-end boot：    
-you need download node.js and npm 
+you need download node.js and npm   
 Under the src/main/antd directory  
 npm build     
 npm start    
