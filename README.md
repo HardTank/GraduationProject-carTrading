@@ -6,7 +6,7 @@ you need download node.js and npm
 Under the src/main/antd directory  
 npm build     
 npm start    
-access localhost:8081   
+access localhost:8081  
 
 Backend startup：  
 under  src/main/java/com/carTrading/configuration  
