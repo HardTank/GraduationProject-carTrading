@@ -5,7 +5,7 @@
   "dependencies": {
     "alimask": "^1.0.3",
     "antd": "^3.13.6",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "braft-editor": "^2.2.9",
     "history": "^4.9.0",
     "react": "^16.8.3",
